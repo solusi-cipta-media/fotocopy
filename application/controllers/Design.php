@@ -33,4 +33,32 @@ class Design extends CI_Controller
         $this->load->view('karyawan');
         $this->load->view('template/footer');
     }
+
+    function mesin()
+    {
+        $this->load->view('template/header');
+        $this->load->view('mesin');
+        $this->load->view('template/footer');
+    }
+
+    function customer()
+    {
+        $this->load->view('template/header');
+        $this->load->view('customer');
+        $this->load->view('template/footer');
+    }
+
+    function kontrak()
+    {
+        $this->load->view('template/header');
+        $this->load->view('kontrak');
+        $this->load->view('template/footer');
+    }
+
+    function cuti()
+    {
+        $this->load->view('template/header');
+        $this->load->view('cuti');
+        $this->load->view('template/footer');
+    }
 }

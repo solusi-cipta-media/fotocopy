@@ -34,6 +34,7 @@
     <!-- Fonts and Codebase framework -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap">
     <link rel="stylesheet" id="css-main" href="<?= base_url('') ?>assets/css/codebase.min.css">
+    <link rel="stylesheet" href="<?= base_url('') ?>assets/js/plugins/sweetalert2/sweetalert2.min.css">
 
     <!-- jQuery (required for DataTables plugin) -->
     <script src="<?= base_url('') ?>assets/js/lib/jquery.min.js"></script>
@@ -127,25 +128,25 @@
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="#">
+                                <a class="nav-main-link" href="<?= base_url('design/mesin') ?>">
                                     <i class="nav-main-link-icon fa fa-dumpster"></i>
                                     <span class="nav-main-link-name">Mesin</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="#">
+                                <a class="nav-main-link" href="<?= base_url('design/customer') ?>">
                                     <i class="nav-main-link-icon fa fa-elevator"></i>
                                     <span class="nav-main-link-name">Customer</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="#">
+                                <a class="nav-main-link" href="<?= base_url('design/kontrak') ?>">
                                     <i class="nav-main-link-icon fa fa-book"></i>
                                     <span class="nav-main-link-name">Kontrak</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="#">
+                                <a class="nav-main-link" href="<?= base_url('design/cuti') ?>">
                                     <i class="nav-main-link-icon fa fa-layer-group"></i>
                                     <span class="nav-main-link-name">Jenis Cuti</span>
                                 </a>
@@ -434,3 +435,17 @@
             <!-- END Header Loader -->
         </header>
         <!-- END Header -->
+
+        <script>
+            const toast = (icon, title) => {
+                Swal.fire({
+                    icon: icon,
+                    title: title,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                })
+            }
+        </script>
