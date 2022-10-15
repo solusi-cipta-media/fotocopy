@@ -61,4 +61,25 @@ class Design extends CI_Controller
         $this->load->view('cuti');
         $this->load->view('template/footer');
     }
+
+    function absensi()
+    {
+        $this->load->view('template/header');
+        $this->load->view('absensi_kehadiran');
+        $this->load->view('template/footer');
+    }
+
+    function ketidakhadiran()
+    {
+        $this->load->view('template/header');
+        $this->load->view('absensi_ketidakhadiran');
+        $this->load->view('template/footer');
+    }
+
+    function periode()
+    {
+        $this->load->view('template/header');
+        $this->load->view('periode');
+        $this->load->view('template/footer');
+    }
 }

@@ -154,19 +154,19 @@
 
                             <li class="nav-main-heading">Absensi</li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="#">
+                                <a class="nav-main-link" href="<?= base_url('design/absensi') ?>">
                                     <i class="nav-main-link-icon fa fa-calendar-check"></i>
                                     <span class="nav-main-link-name">Data Absensi</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="#">
+                                <a class="nav-main-link" href="<?= base_url('design/ketidakhadiran') ?>">
                                     <i class="nav-main-link-icon fa fa-calendar-xmark"></i>
                                     <span class="nav-main-link-name">Ketidakhadiran</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="#">
+                                <a class="nav-main-link" href="<?= base_url('design/periode') ?>">
                                     <i class="nav-main-link-icon fa fa-clock"></i>
                                     <span class="nav-main-link-name">Register Periode</span>
                                 </a>
