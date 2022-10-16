@@ -97,6 +97,20 @@ class Design extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    function prosesohform()
+    {
+        $this->load->view('template/header');
+        $this->load->view('prosesohform');
+        $this->load->view('template/footer');
+    }
+
+    function prosesohdetail()
+    {
+        $this->load->view('template/header');
+        $this->load->view('prosesohdetail');
+        $this->load->view('template/footer');
+    }
+
     function generate_qr() //nanti digunakan untuk generate QR
     {
         $qrcode = 'AGUS';
@@ -130,5 +144,10 @@ class Design extends CI_Controller
         $this->load->view('template/header');
         $this->load->view('report/qrcode');
         $this->load->view('template/footer');
+    }
+
+    function cetakhasiloverhaul()
+    {
+        $this->load->view('report/hasiloh');
     }
 }

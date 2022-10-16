@@ -42,19 +42,19 @@
                             <td>15-Nov-2022</td>
                             <td>Wisnu</td>
                             <td class="text-center" style="width: 20%;">
-                                <button type="button" class="btn btn-sm btn-primary" onclick=ganti_data() data-bs-toggle="tooltip" title="Ganti Teknisi">
+                                <button type="button" class="btn btn-sm btn-secondary" onclick=ganti_data() data-bs-toggle="tooltip" title="Ganti Teknisi">
                                     <i class="fa fa-gear"></i>
                                 </button>
-                                <a href="<?= base_url('design/cetakqr?SN=AGUS') ?>" target="_blank" type="button" class="btn btn-sm btn-primary" onclick=qr_data() data-bs-toggle="tooltip" title="Cetak QR">
+                                <a href="<?= base_url('design/cetakqr?SN=AGUS') ?>" target="_blank" type="button" class="btn btn-sm btn-warning" onclick=qr_data() data-bs-toggle="tooltip" title="Cetak QR">
                                     <i class="fa fa-qrcode"></i>
                                 </a>
-                                <button type="button" class="btn btn-sm btn-primary" onclick=tambah_data() data-bs-toggle="tooltip" title="Tambah Item">
+                                <a href="<?= base_url('design/prosesohform') ?>" type="button" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Tambah Item">
                                     <i class="fa fa-plus"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm btn-primary" onclick=detail_data() data-bs-toggle="tooltip" title="Detail">
+                                </a>
+                                <a href="<?= base_url('design/prosesohdetail') ?>" type="button" class="btn btn-sm btn-success" data-bs-toggle="tooltip" title="Detail">
                                     <i class="fa fa-eye"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm btn-primary" onclick=selesai_data() data-bs-toggle="tooltip" title="Selesai">
+                                </a>
+                                <button type="button" class="btn btn-sm btn-danger" onclick=selesai_data() data-bs-toggle="tooltip" title="Selesai">
                                     <i class="si si-like"></i>
                                 </button>
                             </td>
@@ -64,70 +64,7 @@
             </div>
         </div>
 
-        <div class="block block-rounded" id="add-new" style="display: none;">
-            <div class="block-header block-header-default">
-                <h3 class="block-title">Register Mesin</h3>
-                <div class="block-options">
-                    <button type="button" class="btn btn-outline-danger min-width-125" id="btn-hide"><i class="fa fa-minus-circle"></i> Sembunyikan</button>
-                </div>
-            </div>
-            <div class="block-content">
-                <form action="be_forms_elements.html" method="POST" enctype="multipart/form-data" onsubmit="return false;">
-                    <div class="row push">
-                        <div class="col-lg-12 col-xl-12">
-                            <div class="mb-4">
-                                <label class="form-label" for="example-text-input">Nomor Mesin</label>
-                                <input type="text" class="form-control" id="example-text-input" name="example-text-input">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="example-email-input">Serial Number</label>
-                                <input type="text" class="form-control" id="example-email-input" name="example-email-input">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="example-textarea-input">Model</label>
-                                <input type="text" class="form-control" id="example-email-input" name="example-email-input">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="example-email-input">Asal</label>
-                                <select class="form-select" id="example-select" name="example-select">
-                                    <option value="1">Import</option>
-                                    <option value="1">EX-Customer</option>
-                                </select>
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="example-email-input">Meter</label>
-                                <input type="text" class="form-control" id="example-email-input" name="example-email-input">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="example-email-input">Tegangan</label>
-                                <input type="text" class="form-control" id="example-email-input" name="example-email-input">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="example-email-input">Status</label>
-                                <select class="form-select" id="example-select" name="example-select">
-                                    <option value="1">Import</option>
-                                    <option value="1">Overhaul</option>
-                                    <option value="2">Ready</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-12 col-xl-12">
-                            <div class="mb-4">
-                                <button type="submit" class="btn btn-alt-primary"><i class="si si-cloud-upload"></i> Simpan</button>
-                                <button type="button" class="btn btn-alt-danger" id="clear-form"><i class="si si-close"></i> Clear</button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- <div class="row-push">
-                        <div class="col-lg-12 col-xl-12">
-                            <button type="submit" class="btn btn-alt-primary"><i class="si si-cloud-upload"></i> Simpan</button>
-                            <button type="button" class="btn btn-alt-danger" id="clear-form"><i class="si si-close"></i> Clear</button>
-                        </div>
-                    </div> -->
-                </form>
-            </div>
-        </div>
-        <!-- Dynamic Table Responsive -->
+
     </div>
     <!-- END Page Content -->
 </main>
@@ -139,7 +76,7 @@
         <div class="modal-content">
             <div class="block block-rounded shadow-none mb-0">
                 <div class="block-header block-header-default">
-                    <h3 class="block-title">Tentukan Teknisi</h3>
+                    <h3 class="block-title">Ganti Teknisi</h3>
                     <div class="block-options">
                         <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                             <i class="fa fa-times"></i>
@@ -173,26 +110,11 @@
 <!-- END Normal Modal -->
 
 <script>
-    $('#btn-add').on('click', function() {
-        $('#add-new').show(500);
-        $('#list-karyawan').hide();
-    });
-
-    $('#btn-hide').on('click', function() {
-        $('#list-karyawan').show(500);
-        $('#add-new').hide();
-    });
-
-    $('#btn-edit').on('click', function() {
-        $('#add-new').show(500);
-        $('#list-karyawan').hide();
-    });
-
-    function pilih_data() {
+    function selesai_data() {
 
         Swal.fire({
             title: 'Apakah Anda Yakin ?',
-            text: "Anda akan memilih mesin 120 - DC236 untuk Overhaul!",
+            text: "Anda melaporkan bahwa proses overhaul mesin 120 - DC236 telah selesai!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -202,7 +124,7 @@
             if (result.isConfirmed) {
                 Swal.fire(
                     'Berhasil!',
-                    'Menunggu persetujuan Supervisor untuk proses overhaul.',
+                    'Menunggu persetujuan Supervisor untuk laporan overhaul.',
                     'success'
                 )
             }
@@ -211,7 +133,7 @@
 
     }
 
-    function tentukan_data() {
+    function ganti_data() {
         // var html
         // var nama
         $('#exampleModalCenter').modal('show')
