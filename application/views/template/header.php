@@ -174,7 +174,7 @@
 
                             <li class="nav-main-heading">Overhaul</li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="#">
+                                <a class="nav-main-link" href="<?= base_url('design/listoh') ?>">
                                     <i class="nav-main-link-icon fa fa-cash-register"></i>
                                     <span class="nav-main-link-name">List Mesin</span>
                                 </a>

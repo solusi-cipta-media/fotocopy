@@ -82,4 +82,11 @@ class Design extends CI_Controller
         $this->load->view('periode');
         $this->load->view('template/footer');
     }
+
+    function listoh()
+    {
+        $this->load->view('template/header');
+        $this->load->view('list_overhaul');
+        $this->load->view('template/footer');
+    }
 }
