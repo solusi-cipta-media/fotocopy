@@ -150,4 +150,18 @@ class Design extends CI_Controller
     {
         $this->load->view('report/hasiloh');
     }
+
+    function cekqr()
+    {
+        $this->load->view('template/header');
+        $this->load->view('cekqr');
+        $this->load->view('template/footer');
+    }
+
+    function jadwalspk()
+    {
+        $this->load->view('template/header');
+        $this->load->view('jadwalspk');
+        $this->load->view('template/footer');
+    }
 }

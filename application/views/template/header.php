@@ -186,7 +186,7 @@
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="#">
+                                <a class="nav-main-link" href="<?= base_url('design/cekqr') ?>">
                                     <i class="nav-main-link-icon fa fa-qrcode"></i>
                                     <span class="nav-main-link-name">Cek QR</span>
                                 </a>
@@ -194,7 +194,7 @@
 
                             <li class="nav-main-heading">Kerja Luar</li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="#">
+                                <a class="nav-main-link" href="<?= base_url('design/jadwalspk') ?>">
                                     <i class="nav-main-link-icon fa fa-business-time"></i>
                                     <span class="nav-main-link-name">Jadwal SPK</span>
                                 </a>
