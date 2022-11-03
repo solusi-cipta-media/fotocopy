@@ -30,7 +30,7 @@
                             <th>Alamat</th>
                             <th>Kolektor</th>
                             <th>Status</th>
-                            <th>Tgl Masuk</th>
+                            <th>Tgl Instal</th>
                             <th>Model</th>
                             <th>Lokasi</th>
                             <th>Telp</th>

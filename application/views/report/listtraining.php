@@ -142,8 +142,8 @@
                 </div>
                 <div class="col-10">
                     <p><strong>CV. CIPTA MULTI SOLUTION</strong></p>
-                    <p>Jl. Pramuka No. 48 Malang</p>
-                    <p>Telp. 6576575 - Fax. 7657578</p>
+                    <p>Jl R Sanim No 36 Ruko dLiving Tanah Baru Beji Kota Depok</p>
+                    <p>Telp. 0812 1000 8595 - 0813 8110 6208</p>
                 </div>
             </div>
             <div class="row" style="margin-top: 30px;">

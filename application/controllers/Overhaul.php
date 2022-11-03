@@ -397,15 +397,17 @@ class Overhaul extends CI_Controller
 
     function cetakqr()
     {
+        date_default_timezone_set('Asia/Jakarta');
+
         //ambil data notifikasi
-        $data['notifikasi'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->result_array();
-        $data['jumlah_notif'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->num_rows();
+        // $data['notifikasi'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->result_array();
+        // $data['jumlah_notif'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->num_rows();
         //end
 
         //ambil data teknisi
         // $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 'TEKNISI'])->result_array();
 
-        $data['sess_menu'] = 'prosesoh';
+        // $data['sess_menu'] = 'prosesoh';
 
         //generate QR CODE berisi SN
 
@@ -433,10 +435,11 @@ class Overhaul extends CI_Controller
 
         $data['qrcode'] = $qrcode;
         $data['qrcode_pict'] = $image_name;
+        $data['tanggal'] = date('d-M-Y H:i:sa', strtotime(date('Y-m-d H:i:s')));
 
-        $this->load->view('template/header', $data);
-        $this->load->view('report/qrcode');
-        $this->load->view('template/footer');
+        // $this->load->view('template/header', $data);
+        $this->load->view('report/qrcode', $data);
+        // $this->load->view('template/footer');
     }
 
     public function ajax_table_mesin()

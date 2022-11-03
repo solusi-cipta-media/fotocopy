@@ -99,6 +99,14 @@ class Kerjaluar extends CI_Controller
         $this->load->view('report/listtraining');
     }
 
+    public function formkirim()
+    {
+        //ambil data
+        $data['customer'] = $this->crud->get_where('kerjaluar', ['id' => $this->input->get('id')])->row_array();
+
+        $this->load->view('report/formkirim', $data);
+    }
+
     public function ajax_table_spk()
     {
 
