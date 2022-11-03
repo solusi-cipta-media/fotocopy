@@ -58,7 +58,7 @@
                             <th>Jenis</th>
                             <th>Tgl Kerja</th>
                             <th class="text-center">Teknisi</th>
-                            <th class="text-center">Aksi</th>
+                            <!-- <th class="text-center">Aksi</th> -->
                         </tr>
                     </thead>
                 </table>
@@ -112,9 +112,23 @@
                                 <div class="mb-4">
                                     <label class="form-label" for="jenis">Jenis Pekerjaan</label>
                                     <select class="form-select" id="jenis" name="jenis">
-                                        <option value="SERVIS">Servis</option>
-                                        <option value="INSTAL">Instal</option>
                                         <option value="INVOICE">Invoice</option>
+                                        <option value="INSTAL">Instal</option>
+                                        <option value="SERVIS">Servis</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-xl-12" id="q_nomor_mesin" style="display: none;">
+                                <div class="mb-4">
+                                    <label class="form-label" for="nomor_mesin">Nomor Mesin</label>
+                                    <select name="nomor_mesin" id="nomor_mesin" class="form-control">
+                                        <?php
+                                        foreach ($mesin as $key => $value) {
+                                        ?>
+                                            <option value="<?= $value['serial_number'] . '-' . $value['nomor_mesin'] . '-' . $value['model'] ?>"><?= $value['nomor_mesin'] . ' - ' . $value['serial_number'] ?></option>
+                                        <?php
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </div>
@@ -263,6 +277,18 @@
         $('#customer').select2({
             dropdownParent: $('#modal-register')
         });
+        $('#nomor_mesin').select2({
+            dropdownParent: $('#modal-register')
+        });
+    });
+
+    $('#jenis').on('change', function() {
+        if ($('#jenis').val() == 'SERVIS' || $('#jenis').val() == 'INSTAL') {
+            $('#q_nomor_mesin').show()
+        } else if ($('#jenis').val() == 'INVOICE') {
+            $('#q_nomor_mesin').hide()
+        }
+
     });
 
     function reload_table() {
@@ -359,6 +385,7 @@
         form_data.append('customer', $("#customer").val());
         form_data.append('tgl_kerja', $("#tgl_kerja").val());
         form_data.append('jenis', $("#jenis").val());
+        form_data.append('nomor_mesin', $("#nomor_mesin").val());
 
         url_ajax = '<?= base_url() ?>kerjaluar/register_spk'
 
@@ -450,13 +477,6 @@
                     "target": [<?= $target ?>],
                     "className": 'text-center py-1',
                     "data": "data.teknisi",
-                }, {
-                    "target": [<?= $target ?>],
-                    "className": 'text-center py-1',
-                    "data": "data",
-                    "render": function(data) {
-                        return `<button type="button" class="btn btn-sm btn-success" onclick="tentukan_data(` + data.id + `)" data-bs-toggle="tooltip" title="Lihat Detail"><i class="fa fa-eye"></i> Details</button>`
-                    }
                 }, ],
                 "dom": '<"row" <"col-md-6" l><"col-md-6" f>>rt<"row" <"col-md-6" i><"col-md-6" p>>',
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]

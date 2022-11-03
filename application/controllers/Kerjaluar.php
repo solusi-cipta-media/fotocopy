@@ -26,6 +26,8 @@ class Kerjaluar extends CI_Controller
         $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 'TEKNISI'])->result_array();
         //ambil data customer
         $data['customer'] = $this->crud->get_all('customer')->result_array();
+        //ambil data mesin
+        $data['mesin'] = $this->crud->get_all('mesin')->result_array();
 
         $data['sess_menu'] = 'jadwalspk';
 
@@ -216,9 +218,9 @@ class Kerjaluar extends CI_Controller
         $where = [];
 
         $table = 'kerjaluar'; //nama tabel dari database
-        $column_order = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'nomor_mesin', 'serial_number', 'meter', 'uraian', 'time_in', 'time_out', 'status', 'date_created', 'id'); //field yang ada di table user
-        $column_search = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'nomor_mesin', 'serial_number', 'meter', 'uraian', 'time_in', 'time_out', 'status', 'date_created'); //field yang diizin untuk pencarian 
-        $select = 'id, customer, jenis, tgl_kerja, lokasi, latitude, longitude, teknisi, nomor_mesin, serial_number, meter, uraian, id_karyawan, time_in, time_out, status, date_created';
+        $column_order = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'nomor_mesin', 'serial_number', 'model', 'meter', 'uraian', 'time_in', 'time_out', 'status', 'date_created', 'id'); //field yang ada di table user
+        $column_search = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'nomor_mesin', 'serial_number', 'model', 'meter', 'uraian', 'time_in', 'time_out', 'status', 'date_created'); //field yang diizin untuk pencarian 
+        $select = 'id, customer, jenis, tgl_kerja, lokasi, latitude, longitude, teknisi, nomor_mesin, serial_number, model, meter, uraian, id_karyawan, time_in, time_out, status, date_created';
         $order = array('id' => 'asc'); // default order 
         $list = $this->m_kerja->get_datatables($table, $select, $column_order, $column_search, $order, $where);
         $data = array();
@@ -238,6 +240,7 @@ class Kerjaluar extends CI_Controller
             $row['data']['teknisi'] = $key->teknisi;
             $row['data']['nomor_mesin'] = $key->nomor_mesin;
             $row['data']['serial_number'] = $key->serial_number;
+            $row['data']['model'] = $key->model;
             $row['data']['meter'] = $key->meter;
             $row['data']['uraian'] = $key->uraian;
             $row['data']['time_in'] = $key->time_in;
@@ -301,8 +304,14 @@ class Kerjaluar extends CI_Controller
         //ambil data customer
         $customer = $this->crud->get_where('customer', ['id' => $this->input->post('customer')])->row_array();
 
-        // echo $this->db->last_query();
-        // die;
+        $a = explode('-', $data['nomor_mesin']);
+
+        if ($data['jenis'] != 'INVOICE') {
+            $data['serial_number'] = $a[0];
+            $data['nomor_mesin'] = $a[1];
+            $data['model'] = $a[2];
+        }
+
         $data['customer'] = $customer['nama'];
         $data['lokasi'] = $customer['alamat'];
         $data['latitude'] = $customer['latitude'];

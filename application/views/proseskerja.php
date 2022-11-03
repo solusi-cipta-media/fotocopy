@@ -165,15 +165,21 @@
                 "className": 'py-1',
                 "data": "data",
                 "render": function(data) {
-                    if (data.status == 'SELESAI')
+                    if (data.status == 'SELESAI') {
                         return ``
-                    return `<button type="button" class="btn btn-sm btn-secondary" onclick=tentukan_data(` + data.id + `) data-bs-toggle="tooltip" title="Ganti Teknisi">
+                    } else if (data.jenis == 'SERVIS' || data.jenis == 'INSTAL') {
+                        return `<button type="button" class="btn btn-sm btn-secondary" onclick=tentukan_data(` + data.id + `) data-bs-toggle="tooltip" title="Ganti Teknisi">
                                     <i class="fa fa-file-lines"></i> Machine Record
                                 </button><br style="margin-bottom: 10px;">
                                 <button type="button" class="btn btn-sm btn-danger" onclick="selesai_data('` + data.id + `', '` + data.nomor_mesin + `','` + data.model + `')" data-bs-toggle="tooltip" title="Selesai">
                                     <i class="fa fa-circle-check"></i> Selesai
                                 </button><br style="margin-bottom: 10px;">
                                 `
+                    } else {
+                        return `<button type="button" class="btn btn-sm btn-danger" onclick="selesai_data('` + data.id + `', '` + data.nomor_mesin + `','` + data.model + `')" data-bs-toggle="tooltip" title="Selesai">
+                                    <i class="fa fa-circle-check"></i> Selesai
+                                </button><br style="margin-bottom: 10px;">`
+                    }
                 }
             }, ],
             "dom": '<"row" <"col-md-6" l><"col-md-6" f>>rt<"row" <"col-md-6" i><"col-md-6" p>>',
