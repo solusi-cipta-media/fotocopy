@@ -27,7 +27,7 @@ class Kerjaluar extends CI_Controller
         //ambil data customer
         $data['customer'] = $this->crud->get_all('customer')->result_array();
         //ambil data mesin
-        $data['mesin'] = $this->crud->get_all('mesin')->result_array();
+        $data['mesin'] = $this->crud->get_where('overhaul', ['status' => 'READY'])->result_array();
 
         $data['sess_menu'] = 'jadwalspk';
 
