@@ -226,6 +226,12 @@
                                     <span class="nav-main-link-name">Catatan Meter</span>
                                 </a>
                             </li>
+                            <li class="nav-main-item">
+                                <a class="<?= ($sess_menu == "listtraining") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('kerjaluar/listtraining') ?>" target="_blank">
+                                    <i class="nav-main-link-icon fa fa-print"></i>
+                                    <span class="nav-main-link-name">List Training</span>
+                                </a>
+                            </li>
 
 
                             <li class="nav-main-heading">Setting</li>

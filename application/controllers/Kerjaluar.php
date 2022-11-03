@@ -93,6 +93,12 @@ class Kerjaluar extends CI_Controller
         $this->load->view('report/catatanmeter', $data);
     }
 
+    public function listtraining()
+    {
+
+        $this->load->view('report/listtraining');
+    }
+
     public function ajax_table_spk()
     {
 
