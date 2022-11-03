@@ -220,6 +220,12 @@
                                     <span class="nav-main-link-name">Machine Record</span>
                                 </a>
                             </li>
+                            <li class="nav-main-item">
+                                <a class="<?= ($sess_menu == "catatanmeter") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('kerjaluar/catatanmeter') ?>">
+                                    <i class="nav-main-link-icon fa fa-print"></i>
+                                    <span class="nav-main-link-name">Catatan Meter</span>
+                                </a>
+                            </li>
 
 
                             <li class="nav-main-heading">Setting</li>

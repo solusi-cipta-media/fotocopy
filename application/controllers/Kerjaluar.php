@@ -70,6 +70,29 @@ class Kerjaluar extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    public function catatanmeter()
+    {
+        //ambil data notifikasi
+        $data['notifikasi'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->result_array();
+        $data['jumlah_notif'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->num_rows();
+        //end
+
+
+        $data['sess_menu'] = 'catatanmeter';
+
+        $this->load->view('template/header', $data);
+        $this->load->view('catatanmeter');
+        $this->load->view('template/footer');
+    }
+
+    public function cetakmeter()
+    {
+        //ambil data
+        $data['customer'] = $this->crud->get_where('catatan_meter', ['id' => $this->input->get('id')])->row_array();
+
+        $this->load->view('report/catatanmeter', $data);
+    }
+
     public function ajax_table_spk()
     {
 
@@ -98,6 +121,49 @@ class Kerjaluar extends CI_Controller
             $row['data']['time_in'] = $key->time_in;
             $row['data']['time_out'] = $key->time_out;
             $row['data']['status'] = $key->status;
+            $row['data']['date_created'] = $key->date_created;
+
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->crud->count_all($table),
+            "recordsFiltered" => $this->crud->count_filtered($table, $select, $column_order, $column_search, $order),
+            "data" => $data,
+            "query" => $this->db->last_query()
+        );
+        //output to json format
+        echo json_encode($output);
+    }
+
+    public function ajax_table_catatanmeter()
+    {
+
+
+        $table = 'catatan_meter'; //nama tabel dari database
+        $column_order = array('id', 'customer', 'alamat', 'kolektor', 'status', 'tgl_instal', 'model', 'lokasi', 'telp', 'fax', 'nomor_kontrak', 'date_created', 'id'); //field yang ada di table user
+        $column_search = array('id', 'customer', 'alamat', 'kolektor', 'status', 'tgl_instal', 'model', 'lokasi', 'telp', 'fax', 'nomor_kontrak', 'date_created'); //field yang diizin untuk pencarian 
+        $select = 'id, customer, alamat, kolektor, status, tgl_instal, model, telp, lokasi, fax, nomor_kontrak, date_created';
+        $order = array('id' => 'asc'); // default order 
+        $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order);
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($list as $key) {
+            $no++;
+            $row = array();
+            $row['data']['no'] = $no;
+            $row['data']['id'] = $key->id;
+            $row['data']['customer'] = $key->customer;
+            $row['data']['alamat'] = $key->alamat;
+            $row['data']['kolektor'] = $key->kolektor;
+            $row['data']['status'] = $key->status;
+            $row['data']['tgl_instal'] = date('d-M-Y', strtotime($key->tgl_instal));
+            $row['data']['model'] = $key->model;
+            $row['data']['lokasi'] = $key->lokasi;
+            $row['data']['telp'] = $key->telp;
+            $row['data']['fax'] = $key->fax;
+            $row['data']['nomor_kontrak'] = $key->nomor_kontrak;
             $row['data']['date_created'] = $key->date_created;
 
             $data[] = $row;
@@ -435,6 +501,18 @@ class Kerjaluar extends CI_Controller
             $response = ['status' => 'success', 'message' => 'Success Mengajukan Selesai Kerja!'];
         } else
             $response = ['status' => 'failed', 'message' => 'Error Mengajukan Selesai Kerja!'];
+
+        echo json_encode($response);
+    }
+
+    public function delete_data()
+    {
+        $table = $this->input->post('table');
+        // $name = $this->input->post('name');
+        if ($this->crud->delete($table, ['id' => $this->input->post('id')])) {
+            $response = ['status' => 'success', 'message' => 'Success Delete Data!'];
+        } else
+            $response = ['status' => 'failed', 'message' => 'Error Delete Data!'];
 
         echo json_encode($response);
     }
