@@ -151,6 +151,11 @@ class Design extends CI_Controller
         $this->load->view('report/hasiloh');
     }
 
+    function cetakhasiloverhaul2()
+    {
+        $this->load->view('report/hasiloh2');
+    }
+
     function cekqr()
     {
         $this->load->view('template/header');
@@ -162,6 +167,13 @@ class Design extends CI_Controller
     {
         $this->load->view('template/header');
         $this->load->view('jadwalspk');
+        $this->load->view('template/footer');
+    }
+
+    function user()
+    {
+        $this->load->view('template/header');
+        $this->load->view('user');
         $this->load->view('template/footer');
     }
 }

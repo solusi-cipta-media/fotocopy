@@ -1,9 +1,4 @@
 <!-- Main Container -->
-<style>
-    .select2.select2-container.select2-container--default {
-        width: 100% !important;
-    }
-</style>
 <main id="main-container">
     <!-- Page Content -->
     <div class="content">
@@ -13,11 +8,11 @@
         <div class="block block-rounded" id="list-kontrak">
             <div class="block-header block-header-default">
                 <h3 class="block-title">
-                    Master Kontrak
+                    Notifikasi Kontrak
                 </h3>
-                <button type="button" class="btn btn-outline-primary min-width-125" id="btn-add">
+                <!-- <button type="button" class="btn btn-outline-primary min-width-125" id="btn-add">
                     <i class="fa fa-plus mr-5"></i> Register Kontrak
-                </button>
+                </button> -->
             </div>
             <div class="block-content block-content-full">
                 <!-- DataTables functionality is initialized with .js-dataTable-responsive class in js/pages/be_tables_datatables.min.js which was auto compiled from _js/pages/be_tables_datatables.js -->
@@ -26,67 +21,16 @@
                     <thead>
                         <tr>
                             <th class="text-center">#</th>
-                            <th>Nomor</th>
                             <th>Customer</th>
-                            <th>Awal Kontrak</th>
-                            <th>Akhir Kontrak</th>
-                            <th>Reminder</th>
+                            <th>Pesan</th>
                             <th>Dokumen</th>
-                            <th class="text-center" style="width: 20%;">Aksi</th>
+                            <th>Date Created</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                 </table>
             </div>
         </div>
-
-        <div class="block block-rounded" id="add-new" style="display: none;">
-            <div class="block-header block-header-default">
-                <h3 class="block-title">Register Kontrak</h3>
-                <div class="block-options">
-                    <button type="button" class="btn btn-outline-danger min-width-125" id="btn-hide"><i class="fa fa-minus-circle"></i> Sembunyikan</button>
-                </div>
-            </div>
-            <div class="block-content">
-                <form id="form-data">
-                    <div class="row push">
-                        <div class="col-lg-12 col-xl-12">
-                            <div class="mb-4">
-                                <label class="form-label" for="nomor_kontrak">Nomor</label>
-                                <input type="text" class="form-control" id="nomor_kontrak" name="nomor_kontrak" onkeyup="this.value = this.value.toUpperCase()">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="customer">Customer</label>
-                                <select name="customer" id="customer" class="form-control"></select>
-                                <!-- <input type="text" class="form-control" id="customer" name="customer"> -->
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="awal_kontrak">Awal Kontrak</label>
-                                <input type="date" class="form-control" id="awal_kontrak" name="awal_kontrak">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="akhir_kontrak">Akhir Kontrak</label>
-                                <input type="date" class="form-control" id="akhir_kontrak" name="akhir_kontrak">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="reminder">Reminder</label>
-                                <input type="date" class="form-control" id="reminder" name="reminder">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="file">Upload Dokumen Kontrak -FILE HARUS PDF</label>
-                                <input class="form-control" type="file" id="file" name="file">
-                            </div>
-                        </div>
-                        <div class="col-lg-12 col-xl-12">
-                            <div class="mb-4">
-                                <button type="submit" class="btn btn-alt-primary"><i class="si si-cloud-upload"></i> Simpan</button>
-                                <button type="button" class="btn btn-alt-danger" id="clear-form"><i class="si si-close"></i> Clear</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <!-- Dynamic Table Responsive -->
     </div>
     <!-- END Page Content -->
 </main>
@@ -142,7 +86,7 @@
             ],
             'ajax': {
                 'dataType': 'json',
-                'url': '<?= base_url() ?>kontrak/ajax_table_kontrak',
+                'url': '<?= base_url() ?>kontrak/ajax_table_notifikasi_kontrak',
                 'type': 'post',
             },
             'columns': [{
@@ -152,23 +96,11 @@
             }, {
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
-                "data": "data.nomor_kontrak",
-            }, {
-                "target": [<?= $target ?>],
-                "className": 'text-center py-1',
                 "data": "data.customer",
             }, {
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
-                "data": "data.awal_kontrak",
-            }, {
-                "target": [<?= $target ?>],
-                "className": 'text-center py-1',
-                "data": "data.akhir_kontrak",
-            }, {
-                "target": [<?= $target ?>],
-                "className": 'text-center py-1',
-                "data": "data.reminder",
+                "data": "data.pesan",
             }, {
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
@@ -179,9 +111,15 @@
             }, {
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
+                "data": "data.date_created",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
                 "data": "data",
                 "render": function(data) {
-                    return `<button type="button" class="btn btn-sm btn-danger" onclick=delete_data('` + data.id + `')><i class="fa fa-trash"></i> Hapus</button>&nbsp;<button type="button" class="btn btn-sm btn-info" id="btn-edit" onclick="edit_data('` + data.id + `')"><i class="fa fa-edit"></i> Edit</button>`
+                    if (data.status_read == 0)
+                        return `<a href="<?= base_url('kontrak/notifikasidetails?id=') ?>` + data.id + `" type="button" class="btn btn-sm btn-danger"><i class="fa fa-envelope"></i> Baca</a>`
+                    return `<a href="<?= base_url('kontrak/notifikasidetails?id=') ?>` + data.id + `" type="button" class="btn btn-sm btn-success"><i class="fa fa-envelope-open"></i> Baca</a>`
                 }
             }, ],
             "dom": '<"row" <"col-md-6" l><"col-md-6" f>>rt<"row" <"col-md-6" i><"col-md-6" p>>',

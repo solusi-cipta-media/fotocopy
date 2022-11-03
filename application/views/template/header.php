@@ -36,6 +36,9 @@
     <link rel="stylesheet" id="css-main" href="<?= base_url('') ?>assets/css/codebase.min.css">
     <link rel="stylesheet" href="<?= base_url('') ?>assets/js/plugins/sweetalert2/sweetalert2.min.css">
 
+    <!-- select2 -->
+    <link rel="stylesheet" href="<?= base_url() ?>resources/select2/select2.min.css">
+
     <!-- jQuery (required for DataTables plugin) -->
     <script src="<?= base_url('') ?>assets/js/lib/jquery.min.js"></script>
 
@@ -55,7 +58,7 @@
                         <span class="smini-visible fw-bold tracking-wide fs-lg">
                             c<span class="text-primary">b</span>
                         </span>
-                        <a class="link-fx fw-bold tracking-wide mx-auto" href="index.html">
+                        <a class="link-fx fw-bold tracking-wide mx-auto" href="<?= base_url() ?>">
                             <span class="smini-hidden">
                                 <img src="<?= base_url('assets/media/favicons/cms.png') ?>" alt="cms" width="80%">
                                 <!-- <i class="fa fa-fire text-primary"></i> -->
@@ -88,11 +91,11 @@
                         <!-- Visible only in normal mode -->
                         <div class="smini-hidden text-center mx-auto">
                             <a class="img-link" href="be_pages_generic_profile.html">
-                                <img class="img-avatar" src="<?= base_url('') ?>assets/media/avatars/asa.jpg" alt="">
+                                <img class="img-avatar" src="<?= base_url('assets/media/karyawan/' . $this->session->userdata('photo')) ?>" alt="">
                             </a>
                             <ul class="list-inline mt-3 mb-0">
                                 <li class="list-inline-item">
-                                    <a class="link-fx text-dual fs-sm fw-semibold text-uppercase" href="<?= base_url('design/profil') ?>">Agus Salim</a>
+                                    <a class="link-fx text-dual fs-sm fw-semibold text-uppercase" href="<?= base_url('dashboard/profil') ?>"><?= $this->session->userdata('name') ?></a>
                                 </li>
                                 <li class="list-inline-item">
                                     <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
@@ -101,7 +104,7 @@
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
-                                    <a class="link-fx text-dual" href="<?= base_url('design') ?>">
+                                    <a class="link-fx text-dual" href="<?= base_url('auth/logout') ?>">
                                         <i class="fa fa-sign-out-alt"></i>
                                     </a>
                                 </li>
@@ -115,38 +118,38 @@
                     <div class="content-side content-side-full">
                         <ul class="nav-main">
                             <li class="nav-main-item">
-                                <a class="nav-main-link active" href="<?= base_url('design/dashboard') ?>">
+                                <a class="<?= ($sess_menu == "dashboard") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('dashboard') ?>">
                                     <i class="nav-main-link-icon fa fa-house-user"></i>
                                     <span class="nav-main-link-name">Dashboard</span>
                                 </a>
                             </li>
                             <li class="nav-main-heading">Master</li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link active" href="<?= base_url('design/karyawan') ?>">
+                                <a class="<?= ($sess_menu == "karyawan") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('karyawan') ?>">
                                     <i class="nav-main-link-icon fa fa-child"></i>
                                     <span class="nav-main-link-name">Karyawan</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="<?= base_url('design/mesin') ?>">
+                                <a class="<?= ($sess_menu == "mesin") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('mesin') ?>">
                                     <i class="nav-main-link-icon fa fa-dumpster"></i>
                                     <span class="nav-main-link-name">Mesin</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="<?= base_url('design/customer') ?>">
+                                <a class="<?= ($sess_menu == "customer") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('customer') ?>">
                                     <i class="nav-main-link-icon fa fa-elevator"></i>
                                     <span class="nav-main-link-name">Customer</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="<?= base_url('design/kontrak') ?>">
+                                <a class="<?= ($sess_menu == "kontrak") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('kontrak') ?>">
                                     <i class="nav-main-link-icon fa fa-book"></i>
                                     <span class="nav-main-link-name">Kontrak</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="<?= base_url('design/cuti') ?>">
+                                <a class="<?= ($sess_menu == "cuti") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('cuti') ?>">
                                     <i class="nav-main-link-icon fa fa-layer-group"></i>
                                     <span class="nav-main-link-name">Jenis Cuti</span>
                                 </a>
@@ -174,19 +177,25 @@
 
                             <li class="nav-main-heading">Overhaul</li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="<?= base_url('design/listoh') ?>">
+                                <a class="<?= ($sess_menu == "listoh") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('overhaul') ?>">
                                     <i class="nav-main-link-icon fa fa-cash-register"></i>
                                     <span class="nav-main-link-name">List Mesin</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="<?= base_url('design/prosesoh') ?>">
+                                <a class="<?= ($sess_menu == "prosesoh") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('overhaul/prosesoh') ?>">
                                     <i class="nav-main-link-icon fa fa-dumpster-fire"></i>
                                     <span class="nav-main-link-name">Proses Overhaul</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="<?= base_url('design/cekqr') ?>">
+                                <a class="<?= ($sess_menu == "selesaioh") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('overhaul/selesaioh') ?>">
+                                    <i class="nav-main-link-icon fa fa-flag-checkered"></i>
+                                    <span class="nav-main-link-name">Overhaul Selesai</span>
+                                </a>
+                            </li>
+                            <li class="nav-main-item">
+                                <a class="<?= ($sess_menu == "cekqr") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('overhaul/cekqr') ?>">
                                     <i class="nav-main-link-icon fa fa-qrcode"></i>
                                     <span class="nav-main-link-name">Cek QR</span>
                                 </a>
@@ -194,13 +203,19 @@
 
                             <li class="nav-main-heading">Kerja Luar</li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="<?= base_url('design/jadwalspk') ?>">
+                                <a class="<?= ($sess_menu == "jadwalspk") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('kerjaluar') ?>">
                                     <i class="nav-main-link-icon fa fa-business-time"></i>
                                     <span class="nav-main-link-name">Jadwal SPK</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="#">
+                                <a class="<?= ($sess_menu == "proseskerja") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('kerjaluar/proseskerja') ?>">
+                                    <i class="nav-main-link-icon fa fa-person-running"></i>
+                                    <span class="nav-main-link-name">Proses Kerja</span>
+                                </a>
+                            </li>
+                            <li class="nav-main-item">
+                                <a class="<?= ($sess_menu == "machinerecord") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('kerjaluar/machinerecord') ?>">
                                     <i class="nav-main-link-icon fa fa-file-contract"></i>
                                     <span class="nav-main-link-name">Machine Record</span>
                                 </a>
@@ -208,14 +223,14 @@
 
 
                             <li class="nav-main-heading">Setting</li>
-                            <li class="nav-main-item">
-                                <a class="nav-main-link" href="#">
+                            <!-- <li class="nav-main-item">
+                                <a class="nav-main-link" href="<?= base_url('design/user') ?>">
                                     <i class="nav-main-link-icon fa fa-user-lock"></i>
                                     <span class="nav-main-link-name">User</span>
                                 </a>
-                            </li>
+                            </li> -->
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="<?= base_url('design') ?>">
+                                <a class="nav-main-link" href="<?= base_url('auth/logout') ?>">
                                     <i class="nav-main-link-icon fa fa-sign-out-alt"></i>
                                     <span class="nav-main-link-name">Logout</span>
                                 </a>
@@ -323,7 +338,7 @@
                     <div class="dropdown d-inline-block">
                         <button type="button" class="btn btn-sm btn-alt-secondary" id="page-header-notifications" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-flag"></i>
-                            <span class="text-primary">&bull;</span>
+                            <span class="badge rounded-pill bg-black-50 ms-1"><?= $jumlah_notif ?></span>
                         </button>
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications">
                             <div class="px-2 py-3 bg-body-light rounded-top">
@@ -332,64 +347,26 @@
                                 </h5>
                             </div>
                             <ul class="nav-items my-2 fs-sm">
-                                <li>
-                                    <a class="text-dark d-flex py-2" href="javascript:void(0)">
-                                        <div class="flex-shrink-0 me-2 ms-3">
-                                            <i class="fa fa-fw fa-check text-success"></i>
-                                        </div>
-                                        <div class="flex-grow-1 pe-2">
-                                            <p class="fw-medium mb-1">Kontrak dengan PT. ABC akan segera berakhir pada 20-December-2022!</p>
-                                            <div class="text-muted">15 min ago</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="text-dark d-flex py-2" href="javascript:void(0)">
-                                        <div class="flex-shrink-0 me-2 ms-3">
-                                            <i class="fa fa-fw fa-exclamation-triangle text-warning"></i>
-                                        </div>
-                                        <div class="flex-grow-1 pe-2">
-                                            <p class="fw-medium mb-1">Kontrak dengan PT. ABC akan segera berakhir pada 20-December-2022!</p>
-                                            <div class="text-muted">50 min ago</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="text-dark d-flex py-2" href="javascript:void(0)">
-                                        <div class="flex-shrink-0 me-2 ms-3">
-                                            <i class="fa fa-fw fa-times text-danger"></i>
-                                        </div>
-                                        <div class="flex-grow-1 pe-2">
-                                            <p class="fw-medium mb-1">Kontrak dengan PT. ABC akan segera berakhir pada 20-December-2022!</p>
-                                            <div class="text-muted">4 hours ago</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="text-dark d-flex py-2" href="javascript:void(0)">
-                                        <div class="flex-shrink-0 me-2 ms-3">
-                                            <i class="fa fa-fw fa-exclamation-triangle text-warning"></i>
-                                        </div>
-                                        <div class="flex-grow-1 pe-2">
-                                            <p class="fw-medium mb-1">Kontrak dengan PT. ABC akan segera berakhir pada 20-December-2022!</p>
-                                            <div class="text-muted">16 hours ago</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="text-dark d-flex py-2" href="javascript:void(0)">
-                                        <div class="flex-shrink-0 me-2 ms-3">
-                                            <i class="fa fa-fw fa-plus text-primary"></i>
-                                        </div>
-                                        <div class="flex-grow-1 pe-2">
-                                            <p class="fw-medium mb-1">Kontrak dengan PT. ABC akan segera berakhir pada 20-December-2022!</p>
-                                            <div class="text-muted">1 day ago</div>
-                                        </div>
-                                    </a>
-                                </li>
+                                <?php
+                                foreach ($notifikasi as $key => $value) {
+                                ?>
+                                    <li>
+                                        <a class="text-dark d-flex py-2" href="<?= base_url('kontrak/notifikasidetails?id=' . $value["id"]) ?>">
+                                            <div class="flex-shrink-0 me-2 ms-3">
+                                                <i class="fa fa-fw fa-envelope text-primary"></i>
+                                            </div>
+                                            <div class="flex-grow-1 pe-2">
+                                                <p class="fw-medium mb-1"><?= $value['pesan'] ?></p>
+                                                <div class="text-muted"><?= date('d-M-Y H:i:s', strtotime($value['date_created'])); ?></div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                <?php
+                                }
+                                ?>
                             </ul>
                             <div class="p-2 bg-body-light rounded-bottom">
-                                <a class="dropdown-item text-center mb-0" href="javascript:void(0)">
+                                <a class="dropdown-item text-center mb-0" href="<?= base_url('kontrak/notifikasi') ?>">
                                     <i class="fa fa-fw fa-flag opacity-50 me-1"></i> View All
                                 </a>
                             </div>
@@ -435,6 +412,33 @@
             <!-- END Header Loader -->
         </header>
         <!-- END Header -->
+
+        <script src="<?= base_url('') ?>assets/js/codebase.app.min.js"></script>
+
+        <!-- Page JS Plugins -->
+        <script src="<?= base_url('') ?>assets/js/plugins/chart.js/chart.min.js"></script>
+
+        <!-- Page JS Plugins -->
+        <script src="<?= base_url('') ?>assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="<?= base_url('') ?>assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
+        <script src="<?= base_url('') ?>assets/js/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="<?= base_url('') ?>assets/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+        <script src="<?= base_url('') ?>assets/js/plugins/datatables-buttons/dataTables.buttons.min.js"></script>
+        <script src="<?= base_url('') ?>assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+        <script src="<?= base_url('') ?>assets/js/plugins/datatables-buttons-jszip/jszip.min.js"></script>
+        <script src="<?= base_url('') ?>assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js"></script>
+        <script src="<?= base_url('') ?>assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js"></script>
+        <script src="<?= base_url('') ?>assets/js/plugins/datatables-buttons/buttons.print.min.js"></script>
+        <script src="<?= base_url('') ?>assets/js/plugins/datatables-buttons/buttons.html5.min.js"></script>
+
+        <!-- Page JS Code -->
+        <script src="<?= base_url('') ?>assets/js/pages/be_tables_datatables.min.js"></script>
+
+        <!-- Page JS Code -->
+        <script src="<?= base_url('') ?>assets/js/pages/be_pages_dashboard.min.js"></script>
+
+        <script src="<?= base_url('assets/js/plugins/sweetalert2/sweetalert2.min.js') ?>"></script>
+
 
         <script>
             const toast = (icon, title) => {

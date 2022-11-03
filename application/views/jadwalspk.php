@@ -1,4 +1,9 @@
 <!-- Main Container -->
+<style>
+    .select2.select2-container.select2-container--default {
+        width: 100% !important;
+    }
+</style>
 <main id="main-container">
     <!-- Page Content -->
     <div class="content">
@@ -16,7 +21,7 @@
             </div>
             <div class="block-content block-content-full">
                 <!-- DataTables functionality is initialized with .js-dataTable-responsive class in js/pages/be_tables_datatables.min.js which was auto compiled from _js/pages/be_tables_datatables.js -->
-                <table class="table table-bordered table-striped table-vcenter js-dataTable-responsive">
+                <table class="table table-bordered table-striped table-vcenter js-dataTable-responsive" id="table-spk">
                     <!-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> -->
                     <thead>
                         <tr>
@@ -29,140 +34,38 @@
                             <th class="text-center" style="width: 15%;">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td class="text-center">1</td>
-                            <td class="fw-semibold">PT. ABC</td>
-                            <td><span class="badge bg-success">Servis</span></td>
-                            <td>22-Oct-2022</td>
-                            <td class="text-center">Jl. Pramuka No. 48 Malang<br>
-                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Maps">
-                                    <i class="fa fa-location-dot"></i>
-                                </button>
-                            </td>
-                            <td>-</td>
-                            <td class="text-center">
-                                <button type="button" class="btn btn-sm btn-primary" onclick=pilih_data() data-bs-toggle="tooltip" title="Pilih">
-                                    <i class="fa fa-circle-check"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm btn-primary" id="btn-add" data-bs-toggle="tooltip" title="Pilih Teknisi">
-                                    <i class="fa fa-user-gear"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">2</td>
-                            <td class="fw-semibold">PT. XYZ</td>
-                            <td><span class="badge bg-danger">Instal</span></td>
-                            <td>22-Oct-2022</td>
-                            <td class="text-center">Jl. Pramuka No. 48 Malang<br>
-                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Maps">
-                                    <i class="fa fa-location-dot"></i>
-                                </button>
-                            </td>
-                            <td>-</td>
-                            <td class="text-center">
-                                <button type="button" class="btn btn-sm btn-primary" id="btn-add" data-bs-toggle="tooltip" title="Pilih">
-                                    <i class="fa fa-circle-check"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm btn-primary" id="btn-add" data-bs-toggle="tooltip" title="Pilih Teknisi">
-                                    <i class="fa fa-user-gear"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">3</td>
-                            <td class="fw-semibold">PT. YCR</td>
-                            <td><span class="badge bg-primary">Invoice</span></td>
-                            <td>22-Oct-2022</td>
-                            <td class="text-center">Jl. Pramuka No. 48 Malang<br>
-                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Maps">
-                                    <i class="fa fa-location-dot"></i>
-                                </button>
-                            </td>
-                            <td>-</td>
-                            <td class="text-center">
-                                <button type="button" class="btn btn-sm btn-primary" onclick=pilih_data() data-bs-toggle="tooltip" title="Pilih">
-                                    <i class="fa fa-circle-check"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm btn-primary" id="btn-add" data-bs-toggle="tooltip" title="Pilih Teknisi">
-                                    <i class="fa fa-user-gear"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
                 </table>
             </div>
         </div>
 
-        <div class="block block-rounded" id="add-new" style="display: none;">
+        <div class="block block-rounded" id="list-histori" style="display: none;">
             <div class="block-header block-header-default">
-                <h3 class="block-title">Pilih Teknisi</h3>
+                <h3 class="block-title">
+                    Histori Kerja Teknisi
+                </h3>
                 <div class="block-options">
-                    <button type="button" class="btn btn-outline-danger min-width-125" id="btn-hide"><i class="fa fa-minus-circle"></i> Sembunyikan</button>
+                    <button type="button" class="btn btn-outline-danger min-width-125" id="btn-hide-histori"><i class="fa fa-minus-circle"></i> Sembunyikan</button>
                 </div>
             </div>
-            <div class="block-content">
-                <form action="be_forms_elements.html" method="POST" enctype="multipart/form-data" onsubmit="return false;">
-                    <div class="row push">
-                        <div class="col-lg-12 col-xl-12">
-                            <div class="mb-4">
-                                <label class="form-label" for="example-text-input">Teknisi</label>
-                                <input type="text" class="form-control" id="example-text-input" name="example-text-input" value="select2 method">
-                            </div>
-                        </div>
-                        <div class="col-lg-12 col-xl-12">
-                            <div class="mb-4">
-                                <button type="submit" class="btn btn-alt-primary"><i class="si si-cloud-upload"></i> Simpan</button>
-                                <button type="button" class="btn btn-alt-danger" id="clear-form"><i class="si si-close"></i> Clear</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <div class="row push">
-                    <div class="col-lg-12 col-xl-12">
-                        <div class="mb-4">
-                            <small style="text-decoration: underline;"><strong>Rincian Pekerjaan</strong></small>
-                        </div>
-                        <div class="mb-4">
-                            <div class="row">
-                                <div class="col-lg-1">
-                                    1
-                                </div>
-                                <div class="col-lg-4">
-                                    PT. ABC
-                                </div>
-                                <div class="col-lg-3">
-                                    22-Oct-2022
-                                </div>
-                                <div class="col-lg-4">
-                                    <input type="text" class="form-control" value="1">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-1">
-                                    2
-                                </div>
-                                <div class="col-lg-4">
-                                    PT. XYZ
-                                </div>
-                                <div class="col-lg-3">
-                                    22-Oct-2022
-                                </div>
-                                <div class="col-lg-4">
-                                    <input type="text" class="form-control" value="2">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-4" style="text-align: right;">
-                            <button type="button" class="btn btn-sm btn-info">
-                                <i class="si si-cloud-upload"></i> Update
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            <div class="block-content block-content-full">
+                <!-- DataTables functionality is initialized with .js-dataTable-responsive class in js/pages/be_tables_datatables.min.js which was auto compiled from _js/pages/be_tables_datatables.js -->
+                <table class="table table-bordered table-striped table-vcenter js-dataTable-responsive" id="table-histori">
+                    <!-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> -->
+                    <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th>Customer</th>
+                            <th>Jenis</th>
+                            <th>Tgl Kerja</th>
+                            <th class="text-center">Teknisi</th>
+                            <th class="text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
         </div>
+
+
         <!-- Dynamic Table Responsive -->
     </div>
     <!-- END Page Content -->
@@ -170,7 +73,7 @@
 <!-- END Main Container -->
 
 <!-- Normal Modal -->
-<div class="modal" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+<div class="modal" id="modal-register" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="block block-rounded shadow-none mb-0">
@@ -182,28 +85,36 @@
                         </button>
                     </div>
                 </div>
-                <form action="be_forms_elements.html" method="POST" enctype="multipart/form-data" onsubmit="return false;">
+                <form id="form-data-spk">
                     <div class="block-content fs-sm" id="body-modal">
                         <div class="row push">
                             <div class="col-lg-12 col-xl-12">
                                 <div class="mb-4">
                                     <label class="form-label" for="example-text-input">Customer</label>
-                                    <input type="text" class="form-control" id="example-text-input" name="example-text-input" value="select2 method">
+                                    <select name="customer" id="customer" class="form-control">
+                                        <?php
+                                        foreach ($customer as $key => $value) {
+                                        ?>
+                                            <option value="<?= $value['id'] ?>"><?= $value['kode'] . ' - ' . $value['nama'] ?></option>
+                                        <?php
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-lg-12 col-xl-12">
                                 <div class="mb-4">
-                                    <label class="form-label" for="example-text-input">Waktu Kerja</label>
-                                    <input type="date" class="form-control" id="example-text-input" name="example-text-input">
+                                    <label class="form-label" for="tgl_kerja">Waktu Kerja</label>
+                                    <input type="date" class="form-control" id="tgl_kerja" name="tgl_kerja">
                                 </div>
                             </div>
                             <div class="col-lg-12 col-xl-12">
                                 <div class="mb-4">
-                                    <label class="form-label" for="example-email-input">Jenis Pekerjaan</label>
-                                    <select class="form-select" id="example-select" name="example-select">
-                                        <option value="1">Servis</option>
-                                        <option value="2">Instal</option>
-                                        <option value="3">Invoice</option>
+                                    <label class="form-label" for="jenis">Jenis Pekerjaan</label>
+                                    <select class="form-select" id="jenis" name="jenis">
+                                        <option value="SERVIS">Servis</option>
+                                        <option value="INSTAL">Instal</option>
+                                        <option value="INVOICE">Invoice</option>
                                     </select>
                                 </div>
                             </div>
@@ -213,7 +124,54 @@
                         <button type="button" class="btn btn-alt-secondary" data-bs-dismiss="modal">
                             Close
                         </button>
-                        <button type="button" class="btn btn-alt-primary" data-bs-dismiss="modal">
+                        <button type="submit" class="btn btn-alt-primary" data-bs-dismiss="modal">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="block block-rounded shadow-none mb-0">
+                <div class="block-header block-header-default">
+                    <h3 class="block-title">Tentukan Teknisi</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <form id="form-data-teknisi">
+                    <div class="block-content fs-sm" id="body-modal">
+                        <div class="row push">
+                            <div class="col-lg-12 col-xl-12">
+                                <div class="mb-4">
+                                    <label class="form-label" for="example-text-input">Nama</label>
+                                    <input type="hidden" class="form-control" id="id" name="id">
+                                    <select name="teknisi" id="teknisi" class="form-control">
+                                        <?php
+                                        foreach ($teknisi as $key => $value) {
+                                        ?>
+                                            <option value="<?= $value['id'] . '-' . $value['nama'] ?>"><?= $value['nama'] ?></option>
+                                        <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full block-content-sm text-end border-top">
+                        <button type="button" class="btn btn-alt-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-alt-primary" data-bs-dismiss="modal">
                             Submit
                         </button>
                     </div>
@@ -223,53 +181,289 @@
     </div>
 </div>
 <!-- END Normal Modal -->
+<script src="<?= base_url() ?>resources/select2/select2.min.js"></script>
 
 <script>
-    $('#btn-add').on('click', function() {
-        $('#add-new').show(500);
-        $('#list-karyawan').hide();
+    <?php $target = 0; ?>
+    var a = '<?= $this->session->userdata('userid') ?>'
+    $(function() {
+        $("#table-spk").DataTable({
+            "responsive": true,
+            "lengthChange": true,
+            "autoWidth": false,
+            'serverSide': true,
+            'processing': true,
+            "order": [
+                [0, "desc"]
+            ],
+            'ajax': {
+                'dataType': 'json',
+                'url': '<?= base_url() ?>kerjaluar/ajax_table_spk',
+                'type': 'post',
+            },
+            'columns': [{
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data.no",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data.customer",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data",
+                "render": function(data) {
+                    if (data.jenis == "INVOICE") {
+                        return `<span class="badge bg-danger"> Invoice</span>`
+                    } else if (data.jenis == 'INSTAL') {
+                        return `<span class="badge bg-primary"> Instal</span>`
+                    } else {
+                        return `<span class="badge bg-success"> Invoice</span>`
+                    }
+                }
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data.tgl_kerja",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data",
+                "render": function(data) {
+                    return data.lokasi + `<br><a href="https://www.google.com/maps/place/` + data.latitude + `,` + data.longitude + `" target="_blank" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Lokasi Map">
+                                    <i class="fa fa-location-dot"></i> Lokasi
+                                </a>`
+                }
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data",
+                "render": function(data) {
+                    if (data.teknisi == '')
+                        return `-`
+                    return data.teknisi + `<br><button class="btn btn-sm btn-success" onclick="histori_teknisi('` + data.id_karyawan + `')"><i class="fa fa-circle-arrow-right"></i> Histori</button>`
+                }
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data",
+                "render": function(data) {
+                    return `<button type="button" class="btn btn-sm btn-primary" onclick="tentukan_data(` + data.id + `)" data-bs-toggle="tooltip" title="Pilih Teknisi"><i class="fa fa-gear"></i> Pilih Teknisi</button>`
+                }
+            }, ],
+            "dom": '<"row" <"col-md-6" l><"col-md-6" f>>rt<"row" <"col-md-6" i><"col-md-6" p>>',
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        });
+
+        //   $('#tambah-user').hide();
+        $('#teknisi').select2({
+            dropdownParent: $('#exampleModalCenter')
+        });
+        $('#customer').select2({
+            dropdownParent: $('#modal-register')
+        });
     });
 
-    $('#btn-hide').on('click', function() {
+    function reload_table() {
+        $('#table-spk').DataTable().ajax.reload(null, false);
+    }
+
+    $('#btn-hide-histori').on('click', function() {
         $('#list-karyawan').show(500);
-        $('#add-new').hide();
+        $('#list-histori').hide();
     });
 
-    $('#btn-edit').on('click', function() {
-        $('#add-new').show(500);
-        $('#list-karyawan').hide();
-    });
+    function register_data() {
 
-    function pilih_data() {
-
-        Swal.fire({
-            title: 'Apakah Anda Yakin ?',
-            text: "Anda akan memilih mesin 120 - DC236 untuk Overhaul!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, saya yakin!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire(
-                    'Berhasil!',
-                    'Menunggu persetujuan Supervisor untuk proses overhaul.',
-                    'success'
-                )
-            }
-        })
-
+        $('#modal-register').modal('show')
 
     }
 
-    function register_data() {
-        // var html
-        // var nama
+    function tentukan_data(id) {
+        $('#id').val(id)
         $('#exampleModalCenter').modal('show')
-        // nama = '<h3 class="block-title">Bukti Ketidakhadiran - Agus Salim</h3>'
-        // html = '<img src="<?= base_url('assets/media/leave/agus.jpg') ?>" class="img-fluid" alt="bukti_leave">'
-        // $('#body-modal').html(html)
-        // $('.block-title').html(nama)
+    }
+
+    $("#form-data-teknisi").submit(function(e) {
+        e.preventDefault()
+        //   loading_submit()
+
+        if ($('#teknisi').val() == '') {
+            Swal.fire(
+                'error!',
+                'Tidak boleh ada kolom kosong!',
+                'error'
+            )
+            return
+        }
+
+
+        var form_data = new FormData();
+        form_data.append('table', 'kerjaluar');
+        form_data.append('id', $("#id").val());
+        form_data.append('teknisi_all', $("#teknisi").val());
+
+        url_ajax = '<?= base_url() ?>kerjaluar/update_data_teknisi_langsung'
+
+        $.ajax({
+            url: url_ajax,
+            type: "post",
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form_data,
+            dataType: "json",
+            success: function(result) {
+                if (result.status == "success") {
+                    Swal.fire(
+                        'Success!',
+                        result.message,
+                        'success'
+                    )
+                    reload_table()
+                } else {
+                    Swal.fire(
+                        'error!',
+                        result.message,
+                        'error'
+                    )
+                }
+            },
+            error: function(err) {
+                Swal.fire(
+                    'error!',
+                    err.responseText,
+                    'error'
+                )
+            }
+        })
+    })
+
+    $("#form-data-spk").submit(function(e) {
+        e.preventDefault()
+        //   loading_submit()
+
+        if ($('#customer').val() == '' || $('#jenis').val() == '' || $('#tgl_kerja').val() == '') {
+            Swal.fire(
+                'error!',
+                'Tidak boleh ada kolom kosong!',
+                'error'
+            )
+            return
+        }
+
+
+        var form_data = new FormData();
+        form_data.append('table', 'kerjaluar');
+        form_data.append('customer', $("#customer").val());
+        form_data.append('tgl_kerja', $("#tgl_kerja").val());
+        form_data.append('jenis', $("#jenis").val());
+
+        url_ajax = '<?= base_url() ?>kerjaluar/register_spk'
+
+        $.ajax({
+            url: url_ajax,
+            type: "post",
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form_data,
+            dataType: "json",
+            success: function(result) {
+                if (result.status == "success") {
+                    Swal.fire(
+                        'Success!',
+                        result.message,
+                        'success'
+                    )
+                    reload_table()
+                } else {
+                    Swal.fire(
+                        'error!',
+                        result.message,
+                        'error'
+                    )
+                }
+            },
+            error: function(err) {
+                Swal.fire(
+                    'error!',
+                    err.responseText,
+                    'error'
+                )
+            }
+        })
+    })
+
+    function histori_teknisi(id) {
+        $('#list-karyawan').hide()
+        $('#list-histori').show(500)
+
+        console.log(id)
+
+        $(function() {
+            $("#table-histori").DataTable({
+                "destroy": true,
+                "responsive": true,
+                "lengthChange": true,
+                "autoWidth": false,
+                'serverSide': true,
+                'processing': true,
+                "order": [
+                    [0, "desc"]
+                ],
+                'ajax': {
+                    'dataType': 'json',
+                    'url': '<?= base_url() ?>kerjaluar/ajax_table_histori',
+                    'type': 'post',
+                    'data': {
+                        id_karyawan: id
+                    }
+                },
+                'columns': [{
+                    "target": [<?= $target ?>],
+                    "className": 'text-center py-1',
+                    "data": "data.no",
+                }, {
+                    "target": [<?= $target ?>],
+                    "className": 'text-center py-1',
+                    "data": "data.customer",
+                }, {
+                    "target": [<?= $target ?>],
+                    "className": 'text-center py-1',
+                    "data": "data",
+                    "render": function(data) {
+                        if (data.jenis == "INVOICE") {
+                            return `<span class="badge bg-danger"> Invoice</span>`
+                        } else if (data.jenis == 'INSTAL') {
+                            return `<span class="badge bg-primary"> Instal</span>`
+                        } else {
+                            return `<span class="badge bg-success"> Invoice</span>`
+                        }
+                    }
+                }, {
+                    "target": [<?= $target ?>],
+                    "className": 'text-center py-1',
+                    "data": "data.tgl_kerja",
+                }, {
+                    "target": [<?= $target ?>],
+                    "className": 'text-center py-1',
+                    "data": "data.teknisi",
+                }, {
+                    "target": [<?= $target ?>],
+                    "className": 'text-center py-1',
+                    "data": "data",
+                    "render": function(data) {
+                        return `<button type="button" class="btn btn-sm btn-success" onclick="tentukan_data(` + data.id + `)" data-bs-toggle="tooltip" title="Lihat Detail"><i class="fa fa-eye"></i> Details</button>`
+                    }
+                }, ],
+                "dom": '<"row" <"col-md-6" l><"col-md-6" f>>rt<"row" <"col-md-6" i><"col-md-6" p>>',
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+
+
+
+            });
+        });
     }
 </script>

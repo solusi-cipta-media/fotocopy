@@ -5,7 +5,7 @@
         <h2 class="content-heading">Data Mesin</h2>
 
         <!-- Dynamic Table Responsive -->
-        <div class="block block-rounded" id="list-karyawan">
+        <div class="block block-rounded" id="list-mesin">
             <div class="block-header block-header-default">
                 <h3 class="block-title">
                     Master Mesin
@@ -16,41 +16,22 @@
             </div>
             <div class="block-content block-content-full">
                 <!-- DataTables functionality is initialized with .js-dataTable-responsive class in js/pages/be_tables_datatables.min.js which was auto compiled from _js/pages/be_tables_datatables.js -->
-                <table class="table table-bordered table-striped table-vcenter js-dataTable-responsive">
+                <table class="table table-bordered table-striped table-vcenter js-dataTable-responsive" id="table-mesin">
                     <!-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> -->
                     <thead>
                         <tr>
                             <th class="text-center">#</th>
-                            <th>No. Mesin</th>
+                            <th>Nomor Mesin</th>
                             <th>Model</th>
                             <th>Serial Number</th>
                             <th>Asal</th>
+                            <th class="text-center" style="width: 25%;">Tanggal Masuk</th>
                             <th>Meter</th>
                             <th>Tegangan</th>
                             <th>Status</th>
-                            <th class="text-center" style="width: 15%;">Aksi</th>
+                            <th class="text-center" style="width: 25%;">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td class="text-center">1</td>
-                            <td class="fw-semibold">121</td>
-                            <td>DC286</td>
-                            <td>606718</td>
-                            <td>Import</td>
-                            <td>2734</td>
-                            <td>220V</td>
-                            <td><span class="badge bg-warning">Import</span></td>
-                            <td class="text-center">
-                                <button type="button" class="btn btn-sm btn-danger" onclick=delete_data() data-bs-toggle="tooltip" title="Hapus">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Edit" id="btn-edit">
-                                    <i class="fa fa-edit"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
                 </table>
             </div>
         </div>
@@ -63,42 +44,50 @@
                 </div>
             </div>
             <div class="block-content">
-                <form action="be_forms_elements.html" method="POST" enctype="multipart/form-data" onsubmit="return false;">
+                <form id="form-data">
                     <div class="row push">
                         <div class="col-lg-12 col-xl-12">
                             <div class="mb-4">
-                                <label class="form-label" for="example-text-input">Nomor Mesin</label>
-                                <input type="text" class="form-control" id="example-text-input" name="example-text-input">
+                                <label class="form-label" for="nomor_mesin">Nomor Mesin</label>
+                                <input type="text" class="form-control" id="nomor_mesin" name="nomor_mesin">
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="example-email-input">Serial Number</label>
-                                <input type="text" class="form-control" id="example-email-input" name="example-email-input">
+                                <label class="form-label" for="serial_number">Serial Number</label>
+                                <input type="text" class="form-control" id="serial_number" name="serial_number">
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="example-textarea-input">Model</label>
-                                <input type="text" class="form-control" id="example-email-input" name="example-email-input">
+                                <label class="form-label" for="model">Model</label>
+                                <input type="text" class="form-control" id="model" name="model" onkeyup="this.value = this.value.toUpperCase()">
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="example-email-input">Asal</label>
-                                <select class="form-select" id="example-select" name="example-select">
-                                    <option value="1">Import</option>
-                                    <option value="1">EX-Customer</option>
+                                <label class="form-label" for="asal">Asal</label>
+                                <select class="form-select" id="asal" name="asal">
+                                    <option value="IMPORT">IMPORT</option>
+                                    <option value="EX-CUSTOMER">EX-CUSTOMER</option>
                                 </select>
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="example-email-input">Meter</label>
-                                <input type="text" class="form-control" id="example-email-input" name="example-email-input">
+                                <label class="form-label" for="tgl_masuk">Tanggal Masuk</label>
+                                <input type="date" class="form-control" id="tgl_masuk" name="tgl_masuk">
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="example-email-input">Tegangan</label>
-                                <input type="text" class="form-control" id="example-email-input" name="example-email-input">
+                                <label class="form-label" for="meter">Meter</label>
+                                <input type="text" class="form-control" id="meter" name="meter">
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="example-email-input">Status</label>
-                                <select class="form-select" id="example-select" name="example-select">
-                                    <option value="1">Import</option>
-                                    <option value="1">Overhaul</option>
-                                    <option value="2">Ready</option>
+                                <label class="form-label" for="tegangan">Tegangan</label>
+                                <select name="tegangan" id="tegangan" class="form-control">
+                                    <option value="220V">220V</option>
+                                    <option value="110V">110V</option>
+                                </select>
+                                <!-- <input type="text" class="form-control" id="tegangan" name="tegangan" onkeyup="this.value = this.value.toUpperCase()"> -->
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="status">Status</label>
+                                <select class="form-select" id="status" name="status">
+                                    <option value="IMPORT">IMPORT</option>
+                                    <option value="OVERHAUL">OVERHAUL</option>
+                                    <option value="READY">READY</option>
                                 </select>
                             </div>
                         </div>
@@ -125,22 +114,193 @@
 <!-- END Main Container -->
 
 <script>
+    <?php $target = 0; ?>
+    var a = '<?= $this->session->userdata('userid') ?>'
+    $(function() {
+        $("#table-mesin").DataTable({
+            "responsive": true,
+            "lengthChange": true,
+            "autoWidth": false,
+            'serverSide': true,
+            'processing': true,
+            "order": [
+                [0, "desc"]
+            ],
+            'ajax': {
+                'dataType': 'json',
+                'url': '<?= base_url() ?>mesin/ajax_table_mesin',
+                'type': 'post',
+            },
+            'columns': [{
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data.no",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data.nomor_mesin",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data.model",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data.serial_number",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data.asal",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data.tgl_masuk",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data.meter",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data.tegangan",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data",
+                "render": function(data) {
+                    if (data.status == 'IMPORT') {
+                        return `<span class="badge bg-danger">` + data.status + `</span>`
+                    } else if (data.status == 'OVERHAUL') {
+                        return `<span class="badge bg-warning">` + data.status + `</span>`
+                    } else {
+                        return `<span class="badge bg-success">` + data.status + `</span>`
+                    }
+                }
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data",
+                "render": function(data) {
+                    return `<button type="button" class="btn btn-sm btn-danger" onclick=delete_data('` + data.id + `')><i class="fa fa-trash"></i> Hapus</button>&nbsp;<button type="button" class="btn btn-sm btn-info" id="btn-edit" onclick="edit_data('` + data.id + `')"><i class="fa fa-edit"></i> Edit</button>`
+                }
+            }, ],
+            "dom": '<"row" <"col-md-6" l><"col-md-6" f>>rt<"row" <"col-md-6" i><"col-md-6" p>>',
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        });
+
+        //   $('#tambah-user').hide();
+    });
+
+    function reload_table() {
+        $('#table-mesin').DataTable().ajax.reload(null, false);
+    }
+
+    $("#form-data").submit(function(e) {
+        e.preventDefault()
+        //   loading_submit()
+
+        if ($('#nomor_mesin').val() == '' || $('#serial_number').val() == '' || $('#model').val() == '' || $('#asal').val() == '' || $('#meter').val() == '' || $('#tegangan').val() == '' || $('#status').val() == '') {
+            Swal.fire(
+                'error!',
+                'Tidak boleh ada kolom kosong!',
+                'error'
+            )
+            return
+        }
+
+
+        var form_data = new FormData();
+        form_data.append('table', 'overhaul');
+        form_data.append('nomor_mesin', $("#nomor_mesin").val());
+        form_data.append('serial_number', $("#serial_number").val());
+        form_data.append('model', $("#model").val());
+        form_data.append('asal', $("#asal").val());
+        form_data.append('tgl_masuk', $("#tgl_masuk").val());
+        form_data.append('meter', $("#meter").val());
+        form_data.append('tegangan', $("#tegangan").val());
+        form_data.append('status', $("#status").val());
+
+        var url_ajax = '<?= base_url() ?>mesin/insert_data_mesin'
+        if (global_status == "edit") {
+            url_ajax = '<?= base_url() ?>mesin/update_data_mesin'
+            form_data.append('id', global_id);
+        }
+
+        $.ajax({
+            url: url_ajax,
+            type: "post",
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form_data,
+            dataType: "json",
+            success: function(result) {
+                if (result.status == "success") {
+                    Swal.fire(
+                        'Success!',
+                        result.message,
+                        'success'
+                    )
+                    $('#nomor_mesin').val('')
+                    $('#serial_number').val('')
+                    $('#model').val('')
+                    $('#meter').val('')
+                    $('#tgl_masuk').val('')
+                    $('#tegangan').val('')
+                    reload_table()
+                    $('#add-new').hide();
+                    $('#list-mesin').show(500)
+                } else {
+                    Swal.fire(
+                        'error!',
+                        result.message,
+                        'error'
+                    )
+                }
+            },
+            error: function(err) {
+                Swal.fire(
+                    'error!',
+                    err.responseText,
+                    'error'
+                )
+            }
+        })
+    })
+
+
     $('#btn-add').on('click', function() {
         $('#add-new').show(500);
-        $('#list-karyawan').hide();
+        $('#list-mesin').hide();
+        global_status = "tambah"
+        $('#nomor_mesin').val('')
+        $('#serial_number').val('')
+        $('#model').val('')
+        $('#tgl_masuk').val('')
+        $('#meter').val('')
+        $('#tegangan').val('')
+    });
+
+    $('#clear-form').on('click', function() {
+        $('#nomor_mesin').val('')
+        $('#serial_number').val('')
+        $('#model').val('')
+        $('#tgl_masuk').val('')
+        $('#meter').val('')
+        $('#tegangan').val('')
     });
 
     $('#btn-hide').on('click', function() {
-        $('#list-karyawan').show(500);
+        $('#list-mesin').show(500);
         $('#add-new').hide();
     });
 
     $('#btn-edit').on('click', function() {
         $('#add-new').show(500);
-        $('#list-karyawan').hide();
+        $('#list-mesin').hide();
     });
 
-    function delete_data() {
+    function delete_data(id) {
 
         Swal.fire({
             title: 'Apakah Anda Yakin ?',
@@ -152,14 +312,67 @@
             confirmButtonText: 'Ya, hapus saja!'
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire(
-                    'Deleted!',
-                    'Data berhasil di hapus.',
-                    'success'
-                )
+                $.ajax({
+                    url: '<?= base_url() ?>mesin/delete_data',
+                    data: {
+                        id: id,
+                        table: "overhaul"
+                    },
+                    type: 'post',
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result.status == "success") {
+                            Swal.fire(
+                                'Deleted!',
+                                'Data berhasil di hapus.',
+                                'success'
+                            )
+                            reload_table()
+                        } else
+                            toast('error', result.message)
+                    }
+                })
             }
         })
 
+
+    }
+
+    function edit_data(id) {
+
+        global_status = 'edit'
+        global_id = id
+        //   $('#psw1').hide()
+        //   $('#psw2').hide()
+        $('#userid').attr('readonly', true)
+        $('#clear-form').hide()
+
+        $.ajax({
+            url: '<?= base_url('mesin/editmesin') ?>',
+            data: {
+                id: id,
+                table: 'overhaul'
+            },
+            type: 'post',
+            dataType: 'json',
+            success: function(result) {
+                result.forEach(d => {
+                    console.log(d.tgl_masuk)
+                    $('#list-mesin').hide();
+                    $('#add-new').show(500);
+
+                    $('#id').val(d.id)
+                    $('#nomor_mesin').val(d.nomor_mesin)
+                    $('#serial_number').val(d.serial_number)
+                    $('#model').val(d.model)
+                    $('#meter').val(d.meter)
+                    $('#tgl_masuk').val(d.tgl_masuk)
+                    $('#tegangan').val(d.tegangan)
+                    $('#asal').val(d.asal)
+                    $('#status').val(d.status)
+                });
+            }
+        })
 
     }
 </script>

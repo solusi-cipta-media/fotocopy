@@ -8,20 +8,20 @@
                 <!-- Avatar -->
                 <div class="mb-3">
                     <a class="img-link" href="be_pages_generic_profile.html">
-                        <img class="img-avatar img-avatar96 img-avatar-thumb" src="<?= base_url('') ?>assets/media/avatars/asa.jpg" alt="">
+                        <img class="img-avatar img-avatar96 img-avatar-thumb" src="<?= base_url('assets/media/karyawan/' . $this->session->userdata('photo')) ?>" alt="">
                     </a>
                 </div>
                 <!-- END Avatar -->
 
                 <!-- Personal -->
-                <h1 class="h3 text-white fw-bold mb-2">Agus Salim</h1>
+                <h1 class="h3 text-white fw-bold mb-2"><?= $this->session->userdata('name') ?></h1>
                 <h2 class="h5 text-white-75">
-                    Developer <a class="text-primary-light" href="javascript:void(0)">@CMS</a>
+                    <?= $this->session->userdata('role_id') ?> <a class="text-primary-light" href="javascript:void(0)">@CMS</a>
                 </h2>
                 <!-- END Personal -->
 
                 <!-- Actions -->
-                <a href="<?= base_url('design/dashboard') ?>" class="btn btn-primary">
+                <a href="<?= base_url('dashboard') ?>" class="btn btn-primary">
                     <i class="fa fa-arrow-left opacity-50 me-1"></i> Back to Profile
                 </a>
                 <!-- END Actions -->
@@ -40,7 +40,7 @@
                 </h3>
             </div>
             <div class="block-content">
-                <form action="be_pages_generic_profile.edit.html" method="POST" enctype="multipart/form-data" onsubmit="return false;">
+                <form id="form-data">
                     <div class="row items-push">
                         <div class="col-lg-3">
                             <p class="text-muted">
@@ -49,16 +49,17 @@
                         </div>
                         <div class="col-lg-7 offset-lg-1">
                             <div class="mb-4">
-                                <label class="form-label" for="profile-settings-username">Username</label>
-                                <input type="text" class="form-control form-control-lg" id="profile-settings-username" name="profile-settings-username" placeholder="Enter your username.." value="john.doe">
+                                <label class="form-label" for="userid">Username</label>
+                                <input type="text" class="form-control form-control-lg" id="userid" name="userid" readonly>
+                                <input type="hidden" class="form-control form-control-lg" id="id" name="id">
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="profile-settings-name">Name</label>
-                                <input type="text" class="form-control form-control-lg" id="profile-settings-name" name="profile-settings-name" placeholder="Enter your name.." value="John Doe">
+                                <label class="form-label" for="nama">Name</label>
+                                <input type="text" class="form-control form-control-lg" id="nama" name="nama">
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="profile-settings-email">Email Address</label>
-                                <input type="email" class="form-control form-control-lg" id="profile-settings-email" name="profile-settings-email" placeholder="Enter your email.." value="john.doe@example.com">
+                                <label class="form-label" for="email">Email Address</label>
+                                <input type="email" class="form-control form-control-lg" id="email" name="email">
                             </div>
                             <div class="row mb-4">
                                 <div class="col-md-10 col-xl-6">
@@ -66,8 +67,8 @@
                                         <img class="img-avatar" src="<?= base_url('') ?>assets/media/avatars/avatar15.jpg" alt="">
                                     </div>
                                     <div class="mb-4">
-                                        <label class="form-label" for="profile-settings-avatar" class="form-label">Choose new avatar</label>
-                                        <input class="form-control" type="file" id="profile-settings-avatar" name="profile-settings-avatar">
+                                        <label class="form-label" for="file" class="form-label">Pilih photo baru</label>
+                                        <input class="form-control" type="file" id="file" name="file">
                                     </div>
                                 </div>
                             </div>
@@ -150,7 +151,7 @@
                 </h3>
             </div>
             <div class="block-content">
-                <form action="be_pages_generic_profile.edit.html" method="POST" onsubmit="return false;">
+                <form id="form-data-password">
                     <div class="row items-push">
                         <div class="col-lg-3">
                             <p class="text-muted">
@@ -158,17 +159,18 @@
                             </p>
                         </div>
                         <div class="col-lg-7 offset-lg-1">
+                            <!-- <div class="mb-4">
+                                <label class="form-label" for="current">Current Password</label>
+                                <input type="password" class="form-control form-control-lg" id="current" name="current">
+                            </div> -->
                             <div class="mb-4">
-                                <label class="form-label" for="profile-settings-password">Current Password</label>
-                                <input type="password" class="form-control form-control-lg" id="profile-settings-password" name="profile-settings-password">
+                                <label class="form-label" for="psw">New Password</label>
+                                <input type="password" class="form-control form-control-lg" id="psw" name="psw">
+                                <input type="hidden" class="form-control form-control-lg" id="id_karyawan" name="id_karyawan">
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="profile-settings-password-new">New Password</label>
-                                <input type="password" class="form-control form-control-lg" id="profile-settings-password-new" name="profile-settings-password-new">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="profile-settings-password-new-confirm">Confirm New Password</label>
-                                <input type="password" class="form-control form-control-lg" id="profile-settings-password-new-confirm" name="profile-settings-password-new-confirm">
+                                <label class="form-label" for="psw_confirm">Confirm New Password</label>
+                                <input type="password" class="form-control form-control-lg" id="psw_confirm" name="psw_confirm">
                             </div>
                             <div class="mb-4">
                                 <button type="submit" class="btn btn-alt-primary">Update</button>
@@ -188,7 +190,7 @@
                 </h3>
             </div>
             <div class="block-content">
-                <form action="be_pages_generic_profile.edit.html" method="POST" onsubmit="return false;">
+                <form id="form-data-profil">
                     <div class="row items-push">
                         <div class="col-lg-3">
                             <p class="text-muted">
@@ -197,43 +199,30 @@
                         </div>
                         <div class="col-lg-7 offset-lg-1">
                             <div class="mb-4">
-                                <label class="form-label" for="profile-settings-company">Nama Lengkap</label>
-                                <input type="text" class="form-control form-control-lg" id="profile-settings-company" name="profile-settings-company">
-                            </div>
-                            <!-- <div class="row mb-4">
-                                <div class="col-6">
-                                    <label class="form-label" for="profile-settings-firstname">Firstname</label>
-                                    <input type="text" class="form-control form-control-lg" id="profile-settings-firstname" name="profile-settings-firstname">
-                                </div>
-                                <div class="col-6">
-                                    <label class="form-label" for="profile-settings-lastname">Lastname</label>
-                                    <input type="text" class="form-control form-control-lg" id="profile-settings-lastname" name="profile-settings-lastname">
-                                </div>
-                            </div> -->
-                            <div class="mb-4">
-                                <label class="form-label" for="profile-settings-street-1">Alamat 1</label>
-                                <input type="text" class="form-control form-control-lg" id="profile-settings-street-1" name="profile-settings-street-1">
+                                <label class="form-label" for="nik">NIK</label>
+                                <input type="text" class="form-control form-control-lg" id="nik" name="nik" readonly>
+                                <input type="hidden" class="form-control form-control-lg" id="id_karyawan_2" name="id_karyawan_2" readonly>
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="profile-settings-street-2">Alamat 2 (Jika Ada)</label>
-                                <input type="text" class="form-control form-control-lg" id="profile-settings-street-2" name="profile-settings-street-2">
+                                <label class="form-label" for="nama">Role ID</label>
+                                <input type="text" class="form-control form-control-lg" id="role_id" name="role_id" readonly>
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="profile-settings-city">Kota</label>
-                                <input type="text" class="form-control form-control-lg" id="profile-settings-city" name="profile-settings-city">
+                                <label class="form-label" for="nama">Nama Lengkap</label>
+                                <input type="text" class="form-control form-control-lg" id="nama_lengkap" name="nama_lengkap">
                             </div>
-                            <div class="row mb-4">
-                                <div class="col-6">
-                                    <label class="form-label" for="profile-settings-postal">Handphone</label>
-                                    <input type="text" class="form-control form-control-lg" id="profile-settings-postal" name="profile-settings-postal">
-                                </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="alamat">Alamat</label>
+                                <input type="text" class="form-control form-control-lg" id="alamat" name="alamat">
                             </div>
-                            <!-- <div class="row mb-4">
-                                <div class="col-6">
-                                    <label class="form-label" for="profile-settings-vat">VAT Number</label>
-                                    <input type="text" class="form-control form-control-lg" id="profile-settings-vat" name="profile-settings-vat" value="IA00000000" disabled>
-                                </div>
-                            </div> -->
+                            <div class="mb-4">
+                                <label class="form-label" for="no_ktp">Nomor KTP</label>
+                                <input type="text" class="form-control form-control-lg" id="no_ktp" name="no_ktp">
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="handphone">Handphone</label>
+                                <input type="text" class="form-control form-control-lg" id="handphone" name="handphone">
+                            </div>
                             <div class="mb-4">
                                 <button type="submit" class="btn btn-alt-primary">Update</button>
                             </div>
@@ -248,3 +237,224 @@
     <!-- END Page Content -->
 </main>
 <!-- END Main Container -->
+
+<script>
+    $(function() {
+        $.ajax({
+            url: '<?= base_url() ?>dashboard/getdataprofil',
+            data: {
+                table: "karyawan"
+            },
+            type: 'post',
+            dataType: 'json',
+            success: function(result) {
+                result.forEach(d => {
+                    $('#userid').val(d.userid)
+                    $('#id').val(d.id)
+                    $('#id_karyawan').val(d.id)
+                    $('#id_karyawan_2').val(d.id)
+                    $('#nama').val(d.nama)
+                    $('#nama_lengkap').val(d.nama)
+                    $('#email').val(d.email)
+                    $('#nik').val(d.nik)
+                    $('#alamat').val(d.alamat)
+                    $('#no_ktp').val(d.no_ktp)
+                    $('#handphone').val(d.handphone)
+                    $('#role_id').val(d.role_id)
+                });
+            }
+        })
+    });
+
+    $("#form-data").submit(function(e) {
+        e.preventDefault()
+        //   loading_submit()
+
+        if ($('#nama').val() == '' || $('#email').val() == '' || $('#file').val() == '') {
+            Swal.fire(
+                'error!',
+                'Tidak boleh ada kolom kosong!',
+                'error'
+            )
+            return
+        }
+
+
+        var form_data = new FormData();
+        form_data.append('table', 'karyawan');
+        form_data.append('nama', $("#nama").val());
+        form_data.append('email', $("#email").val());
+        form_data.append('id', $("#id").val());
+        if ($('#file').val() !== "") {
+            var file_data = $('#file').prop('files')[0];
+            form_data.append('file', file_data);
+        }
+
+
+        url_ajax = '<?= base_url() ?>dashboard/update_data_profil'
+
+
+        $.ajax({
+            url: url_ajax,
+            type: "post",
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form_data,
+            dataType: "json",
+            success: function(result) {
+                if (result.status == "success") {
+                    Swal.fire(
+                        'Success!',
+                        result.message,
+                        'success'
+                    )
+                    // $('#nama').val('')
+                    // $('#email').val('')
+                    // $('#file').val('')
+                } else {
+                    Swal.fire(
+                        'error!',
+                        result.message,
+                        'error'
+                    )
+                }
+            },
+            error: function(err) {
+                Swal.fire(
+                    'error!',
+                    err.responseText,
+                    'error'
+                )
+            }
+        })
+    })
+
+    $("#form-data-password").submit(function(e) {
+        e.preventDefault()
+        //   loading_submit()
+
+        if ($('#psw').val() == '' || $('#psw_confirm').val() == '') {
+            Swal.fire(
+                'error!',
+                'Tidak boleh ada kolom kosong!',
+                'error'
+            )
+            return
+        }
+
+        if ($('#psw').val() !== $('#psw_confirm').val()) {
+            Swal.fire(
+                'error!',
+                'Password tidak sama!',
+                'error'
+            )
+            return
+        }
+
+
+        var form_data = new FormData();
+        form_data.append('table', 'karyawan');
+        form_data.append('password_mentah', $("#psw").val());
+        form_data.append('id', $("#id").val());
+
+        url_ajax = '<?= base_url() ?>dashboard/update_data_password'
+
+
+        $.ajax({
+            url: url_ajax,
+            type: "post",
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form_data,
+            dataType: "json",
+            success: function(result) {
+                if (result.status == "success") {
+                    Swal.fire(
+                        'Success!',
+                        result.message,
+                        'success'
+                    )
+                    // $('#nama').val('')
+                    // $('#email').val('')
+                    // $('#file').val('')
+                } else {
+                    Swal.fire(
+                        'error!',
+                        result.message,
+                        'error'
+                    )
+                }
+            },
+            error: function(err) {
+                Swal.fire(
+                    'error!',
+                    err.responseText,
+                    'error'
+                )
+            }
+        })
+    })
+
+    $("#form-data-profil").submit(function(e) {
+        e.preventDefault()
+        //   loading_submit()
+
+        if ($('#nama_lengkap').val() == '' || $('#alamat').val() == '' || $('#no_ktp').val() == '' || $('#handphone').val() == '') {
+            Swal.fire(
+                'error!',
+                'Tidak boleh ada kolom kosong!',
+                'error'
+            )
+            return
+        }
+
+
+        var form_data = new FormData();
+        form_data.append('table', 'karyawan');
+        form_data.append('nama', $("#nama_lengkap").val());
+        form_data.append('id', $("#id").val());
+        form_data.append('alamat', $("#alamat").val());
+        form_data.append('no_ktp', $("#no_ktp").val());
+        form_data.append('handphone', $("#handphone").val());
+
+        url_ajax = '<?= base_url() ?>dashboard/update_data_profil_all'
+
+
+        $.ajax({
+            url: url_ajax,
+            type: "post",
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form_data,
+            dataType: "json",
+            success: function(result) {
+                if (result.status == "success") {
+                    Swal.fire(
+                        'Success!',
+                        result.message,
+                        'success'
+                    )
+                    // $('#nama').val('')
+                    // $('#email').val('')
+                    // $('#file').val('')
+                } else {
+                    Swal.fire(
+                        'error!',
+                        result.message,
+                        'error'
+                    )
+                }
+            },
+            error: function(err) {
+                Swal.fire(
+                    'error!',
+                    err.responseText,
+                    'error'
+                )
+            }
+        })
+    })
+</script>
