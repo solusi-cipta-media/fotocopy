@@ -77,6 +77,8 @@ class Kerjaluar extends CI_Controller
         $data['jumlah_notif'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->num_rows();
         //end
 
+        $data['customer'] = $this->crud->get_all('customer')->result_array();
+
 
         $data['sess_menu'] = 'catatanmeter';
 
@@ -156,9 +158,9 @@ class Kerjaluar extends CI_Controller
 
 
         $table = 'catatan_meter'; //nama tabel dari database
-        $column_order = array('id', 'customer', 'alamat', 'kolektor', 'status', 'tgl_instal', 'model', 'lokasi', 'telp', 'fax', 'nomor_kontrak', 'date_created', 'id'); //field yang ada di table user
-        $column_search = array('id', 'customer', 'alamat', 'kolektor', 'status', 'tgl_instal', 'model', 'lokasi', 'telp', 'fax', 'nomor_kontrak', 'date_created'); //field yang diizin untuk pencarian 
-        $select = 'id, customer, alamat, kolektor, status, tgl_instal, model, telp, lokasi, fax, nomor_kontrak, date_created';
+        $column_order = array('id', 'customer', 'alamat', 'kolektor', 'status', 'tgl_instal', 'model', 'lokasi', 'telp', 'fax', 'nomor_kontrak', 'awal', 'akhir', 'date_created', 'id'); //field yang ada di table user
+        $column_search = array('id', 'customer', 'alamat', 'kolektor', 'status', 'tgl_instal', 'model', 'lokasi', 'telp', 'fax', 'nomor_kontrak', 'awal', 'akhir', 'date_created'); //field yang diizin untuk pencarian 
+        $select = 'id, customer, alamat, kolektor, status, tgl_instal, model, telp, lokasi, fax, nomor_kontrak, awal, akhir, date_created';
         $order = array('id' => 'asc'); // default order 
         $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order);
         $data = array();
@@ -178,6 +180,8 @@ class Kerjaluar extends CI_Controller
             $row['data']['telp'] = $key->telp;
             $row['data']['fax'] = $key->fax;
             $row['data']['nomor_kontrak'] = $key->nomor_kontrak;
+            $row['data']['awal'] = date('d-M-Y', strtotime($key->awal));
+            $row['data']['akhir'] = date('d-M-Y', strtotime($key->akhir));
             $row['data']['date_created'] = $key->date_created;
 
             $data[] = $row;
@@ -370,6 +374,39 @@ class Kerjaluar extends CI_Controller
             $response = ['status' => 'success', 'message' => 'Berhasil Tambah Teknisi!'];
         } else
             $response = ['status' => 'error', 'message' => 'Gagal Tambah Teknisi!'];
+
+        echo json_encode($response);
+    }
+
+    public function input_catatan_meter()
+    {
+        $table = $this->input->post("table");
+
+
+        $data = $this->input->post();
+        $a = explode('-', $data['customer_all']);
+        $customer = $a[0];
+        $alamat = $a[1];
+        $status = $a[2];
+        $telp = $a[3];
+
+        $data['customer'] = $customer;
+        $data['alamat'] = $alamat;
+        $data['lokasi'] = $alamat;
+        $data['status'] = $status;
+        $data['telp'] = $telp;
+
+        unset($data['table']);
+        unset($data['customer_all']);
+
+
+        $insert = $this->crud->insert($table, $data);
+
+
+        if ($insert > 0) {
+            $response = ['status' => 'success', 'message' => 'Berhasil Membuat Form Catatan Meter!'];
+        } else
+            $response = ['status' => 'error', 'message' => 'Gagal Membuat Form Catatan Meter!'];
 
         echo json_encode($response);
     }

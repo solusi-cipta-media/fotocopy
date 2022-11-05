@@ -189,7 +189,7 @@
                 }
             }, {
                 "target": [<?= $target ?>],
-                "className": 'text-center py-1',
+                "className": 'py-1',
                 "data": "data",
                 "render": function(data) {
                     return `<button type="button" class="btn btn-sm btn-danger" onclick=delete_data('` + data.id + `')><i class="fa fa-trash"></i> Hapus</button><br style="margin-bottom: 10px;"><button type="button" class="btn btn-sm btn-info" id="btn-edit" onclick="edit_data('` + data.id + `')"><i class="fa fa-edit"></i> Edit</button>`

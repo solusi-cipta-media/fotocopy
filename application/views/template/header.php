@@ -58,7 +58,7 @@
                         <span class="smini-visible fw-bold tracking-wide fs-lg">
                             c<span class="text-primary">b</span>
                         </span>
-                        <a class="link-fx fw-bold tracking-wide mx-auto" href="<?= base_url() ?>">
+                        <a class="link-fx fw-bold tracking-wide mx-auto" href="<?= base_url('dashboard') ?>">
                             <span class="smini-hidden">
                                 <img src="<?= base_url('assets/media/favicons/cms.png') ?>" alt="cms" width="80%">
                                 <!-- <i class="fa fa-fire text-primary"></i> -->
@@ -90,7 +90,7 @@
 
                         <!-- Visible only in normal mode -->
                         <div class="smini-hidden text-center mx-auto">
-                            <a class="img-link" href="be_pages_generic_profile.html">
+                            <a class="img-link" href="<?= base_url('dashboard') ?>">
                                 <img class="img-avatar" src="<?= base_url('assets/media/karyawan/' . $this->session->userdata('photo')) ?>" alt="">
                             </a>
                             <ul class="list-inline mt-3 mb-0">
@@ -157,19 +157,19 @@
 
                             <li class="nav-main-heading">Absensi</li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="<?= base_url('design/absensi') ?>">
+                                <a class="<?= ($sess_menu == "absensi") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('absensi') ?>">
                                     <i class="nav-main-link-icon fa fa-calendar-check"></i>
                                     <span class="nav-main-link-name">Data Absensi</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="<?= base_url('design/ketidakhadiran') ?>">
+                                <a class="<?= ($sess_menu == "ketidakhadiran") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('absensi/ketidakhadiran') ?>">
                                     <i class="nav-main-link-icon fa fa-calendar-xmark"></i>
                                     <span class="nav-main-link-name">Ketidakhadiran</span>
                                 </a>
                             </li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="<?= base_url('design/periode') ?>">
+                                <a class="<?= ($sess_menu == "periode") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('absensi/periode') ?>">
                                     <i class="nav-main-link-icon fa fa-clock"></i>
                                     <span class="nav-main-link-name">Register Periode</span>
                                 </a>
@@ -272,13 +272,13 @@
 
                     <!-- Open Search Section -->
                     <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-                    <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="layout" data-action="header_search_on">
+                    <!-- <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="layout" data-action="header_search_on">
                         <i class="fa fa-fw fa-search"></i>
-                    </button>
+                    </button> -->
                     <!-- END Open Search Section -->
 
                     <!-- Color Themes -->
-                    <div class="dropdown d-inline-block">
+                    <!-- <div class="dropdown d-inline-block">
                         <button type="button" class="btn btn-sm btn-alt-secondary" id="page-header-themes-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-fw fa-wrench"></i>
                         </button>
@@ -323,7 +323,7 @@
                                 </div>
                             </div>
                             <div class="p-3 bg-body-light rounded-bottom">
-                                <!-- <div class="row g-sm text-center">
+                                <div class="row g-sm text-center">
                                     <div class="col-6">
                                         <a class="dropdown-item fs-sm fw-medium mb-0" href="be_layout_api.html">
                                             <i class="fa fa-flask opacity-50 me-1"></i> Layout API
@@ -334,10 +334,10 @@
                                             <i class="fa fa-paint-brush opacity-50 me-1"></i> Themes
                                         </a>
                                     </div>
-                                </div> -->
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- END Color Themes -->
                 </div>
                 <!-- END Left Section -->
@@ -447,7 +447,7 @@
         <script src="<?= base_url('') ?>assets/js/pages/be_tables_datatables.min.js"></script>
 
         <!-- Page JS Code -->
-        <script src="<?= base_url('') ?>assets/js/pages/be_pages_dashboard.min.js"></script>
+        <!-- <script src="<?= base_url('') ?>assets/js/pages/be_pages_dashboard.min.js"></script> -->
 
         <script src="<?= base_url('assets/js/plugins/sweetalert2/sweetalert2.min.js') ?>"></script>
 

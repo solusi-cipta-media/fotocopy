@@ -16,7 +16,7 @@
             </div>
             <div class="block-content block-content-full">
                 <!-- DataTables functionality is initialized with .js-dataTable-responsive class in js/pages/be_tables_datatables.min.js which was auto compiled from _js/pages/be_tables_datatables.js -->
-                <table class="table table-bordered table-striped table-vcenter js-dataTable-responsive">
+                <table class="table table-bordered table-striped table-vcenter js-dataTable-responsive" id="table-absensi">
                     <!-- <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons"> -->
                     <thead>
                         <tr>
@@ -26,7 +26,7 @@
                             <th class="text-center" style="width: 15%;">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <!-- <tbody>
                         <tr>
                             <td class="text-center">1</td>
                             <td class="fw-semibold">01-Oct-2022</td>
@@ -47,7 +47,7 @@
                                 </button>
                             </td>
                         </tr>
-                    </tbody>
+                    </tbody> -->
                 </table>
             </div>
         </div>
@@ -60,18 +60,18 @@
                 </div>
             </div>
             <div class="block-content">
-                <form action="be_forms_elements.html" method="POST" enctype="multipart/form-data" onsubmit="return false;">
+                <form id="form-data">
                     <div class="row push">
                         <div class="col-lg-12 col-xl-12">
                             <div class="mb-4">
-                                <label class="form-label" for="example-text-input">Tanggal</label>
-                                <input type="date" class="form-control" id="example-text-input" name="example-text-input">
+                                <label class="form-label" for="tanggal">Tanggal</label>
+                                <input type="date" class="form-control" id="tanggal" name="tanggal">
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="example-email-input">Status Hari Kerja</label>
-                                <select class="form-select" id="example-select" name="example-select">
-                                    <option value="1">Aktif</option>
-                                    <option value="2">Libur</option>
+                                <label class="form-label" for="status">Status Hari Kerja</label>
+                                <select class="form-select" id="status" name="status">
+                                    <option value="AKTIF">Aktif</option>
+                                    <option value="LIBUR">Libur</option>
                                 </select>
                             </div>
                         </div>
@@ -98,6 +98,65 @@
 <!-- END Main Container -->
 
 <script>
+    <?php $target = 0; ?>
+    $(function() {
+        $("#table-absensi").DataTable({
+            "responsive": true,
+            "lengthChange": true,
+            "autoWidth": false,
+            'serverSide': true,
+            'processing': true,
+            "order": [
+                [0, "desc"]
+            ],
+            'ajax': {
+                'dataType': 'json',
+                'url': '<?= base_url() ?>absensi/ajax_table_absensi_periode',
+                'type': 'post',
+            },
+            'columns': [{
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data.no",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data.tanggal",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data",
+                "render": function(data) {
+                    if (data.status == 'AKTIF') {
+                        return ` <span class="badge bg-primary">Aktif</span>`
+                    } else {
+                        return ` <span class="badge bg-danger">Libur</span>`
+                    }
+
+                }
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data",
+                "render": function(data) {
+
+                    return ` <button type="button" class="btn btn-sm btn-danger" onclick=delete_data('` + data.id + `') data-bs-toggle="tooltip" title="Hapus">
+                                        <i class="fa fa-trash"></i> Hapus
+                                    </button>`
+
+                }
+            }, ],
+            "dom": '<"row" <"col-md-6" l><"col-md-6" f>>rt<"row" <"col-md-6" i><"col-md-6" p>>',
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        });
+
+        //   $('#tambah-user').hide();
+    });
+
+    function reload_table() {
+        $('#table-absensi').DataTable().ajax.reload(null, false);
+    }
+
     $('#btn-add').on('click', function() {
         $('#add-new').show(500);
         $('#list-karyawan').hide();
@@ -108,12 +167,7 @@
         $('#add-new').hide();
     });
 
-    $('#btn-edit').on('click', function() {
-        $('#add-new').show(500);
-        $('#list-karyawan').hide();
-    });
-
-    function delete_data() {
+    function delete_data(id) {
 
         Swal.fire({
             title: 'Apakah Anda Yakin ?',
@@ -125,14 +179,89 @@
             confirmButtonText: 'Ya, hapus saja!'
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire(
-                    'Deleted!',
-                    'Data berhasil di hapus.',
-                    'success'
-                )
+                $.ajax({
+                    url: '<?= base_url() ?>absensi/delete_data',
+                    data: {
+                        id: id,
+                        table: "absensi_periode"
+                    },
+                    type: 'post',
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result.status == "success") {
+                            Swal.fire(
+                                'Deleted!',
+                                'Data berhasil di hapus.',
+                                'success'
+                            )
+                            reload_table()
+                        } else
+                            toast('error', result.message)
+                    }
+                })
             }
         })
 
 
     }
+
+    $("#form-data").submit(function(e) {
+        e.preventDefault()
+        //   loading_submit()
+
+        if ($('#tanggal').val() == '' || $('#status').val() == '') {
+            Swal.fire(
+                'error!',
+                'Tidak boleh ada kolom kosong!',
+                'error'
+            )
+            return
+        }
+
+
+        var form_data = new FormData();
+        form_data.append('table', 'absensi_periode');
+        form_data.append('tanggal', $("#tanggal").val());
+        form_data.append('status', $("#status").val());
+
+        var url_ajax = '<?= base_url() ?>absensi/insert_data_periode'
+
+
+        $.ajax({
+            url: url_ajax,
+            type: "post",
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form_data,
+            dataType: "json",
+            success: function(result) {
+                if (result.status == "success") {
+                    Swal.fire(
+                        'Success!',
+                        result.message,
+                        'success'
+                    )
+                    $('#tanggal').val('')
+                    $('#status').val('')
+                    reload_table()
+                    $('#add-new').hide();
+                    $('#list-karyawan').show(500)
+                } else {
+                    Swal.fire(
+                        'error!',
+                        result.message,
+                        'error'
+                    )
+                }
+            },
+            error: function(err) {
+                Swal.fire(
+                    'error!',
+                    err.responseText,
+                    'error'
+                )
+            }
+        })
+    })
 </script>

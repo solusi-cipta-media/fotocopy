@@ -10,12 +10,12 @@
         <h2 class="content-heading">Kerja Luar</h2>
 
         <!-- Dynamic Table Responsive -->
-        <div class="block block-rounded" id="list-karyawan">
+        <div class="block block-rounded" id="list-meter">
             <div class="block-header block-header-default">
                 <h3 class="block-title">
                     Catatan Meter
                 </h3>
-                <button type="button" class="btn btn-outline-primary min-width-125" onclick=register_data()>
+                <button type="button" class="btn btn-outline-primary min-width-125" id="btn-add">
                     <i class="fa fa-plus mr-5"></i> Register Catatan Meter
                 </button>
             </div>
@@ -28,18 +28,71 @@
                             <th class="text-center">#</th>
                             <th>Customer</th>
                             <th>Alamat</th>
-                            <th>Kolektor</th>
                             <th>Status</th>
                             <th>Tgl Instal</th>
                             <th>Model</th>
-                            <th>Lokasi</th>
-                            <th>Telp</th>
-                            <th>Fax</th>
-                            <th>No.Kontrak</th>
+                            <th>Awal Meter</th>
+                            <th>Akhir Meter</th>
                             <th class="text-center" style="width: 10%;">Aksi</th>
                         </tr>
                     </thead>
                 </table>
+            </div>
+        </div>
+
+        <div class="block block-rounded" id="add-new" style="display: none;">
+            <div class="block-header block-header-default">
+                <h3 class="block-title">Register Kontrak</h3>
+                <div class="block-options">
+                    <button type="button" class="btn btn-outline-danger min-width-125" id="btn-hide"><i class="fa fa-minus-circle"></i> Sembunyikan</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <form id="form-data">
+                    <div class="row push">
+                        <div class="col-lg-12 col-xl-12">
+                            <div class="mb-4">
+                                <label class="form-label" for="customer_all">Customer</label>
+                                <select name="customer_all" id="customer_all" class="form-control">
+                                    <?php
+                                    foreach ($customer as $key => $value) {
+                                    ?>
+                                        <option value="<?= $value['nama'] . '-' . $value['alamat'] . '-' . $value['klasifikasi'] . '-' . $value['hp_contact'] ?>"><?= $value['kode'] . '-' . $value['nama'] ?></option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="tgl_instal">Tanggal Install</label>
+                                <input type="date" class="form-control" id="tgl_instal" name="tgl_instal">
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="model">Model</label>
+                                <input type="text" class="form-control" id="model" name="model" onkeyup="this.value = this.value.toUpperCase()">
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="nomor_kontrak">Nomor Kontrak</label>
+                                <input type="text" class="form-control" id="nomor_kontrak" name="nomor_kontrak" onkeyup="this.value = this.value.toUpperCase()">
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="awal">Awal Meter</label>
+                                <input type="date" class="form-control" id="awal" name="awal">
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="akhir">Akhir Meter</label>
+                                <input type="date" class="form-control" id="akhir" name="akhir">
+                            </div>
+
+                        </div>
+                        <div class="col-lg-12 col-xl-12">
+                            <div class="mb-4">
+                                <button type="submit" class="btn btn-alt-primary"><i class="si si-cloud-upload"></i> Simpan</button>
+                                <button type="button" class="btn btn-alt-danger" id="clear-form"><i class="si si-close"></i> Clear</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
         <!-- Dynamic Table Responsive -->
@@ -128,10 +181,6 @@
             }, {
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
-                "data": "data.kolektor",
-            }, {
-                "target": [<?= $target ?>],
-                "className": 'text-center py-1',
                 "data": "data.status",
             }, {
                 "target": [<?= $target ?>],
@@ -144,25 +193,17 @@
             }, {
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
-                "data": "data.lokasi",
+                "data": "data.awal",
             }, {
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
-                "data": "data.telp",
-            }, {
-                "target": [<?= $target ?>],
-                "className": 'text-center py-1',
-                "data": "data.fax",
-            }, {
-                "target": [<?= $target ?>],
-                "className": 'text-center py-1',
-                "data": "data.nomor_kontrak",
+                "data": "data.akhir",
             }, {
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
                 "data": "data",
                 "render": function(data) {
-                    return `<button type="button" class="btn btn-sm btn-danger" onclick="hapus(` + data.id + `)" data-bs-toggle="tooltip" title="Hapus"><i class="fa fa-trash"></i> Hapus</button><a href="<?= base_url('kerjaluar/cetakmeter?id=') ?>` + data.id + `" target="_blank" type="button" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Cetak"><i class="fa fa-print"></i> Cetak</a>`
+                    return `<button type="button" class="btn btn-sm btn-danger" onclick="hapus(` + data.id + `)" data-bs-toggle="tooltip" title="Hapus"><i class="fa fa-trash"></i> Hapus</button><br style="margin-bottom: 10px;"><a href="<?= base_url('kerjaluar/cetakmeter?id=') ?>` + data.id + `" target="_blank" type="button" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Cetak"><i class="fa fa-print"></i> Cetak</a>`
                 }
             }, ],
             "dom": '<"row" <"col-md-6" l><"col-md-6" f>>rt<"row" <"col-md-6" i><"col-md-6" p>>',
@@ -170,14 +211,38 @@
         });
 
         //   $('#tambah-user').hide();
-        $('#teknisi').select2({
-            dropdownParent: $('#exampleModalCenter')
+        $('#customer').select2({
+            // dropdownParent: $('#exampleModalCenter')
         });
     });
 
     function reload_table() {
         $('#table-spk').DataTable().ajax.reload(null, false);
     }
+    $('#btn-add').on('click', function() {
+        $('#add-new').show(500);
+        $('#list-meter').hide();
+        $('#customer').val('')
+        $('#tgl_instal').val('')
+        $('#model').val('')
+        $('#nomor_kontrak').val('')
+        $('#awal').val('')
+        $('#akhir').val('')
+    });
+
+    $('#clear-form').on('click', function() {
+        $('#customer').val('')
+        $('#tgl_instal').val('')
+        $('#model').val('')
+        $('#nomor_kontrak').val('')
+        $('#awal').val('')
+        $('#akhir').val('')
+    });
+
+    $('#btn-hide').on('click', function() {
+        $('#list-meter').show(500);
+        $('#add-new').hide();
+    });
 
     function hapus(id) {
 
@@ -217,15 +282,11 @@
 
     }
 
-
-
-
-
-    $("#form-data-teknisi").submit(function(e) {
+    $("#form-data").submit(function(e) {
         e.preventDefault()
         //   loading_submit()
 
-        if ($('#teknisi').val() == '') {
+        if ($('#tgl_instal').val() == '' || $('#model').val() == '' || $('#nomor_kontrak').val() == '' || $('#awal_meter').val() == '' || $('#akhir_meter').val() == '') {
             Swal.fire(
                 'error!',
                 'Tidak boleh ada kolom kosong!',
@@ -236,11 +297,15 @@
 
 
         var form_data = new FormData();
-        form_data.append('table', 'kerjaluar');
-        form_data.append('id', $("#id").val());
-        form_data.append('teknisi_all', $("#teknisi").val());
+        form_data.append('table', 'catatan_meter');
+        form_data.append('customer_all', $("#customer_all").val());
+        form_data.append('tgl_instal', $("#tgl_instal").val());
+        form_data.append('model', $("#model").val());
+        form_data.append('nomor_kontrak', $("#nomor_kontrak").val());
+        form_data.append('awal', $("#awal").val());
+        form_data.append('akhir', $("#akhir").val());
 
-        url_ajax = '<?= base_url() ?>kerjaluar/update_data_teknisi_langsung'
+        url_ajax = '<?= base_url() ?>kerjaluar/input_catatan_meter'
 
         $.ajax({
             url: url_ajax,
@@ -258,6 +323,8 @@
                         'success'
                     )
                     reload_table()
+                    $('#list-meter').show(500);
+                    $('#add-new').hide();
                 } else {
                     Swal.fire(
                         'error!',
