@@ -17,8 +17,8 @@ class Mesin extends CI_Controller
     public function index()
     {
         //ambil data notifikasi
-        $data['notifikasi'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->result_array();
-        $data['jumlah_notif'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->num_rows();
+        // $data['notifikasi'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->result_array();
+        // $data['jumlah_notif'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->num_rows();
         //end
 
         $data['sess_menu'] = 'mesin';
@@ -34,9 +34,9 @@ class Mesin extends CI_Controller
         // $get_role_id = $this->crud->get_all("user_role")->result_array();
 
         $table = 'overhaul'; //nama tabel dari database
-        $column_order = array('id', 'nomor_mesin', 'model', 'serial_number', 'asal', 'tgl_masuk', 'meter', 'tegangan', 'status', 'date_created', 'id'); //field yang ada di table user
-        $column_search = array('id', 'nomor_mesin', 'model', 'serial_number', 'asal', 'tgl_masuk', 'meter', 'tegangan', 'status', 'date_created'); //field yang diizin untuk pencarian 
-        $select = 'id, nomor_mesin, model, serial_number, asal, tgl_masuk, meter, tegangan, status, date_created';
+        $column_order = array('id', 'nomor_mesin', 'model', 'serial_number', 'asal', 'supplier', 'tgl_masuk', 'meter', 'tegangan', 'status', 'uraian', 'date_created', 'id'); //field yang ada di table user
+        $column_search = array('id', 'nomor_mesin', 'model', 'serial_number', 'asal', 'supplier', 'tgl_masuk', 'meter', 'tegangan', 'status', 'uraian', 'date_created'); //field yang diizin untuk pencarian 
+        $select = 'id, nomor_mesin, model, serial_number, asal, supplier, tgl_masuk, meter, tegangan, status, uraian, date_created';
         $order = array('id' => 'asc'); // default order 
         $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order);
         $data = array();
@@ -50,10 +50,12 @@ class Mesin extends CI_Controller
             $row['data']['model'] = $key->model;
             $row['data']['serial_number'] = $key->serial_number;
             $row['data']['asal'] = $key->asal;
+            $row['data']['supplier'] = $key->supplier;
             $row['data']['tgl_masuk'] = date('d-M-Y', strtotime($key->tgl_masuk));
             $row['data']['meter'] = $key->meter;
             $row['data']['tegangan'] = $key->tegangan;
             $row['data']['status'] = $key->status;
+            $row['data']['uraian'] = $key->uraian;
             $row['data']['date_created'] = $key->date_created;
 
             $data[] = $row;
@@ -63,6 +65,52 @@ class Mesin extends CI_Controller
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->crud->count_all($table),
             "recordsFiltered" => $this->crud->count_filtered($table, $select, $column_order, $column_search, $order),
+            "data" => $data,
+            "query" => $this->db->last_query()
+        );
+        //output to json format
+        echo json_encode($output);
+    }
+
+    public function ajax_table_mesin_where()
+    {
+
+        $where = array(
+            'status' => $this->input->post('status')
+        );
+
+        $table = 'overhaul'; //nama tabel dari database
+        $column_order = array('id', 'nomor_mesin', 'model', 'serial_number', 'asal', 'supplier', 'tgl_masuk', 'meter', 'tegangan', 'status', 'uraian', 'date_created', 'id'); //field yang ada di table user
+        $column_search = array('id', 'nomor_mesin', 'model', 'serial_number', 'asal', 'supplier', 'tgl_masuk', 'meter', 'tegangan', 'status', 'uraian', 'date_created'); //field yang diizin untuk pencarian 
+        $select = 'id, nomor_mesin, model, serial_number, asal, supplier, tgl_masuk, meter, tegangan, status, uraian, date_created';
+        $order = array('id' => 'asc'); // default order 
+        $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order, $where);
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($list as $key) {
+            $no++;
+            $row = array();
+            $row['data']['no'] = $no;
+            $row['data']['id'] = $key->id;
+            $row['data']['nomor_mesin'] = $key->nomor_mesin;
+            $row['data']['model'] = $key->model;
+            $row['data']['serial_number'] = $key->serial_number;
+            $row['data']['asal'] = $key->asal;
+            $row['data']['supplier'] = $key->supplier;
+            $row['data']['tgl_masuk'] = date('d-M-Y', strtotime($key->tgl_masuk));
+            $row['data']['meter'] = $key->meter;
+            $row['data']['tegangan'] = $key->tegangan;
+            $row['data']['status'] = $key->status;
+            $row['data']['uraian'] = $key->uraian;
+            $row['data']['date_created'] = $key->date_created;
+
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->crud->count_all($table),
+            "recordsFiltered" => $this->crud->count_filtered($table, $select, $column_order, $column_search, $order, $where),
             "data" => $data,
             "query" => $this->db->last_query()
         );
@@ -131,5 +179,15 @@ class Mesin extends CI_Controller
 
 
         echo json_encode($result);
+    }
+
+    public function get_nomor_mesin()
+    {
+        $table = $this->input->post('table');
+        $getnomor = $this->crud->get_all_limit($table)->row_array();
+
+        $last_no = $getnomor['nomor_mesin'] + 1;
+
+        echo json_encode($last_no);
     }
 }

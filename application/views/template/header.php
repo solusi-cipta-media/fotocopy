@@ -34,6 +34,7 @@
     <!-- Fonts and Codebase framework -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap">
     <link rel="stylesheet" id="css-main" href="<?= base_url('') ?>assets/css/codebase.min.css">
+    <link rel="stylesheet" id="css-main" href="<?= base_url('') ?>assets/css/animate.css">
     <link rel="stylesheet" href="<?= base_url('') ?>assets/js/plugins/sweetalert2/sweetalert2.min.css">
 
     <!-- select2 -->
@@ -41,6 +42,9 @@
 
     <!-- jQuery (required for DataTables plugin) -->
     <script src="<?= base_url('') ?>assets/js/lib/jquery.min.js"></script>
+
+    <!-- summernote -->
+    <!-- <link href="<?= base_url() ?>summernote/summernote.css" rel="stylesheet"> -->
 
 </head>
 
@@ -347,7 +351,7 @@
 
 
                     <!-- Notifications -->
-                    <div class="dropdown d-inline-block">
+                    <!-- <div class="dropdown d-inline-block">
                         <button type="button" class="btn btn-sm btn-alt-secondary" id="page-header-notifications" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-flag"></i>
                             <span class="badge rounded-pill bg-black-50 ms-1"><?= $jumlah_notif ?></span>
@@ -383,7 +387,7 @@
                                 </a>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- END Notifications -->
 
                 </div>

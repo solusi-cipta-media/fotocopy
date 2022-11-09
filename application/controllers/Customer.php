@@ -17,8 +17,8 @@ class Customer extends CI_Controller
     public function index()
     {
         //ambil data notifikasi
-        $data['notifikasi'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->result_array();
-        $data['jumlah_notif'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->num_rows();
+        // $data['notifikasi'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->result_array();
+        // $data['jumlah_notif'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->num_rows();
         //end
 
         $data['sess_menu'] = 'customer';
@@ -34,9 +34,9 @@ class Customer extends CI_Controller
         // $get_role_id = $this->crud->get_all("user_role")->result_array();
 
         $table = 'customer'; //nama tabel dari database
-        $column_order = array('id', 'kode', 'nama', 'alamat', 'klasifikasi', 'contact_person', 'hp_contact', 'longitude', 'latitude', 'date_created', 'id'); //field yang ada di table user
-        $column_search = array('id', 'kode', 'nama', 'alamat', 'klasifikasi', 'contact_person', 'hp_contact', 'longitude', 'latitude', 'date_created'); //field yang diizin untuk pencarian 
-        $select = 'id, kode, nama, alamat, klasifikasi, contact_person, hp_contact, longitude, latitude, date_created';
+        $column_order = array('id', 'kode', 'nama', 'alamat', 'klasifikasi', 'contact_person', 'hp_contact', 'no_contact_kantor', 'longitude', 'latitude', 'date_created', 'id'); //field yang ada di table user
+        $column_search = array('id', 'kode', 'nama', 'alamat', 'klasifikasi', 'contact_person', 'hp_contact', 'no_contact_kantor', 'longitude', 'latitude', 'date_created'); //field yang diizin untuk pencarian 
+        $select = 'id, kode, nama, alamat, klasifikasi, contact_person, hp_contact, no_contact_kantor, longitude, latitude, date_created';
         $order = array('id' => 'asc'); // default order 
         $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order);
         $data = array();
@@ -52,6 +52,7 @@ class Customer extends CI_Controller
             $row['data']['klasifikasi'] = $key->klasifikasi;
             $row['data']['contact_person'] = $key->contact_person;
             $row['data']['hp_contact'] = $key->hp_contact;
+            $row['data']['no_contact_kantor'] = $key->no_contact_kantor;
             $row['data']['longitude'] = $key->longitude;
             $row['data']['latitude'] = $key->latitude;
             $row['data']['date_created'] = $key->date_created;

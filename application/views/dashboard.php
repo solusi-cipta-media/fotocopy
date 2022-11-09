@@ -2,8 +2,51 @@
 <main id="main-container">
     <!-- Page Content -->
     <div class="content">
-        <div class="row">
-            <!-- Row #1 -->
+        <?php
+        if ($jumlah_notif > 0) {
+            foreach ($notifikasi as $key => $value) {
+        ?>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="block block-rounded block-link-shadow overflow-hidden shadow shadow-danger">
+                            <div class="block-content block-content-full">
+                                <i class="si si-envelope fa-2x opacity-25"></i>
+                                <div class="row">
+                                    <div class="col-8">
+                                        <h5><?= $value['pesan'] ?></h5>
+                                    </div>
+                                    <div class="col-4 text-end">
+                                        <button class="btn btn-primary" type="button" onclick="show_data(`<?= $value['dokumen'] ?>`)"><i class="fa fa-file-pdf"></i> Lihat</button>
+                                        <button class="btn btn-danger" type="button" onclick="remove_data(`<?= $value['id'] ?>`)"><i class="fa fa-trash"></i> Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php
+            }
+        } else {
+            ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="block block-rounded block-link-shadow overflow-hidden shadow shadow-danger">
+                        <div class="block-content block-content-full">
+                            <i class="si si-like fa-2x opacity-25"></i>
+                            <div class="row">
+                                <div class="col-8">
+                                    <h5>Bagus! Semua reminder end contract telah diselesaikan.</h5>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php
+        }
+        ?>
+        <!-- <div class="row">
             <div class="col-6 col-xl-3">
                 <a class="block block-rounded block-link-shadow text-end" href="javascript:void(0)">
                     <div class="block-content block-content-full d-sm-flex justify-content-between align-items-center">
@@ -56,10 +99,8 @@
                     </div>
                 </a>
             </div>
-            <!-- END Row #1 -->
         </div>
         <div class="row">
-            <!-- Row #2 -->
             <div class="col-md-12">
                 <div class="block block-rounded">
                     <div class="block-header">
@@ -76,35 +117,8 @@
                         </div>
                     </div>
                     <div class="block-content p-1 bg-body-light">
-                        <!-- Chart.js Chart is initialized in js/pages/be_pages_dashboard.min.js which was auto compiled from _js/pages/be_pages_dashboard.js -->
-                        <!-- For more info and examples you can check out http://www.chartjs.org/docs/ -->
                         <canvas id="chartOverhaul"></canvas>
                     </div>
-                    <!-- <div class="block-content">
-                        <div class="row items-push">
-                            <div class="col-6 col-sm-4 text-center text-sm-start">
-                                <div class="fs-sm fw-semibold text-uppercase text-muted">This Month</div>
-                                <div class="fs-4 fw-semibold">720</div>
-                                <div class="fw-semibold text-success">
-                                    <i class="fa fa-caret-up"></i> +16%
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-4 text-center text-sm-start">
-                                <div class="fs-sm fw-semibold text-uppercase text-muted">This Week</div>
-                                <div class="fs-4 fw-semibold">160</div>
-                                <div class="fw-semibold text-danger">
-                                    <i class="fa fa-caret-down"></i> -3%
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-4 text-center text-sm-start">
-                                <div class="fs-sm fw-semibold text-uppercase text-muted">Average</div>
-                                <div class="fs-4 fw-semibold">24.3</div>
-                                <div class="fw-semibold text-success">
-                                    <i class="fa fa-caret-up"></i> +9%
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
             <div class="col-md-12">
@@ -123,41 +137,12 @@
                         </div>
                     </div>
                     <div class="block-content p-1 bg-body-light">
-                        <!-- Chart.js Chart is initialized in js/pages/be_pages_dashboard.min.js which was auto compiled from _js/pages/be_pages_dashboard.js -->
-                        <!-- For more info and examples you can check out http://www.chartjs.org/docs/ -->
                         <canvas id="chartService"></canvas>
                     </div>
-                    <!-- <div class="block-content">
-                        <div class="row items-push">
-                            <div class="col-6 col-sm-4 text-center text-sm-start">
-                                <div class="fs-sm fw-semibold text-uppercase text-muted">This Month</div>
-                                <div class="fs-4 fw-semibold">$ 6,540</div>
-                                <div class="fw-semibold text-success">
-                                    <i class="fa fa-caret-up"></i> +4%
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-4 text-center text-sm-start">
-                                <div class="fs-sm fw-semibold text-uppercase text-muted">This Week</div>
-                                <div class="fs-4 fw-semibold">$ 1,525</div>
-                                <div class="fw-semibold text-danger">
-                                    <i class="fa fa-caret-down"></i> -7%
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-4 text-center text-sm-start">
-                                <div class="fs-sm fw-semibold text-uppercase text-muted">Balance</div>
-                                <div class="fs-4 fw-semibold">$ 9,352</div>
-                                <div class="fw-semibold text-success">
-                                    <i class="fa fa-caret-up"></i> +35%
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
-            <!-- END Row #2 -->
         </div>
         <div class="row">
-            <!-- Row #2 -->
             <div class="col-md-6">
                 <div class="block block-rounded">
                     <div class="block-header">
@@ -174,35 +159,8 @@
                         </div>
                     </div>
                     <div class="block-content p-1 bg-body-light">
-                        <!-- Chart.js Chart is initialized in js/pages/be_pages_dashboard.min.js which was auto compiled from _js/pages/be_pages_dashboard.js -->
-                        <!-- For more info and examples you can check out http://www.chartjs.org/docs/ -->
                         <canvas id="chartPekerjaan"></canvas>
                     </div>
-                    <!-- <div class="block-content">
-                        <div class="row items-push">
-                            <div class="col-6 col-sm-4 text-center text-sm-start">
-                                <div class="fs-sm fw-semibold text-uppercase text-muted">This Month</div>
-                                <div class="fs-4 fw-semibold">720</div>
-                                <div class="fw-semibold text-success">
-                                    <i class="fa fa-caret-up"></i> +16%
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-4 text-center text-sm-start">
-                                <div class="fs-sm fw-semibold text-uppercase text-muted">This Week</div>
-                                <div class="fs-4 fw-semibold">160</div>
-                                <div class="fw-semibold text-danger">
-                                    <i class="fa fa-caret-down"></i> -3%
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-4 text-center text-sm-start">
-                                <div class="fs-sm fw-semibold text-uppercase text-muted">Average</div>
-                                <div class="fs-4 fw-semibold">24.3</div>
-                                <div class="fw-semibold text-success">
-                                    <i class="fa fa-caret-up"></i> +9%
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
             <div class="col-md-6">
@@ -221,45 +179,154 @@
                         </div>
                     </div>
                     <div class="block-content p-1 bg-body-light">
-                        <!-- Chart.js Chart is initialized in js/pages/be_pages_dashboard.min.js which was auto compiled from _js/pages/be_pages_dashboard.js -->
-                        <!-- For more info and examples you can check out http://www.chartjs.org/docs/ -->
                         <canvas id="js-chartjs-dashboard-lines2"></canvas>
                     </div>
-                    <!-- <div class="block-content">
-                        <div class="row items-push">
-                            <div class="col-6 col-sm-4 text-center text-sm-start">
-                                <div class="fs-sm fw-semibold text-uppercase text-muted">This Month</div>
-                                <div class="fs-4 fw-semibold">$ 6,540</div>
-                                <div class="fw-semibold text-success">
-                                    <i class="fa fa-caret-up"></i> +4%
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-4 text-center text-sm-start">
-                                <div class="fs-sm fw-semibold text-uppercase text-muted">This Week</div>
-                                <div class="fs-4 fw-semibold">$ 1,525</div>
-                                <div class="fw-semibold text-danger">
-                                    <i class="fa fa-caret-down"></i> -7%
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-4 text-center text-sm-start">
-                                <div class="fs-sm fw-semibold text-uppercase text-muted">Balance</div>
-                                <div class="fs-4 fw-semibold">$ 9,352</div>
-                                <div class="fw-semibold text-success">
-                                    <i class="fa fa-caret-up"></i> +35%
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
-            <!-- END Row #2 -->
-        </div>
+        </div> -->
     </div>
     <!-- END Page Content -->
 </main>
 <!-- END Main Container -->
 
+<div class="modal" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="block block-rounded shadow-none mb-0">
+                <div class="block-header block-header-default">
+                    <h3 class="block-title">REMINDER!</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content fs-sm" id="body-modal">
+                    <div class="row push">
+                        <div class="col-lg-12 col-xl-12">
+                            <div class="mb-4 text-center">
+                                <h1 style="font-size: 72px;">Ups!</h1>
+                            </div>
+                            <div class="mb-4">
+                                <h5>Ada kontrak yang harus diperbaharui, silahkan kunjungi halaman kontrak</h5>
+                            </div>
+                            <div class="mb-4 text-center">
+                                <a href="<?= base_url('kontrak') ?>" class="btn btn-danger" type="button">Halaman Kontrak</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="block-content block-content-full block-content-sm text-end border-top">
+                    <button type="button" class="btn btn-alt-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <!-- <button type="submit" class="btn btn-alt-primary" data-bs-dismiss="modal">
+                            Submit
+                        </button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="modal-pdf" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="block block-rounded shadow-none mb-0">
+                <div class="block-header block-header-default">
+                    <h3 class="block-title">Terms &amp; Conditions</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content fs-sm" id="body-modal2">
+
+                </div>
+                <div class="block-content block-content-full block-content-sm text-end border-top">
+                    <button type="button" class="btn btn-alt-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <!-- <button type="button" class="btn btn-alt-primary" data-bs-dismiss="modal">
+                        Done
+                    </button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+    $(function() {
+        $.ajax({
+            url: '<?= base_url() ?>dashboard/getnotif',
+            data: {
+                // id: id,
+                table: "notifikasi_kontrak"
+            },
+            type: 'post',
+            dataType: 'json',
+            success: function(result) {
+                if (result > 0) {
+                    // console.log(result)
+                    $('#exampleModalCenter').modal('show')
+                    return
+                }
+            }
+        })
+
+
+    });
+
+    function show_data(dokumen) {
+        console.log(dokumen)
+        var html
+        var nama
+        $('#modal-pdf').modal('show')
+        nama = '<h3 class="block-title">Dokumen Kontrak</h3>'
+        html = '<embed type="application/pdf" src="<?= base_url() ?>assets/media/kontrak/' + dokumen + '" width="700" height="400"></embed>'
+        $('#body-modal2').html(html)
+        $('.block-title').html(nama)
+    }
+
+    function remove_data(id) {
+
+        Swal.fire({
+            title: 'Apakah Anda Yakin ?',
+            text: "Pesan akan hilang dari dashboard, pastikan Anda sudah melakukan follow up kepada customer!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus saja!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '<?= base_url() ?>dashboard/remove',
+                    data: {
+                        id: id,
+                        table: "notifikasi_kontrak"
+                    },
+                    type: 'post',
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result.status == "success") {
+                            Swal.fire(
+                                'Deleted!',
+                                'Data berhasil di hapus.',
+                                'success'
+                            )
+                            location.reload()
+                        } else
+                            toast('error', result.message)
+                    }
+                })
+            }
+        })
+
+
+    }
+
     //ChartOverhaul
     const chartOverhaul = new Chart($('#chartOverhaul'), {
         type: 'line',

@@ -31,8 +31,8 @@ class Dashboard extends CI_Controller
     public function profil()
     {
         //ambil data notifikasi
-        $data['notifikasi'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->result_array();
-        $data['jumlah_notif'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->num_rows();
+        // $data['notifikasi'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->result_array();
+        // $data['jumlah_notif'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->num_rows();
         //end
 
         $data['sess_menu'] = 'dashboard';
@@ -50,6 +50,19 @@ class Dashboard extends CI_Controller
         );
 
         $result = $this->crud->get_where($table, $where)->result();
+
+
+        echo json_encode($result);
+    }
+
+    public function getnotif()
+    {
+        $table = $this->input->post('table');
+        $where = array(
+            'status_read' => 0
+        );
+
+        $result = $this->crud->get_where($table, $where)->num_rows();
 
 
         echo json_encode($result);
@@ -140,6 +153,28 @@ class Dashboard extends CI_Controller
             $response = ['status' => 'success', 'message' => 'Berhasil Edit Data!'];
         } else
             $response = ['status' => 'error', 'message' => 'Gagal Edit Data!'];
+
+        echo json_encode($response);
+    }
+
+    public function remove()
+    {
+        $table = $this->input->post("table");
+        $id = $this->input->post("id");
+
+
+        $data = array(
+            'status_read' => 1
+        );
+
+
+        $update = $this->crud->update($table, $data, ['id' => $id]);
+
+
+        if ($update > 0) {
+            $response = ['status' => 'success', 'message' => 'Berhasil Remove Data!'];
+        } else
+            $response = ['status' => 'error', 'message' => 'Gagal Remove Data!'];
 
         echo json_encode($response);
     }

@@ -17,8 +17,8 @@ class Karyawan extends CI_Controller
     public function index()
     {
         //ambil data notifikasi
-        $data['notifikasi'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->result_array();
-        $data['jumlah_notif'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->num_rows();
+        // $data['notifikasi'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->result_array();
+        // $data['jumlah_notif'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->num_rows();
         //end
 
         $data['sess_menu'] = 'karyawan';
@@ -78,6 +78,27 @@ class Karyawan extends CI_Controller
             $response = ['status' => 'success', 'message' => 'Success Delete Data!'];
         } else
             $response = ['status' => 'failed', 'message' => 'Error Delete Data!'];
+
+        echo json_encode($response);
+    }
+
+    public function reset_pass()
+    {
+        $id = $this->input->post('id');
+        $table = $this->input->post('table');
+
+        $where = array(
+            'id' => $id
+        );
+
+        $data = array(
+            'password' => password_hash('12345', PASSWORD_DEFAULT)
+        );
+
+        if ($this->crud->update($table, $data, $where)) {
+            $response = ['status' => 'success', 'message' => 'Success Reset Password!'];
+        } else
+            $response = ['status' => 'failed', 'message' => 'Error Reset Password!'];
 
         echo json_encode($response);
     }
@@ -169,6 +190,39 @@ class Karyawan extends CI_Controller
         $table = $this->input->post('table');
         $where = array(
             'id' => $this->input->post('id')
+        );
+
+        $result = $this->crud->get_where($table, $where)->result();
+
+
+        echo json_encode($result);
+    }
+
+    public function cek_user()
+    {
+        $table = $this->input->post('table');
+
+        $where = array(
+            'userid' => $this->input->post('userid')
+        );
+
+        $result = $this->crud->get_where($table, $where)->row();
+
+        if ($result) {
+            $data = 400;
+        } else {
+            $data = 200;
+        }
+
+        echo json_encode($data);
+    }
+
+    public function cek_user_ajax()
+    {
+        $table = $this->input->post('table');
+
+        $where = array(
+            'userid' => $this->input->post('userid')
         );
 
         $result = $this->crud->get_where($table, $where)->result();

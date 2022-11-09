@@ -27,6 +27,7 @@
                             <th>Klasifikasi</th>
                             <th>Contact Person</th>
                             <th>HP Contact</th>
+                            <th>Nomor Kantor</th>
                             <th>Lokasi</th>
                             <th class="text-center" style="width: 15%;">Aksi</th>
                         </tr>
@@ -52,7 +53,7 @@
                             </div>
                             <div class="mb-4">
                                 <label class="form-label" for="nama">Nama</label>
-                                <input type="text" class="form-control" id="nama" name="nama">
+                                <input type="text" class="form-control" id="nama" name="nama" onkeyup="this.value = this.value.toUpperCase()">
                             </div>
                             <div class="mb-4">
                                 <label class="form-label" for="alamat">Alamat</label>
@@ -83,6 +84,10 @@
                             <div class="mb-4">
                                 <label class="form-label" for="hp_contact">HP Contact Person</label>
                                 <input type="text" class="form-control" id="hp_contact" name="hp_contact">
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="no_contact_kantor">Nomor Kantor</label>
+                                <input type="text" class="form-control" id="no_contact_kantor" name="no_contact_kantor">
                             </div>
 
                         </div>
@@ -166,6 +171,10 @@
             }, {
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
+                "data": "data.no_contact_kantor",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
                 "data": "data",
                 "render": function(data) {
                     return `<a href="https://www.google.com/maps/place/` + data.latitude + `,` + data.longitude + `" target="_blank" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Lokasi Map">
@@ -216,6 +225,7 @@
         form_data.append('klasifikasi', $("#klasifikasi").val());
         form_data.append('contact_person', $("#contact_person").val());
         form_data.append('hp_contact', $("#hp_contact").val());
+        form_data.append('no_contact_kantor', $("#no_contact_kantor").val());
 
         var url_ajax = '<?= base_url() ?>customer/insert_data_customer'
         if (global_status == "edit") {
@@ -244,6 +254,7 @@
                     $('#latitude').val('')
                     $('#contact_person').val('')
                     $('#hp_contact').val('')
+                    $('#no_contact_kantor').val('')
                     reload_table()
                     $('#add-new').hide();
                     $('#list-customer').show(500)
@@ -275,6 +286,7 @@
         $('#latitude').val('')
         $('#contact_person').val('')
         $('#hp_contact').val('')
+        $('#no_contact_kantor').val('')
     });
 
     $('#clear-form').on('click', function() {
@@ -284,6 +296,7 @@
         $('#latitude').val('')
         $('#contact_person').val('')
         $('#hp_contact').val('')
+        $('#no_contact_kantor').val('')
     });
 
     $('#btn-hide').on('click', function() {
@@ -376,6 +389,7 @@
                     $('#latitude').val(d.latitude)
                     $('#contact_person').val(d.contact_person)
                     $('#hp_contact').val(d.hp_contact)
+                    $('#no_contact_kantor').val(d.no_contact_kantor)
                     $('#klasifikasi').val(d.klasifikasi)
                 });
             }

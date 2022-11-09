@@ -86,6 +86,7 @@
                             <div class="mb-4">
                                 <label class="form-label" for="userid">User ID</label>
                                 <input type="text" class="form-control" id="userid" name="userid">
+                                <small style="color: red; display: none;" id="error-userid">* UserID sudah digunakan</small>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label" for="role_id">Role ID</label>
@@ -192,7 +193,7 @@
                 "className": 'py-1',
                 "data": "data",
                 "render": function(data) {
-                    return `<button type="button" class="btn btn-sm btn-danger" onclick=delete_data('` + data.id + `')><i class="fa fa-trash"></i> Hapus</button><br style="margin-bottom: 10px;"><button type="button" class="btn btn-sm btn-info" id="btn-edit" onclick="edit_data('` + data.id + `')"><i class="fa fa-edit"></i> Edit</button>`
+                    return `<button type="button" class="btn btn-sm btn-danger" onclick=delete_data('` + data.id + `')><i class="fa fa-trash"></i> Hapus</button><br style="margin-bottom: 10px;"><button type="button" class="btn btn-sm btn-info" id="btn-edit" onclick="edit_data('` + data.id + `')"><i class="fa fa-edit"></i> Edit</button><br style="margin-bottom: 10px;"><button type="button" class="btn btn-sm btn-warning" id="btn-edit" onclick="reset_password('` + data.id + `')"><i class="fa fa-key"></i> Reset</button>`
                 }
             }, ],
             "dom": '<"row" <"col-md-6" l><"col-md-6" f>>rt<"row" <"col-md-6" i><"col-md-6" p>>',
@@ -219,6 +220,44 @@
             return
         }
 
+        //cek dulu apakah userid sudah terdaftar
+        var url_ajax_verifikasi = '<?= base_url() ?>karyawan/cek_user'
+        $.ajax({
+            url: url_ajax_verifikasi,
+            type: "post",
+            data: {
+                table: 'karyawan',
+                userid: $('#userid').val()
+            },
+            dataType: "json",
+            success: function(result) {
+                if (result == 200) {
+
+                    form()
+                    return
+                }
+
+                Swal.fire(
+                    'Error!',
+                    'UserID sudah digunakan, gunakan UserID lain!.',
+                    'error'
+                )
+
+            },
+            error: function(err) {
+                Swal.fire(
+                    'error!',
+                    err.responseText,
+                    'error'
+                )
+                return
+            }
+        })
+
+
+    })
+
+    function form() {
 
         var form_data = new FormData();
         form_data.append('table', 'karyawan');
@@ -285,7 +324,7 @@
                 )
             }
         })
-    })
+    }
 
 
     $('#btn-add').on('click', function() {
@@ -325,6 +364,25 @@
         $('#list-karyawan').hide();
     });
 
+    $('#userid').on('keyup', function() {
+        $.ajax({
+            url: '<?= base_url() ?>karyawan/cek_user',
+            data: {
+                userid: $('#userid').val(),
+                table: "karyawan"
+            },
+            type: 'post',
+            dataType: 'json',
+            success: function(result) {
+                if (result == 400) {
+                    $('#error-userid').show()
+                } else {
+                    $('#error-userid').hide()
+                }
+            }
+        })
+    });
+
     function delete_data(id) {
 
         Swal.fire({
@@ -350,6 +408,44 @@
                             Swal.fire(
                                 'Deleted!',
                                 'Data berhasil di hapus.',
+                                'success'
+                            )
+                            reload_table()
+                        } else
+                            toast('error', result.message)
+                    }
+                })
+            }
+        })
+
+
+    }
+
+    function reset_password(id) {
+
+        Swal.fire({
+            title: 'Apakah Anda Yakin ?',
+            text: "Anda akan melakukan reset password karyawan kembali ke default  -> 12345!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, reset password!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '<?= base_url() ?>karyawan/reset_pass',
+                    data: {
+                        id: id,
+                        table: "karyawan"
+                    },
+                    type: 'post',
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result.status == "success") {
+                            Swal.fire(
+                                'Reseted!',
+                                'Password berhasil di reset.',
                                 'success'
                             )
                             reload_table()

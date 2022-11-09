@@ -21,7 +21,7 @@
         Core libraries and functionality
         webpack is putting everything together at assets/_js/main/app.js
     -->
-
+        <!-- <script src="<?= base_url() ?>summernote/summernote.min.js"></script> -->
         </body>
 
         </html>
