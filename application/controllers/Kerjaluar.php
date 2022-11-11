@@ -470,6 +470,7 @@ class Kerjaluar extends CI_Controller
             $data['serial_number'] = $a[0];
             $data['nomor_mesin'] = $a[1];
             $data['model'] = $a[2];
+            $data['tegangan'] = $a[3];
         }
 
         $data['customer'] = $customer['nama'];

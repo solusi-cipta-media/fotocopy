@@ -129,7 +129,7 @@
                                         <?php
                                         foreach ($mesin as $key => $value) {
                                         ?>
-                                            <option value="<?= $value['serial_number'] . '-' . $value['nomor_mesin'] . '-' . $value['model'] ?>"><?= $value['nomor_mesin'] . ' - ' . $value['serial_number'] ?></option>
+                                            <option value="<?= $value['serial_number'] . '-' . $value['nomor_mesin'] . '-' . $value['model'] . '-' . $value['tegangan'] ?>"><?= $value['nomor_mesin'] . ' - ' . $value['serial_number'] ?></option>
                                         <?php
                                         }
                                         ?>

@@ -44,7 +44,7 @@
     <script src="<?= base_url('') ?>assets/js/lib/jquery.min.js"></script>
 
     <!-- summernote -->
-    <!-- <link href="<?= base_url() ?>summernote/summernote.css" rel="stylesheet"> -->
+    <link href="<?= base_url() ?>summernote/summernote.css" rel="stylesheet">
 
 </head>
 
@@ -234,6 +234,20 @@
                                 <a class="<?= ($sess_menu == "listtraining") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('kerjaluar/listtraining') ?>" target="_blank">
                                     <i class="nav-main-link-icon fa fa-print"></i>
                                     <span class="nav-main-link-name">List Training</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-main-heading">Daily Report & CRM</li>
+                            <li class="nav-main-item">
+                                <a class="<?= ($sess_menu == "aktivitascrm") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('crm') ?>">
+                                    <i class="nav-main-link-icon fa fa-address-book"></i>
+                                    <span class="nav-main-link-name">Aktivitas CRM</span>
+                                </a>
+                            </li>
+                            <li class="nav-main-item">
+                                <a class="<?= ($sess_menu == "dailyreport") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('crm/daily') ?>">
+                                    <i class="nav-main-link-icon fa fa-book"></i>
+                                    <span class="nav-main-link-name">Daily Report</span>
                                 </a>
                             </li>
 

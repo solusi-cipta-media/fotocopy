@@ -171,7 +171,7 @@
                 <div class="col-4">
                     <p>: <?= $customer['model'] ?></p>
                     <p>: <?= $customer['tegangan'] ?></p>
-                    <p>: <?= date('d-M-Y', strtotime($customer['tgl_instal'])) ?></p>
+                    <p>: <?= date('d-M-Y', strtotime($customer['tgl_kerja'])) ?></p>
                     <p>: <?= $customer['teknisi'] ?></p>
                     <p>: <?= $customer['klasifikasi'] ?></p>
                 </div>
@@ -197,7 +197,7 @@
 
                             echo '<tr style="height: 40px;">';
                             echo '<td style="border: solid black 1px;">' . $r . '</td>';
-                            echo '<td style="border: solid black 1px;">' . $value['tgl_kerja'] . '</td>';
+                            echo '<td style="border: solid black 1px;">' . date('d-M-Y', strtotime($value['tgl_kerja'])) . '</td>';
                             echo '<td style="border: solid black 1px;">' . $value['uraian'] . '</td>';
                             echo '<td style="border: solid black 1px;">' . date('d-M-Y H:i:sa', strtotime($value['time_in'])) . '</td>';
                             echo '<td style="border: solid black 1px;">' . date('d-M-Y H:i:sa', strtotime($value['time_out'])) . '</td>';
