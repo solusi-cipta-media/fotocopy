@@ -27,12 +27,16 @@
                         <tr>
                             <th class="text-center">#</th>
                             <th>Customer</th>
-                            <th>Jenis</th>
-                            <th>Tanggal Kerja</th>
+                            <th>Tipe Mesin</th>
+                            <th>Status Mesin</th>
+                            <th>Jenis Pekerjaan</th>
+                            <th>Tgl Kerja</th>
                             <th>Lokasi</th>
-                            <th style="width: 20%;">Time</th>
-                            <th>Status</th>
-                            <th style="width: 20%;">Aksi</th>
+                            <th>Teknisi</th>
+                            <th>Uraian Pekerjaan</th>
+                            <th>Time</th>
+                            <th>Status Pekerjaan</th>
+                            <th style="width: 15%;">Aksi</th>
                         </tr>
                     </thead>
                 </table>
@@ -69,7 +73,50 @@
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label" for="meter">Meter</label>
-                                    <input type="number" class="form-control" id="meter" name="meter">
+                                    <input type="text" class="form-control" id="meter" name="meter">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full block-content-sm text-end border-top">
+                        <button type="button" class="btn btn-alt-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-alt-primary" data-bs-dismiss="modal">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="modal-status" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="block block-rounded shadow-none mb-0">
+                <div class="block-header block-header-default">
+                    <h3 class="block-title">Ubah Status Mesin</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <form id="form-data-status">
+                    <div class="block-content fs-sm" id="body-modal2">
+                        <div class="row push">
+                            <div class="col-lg-12 col-xl-12">
+                                <div class="mb-4">
+                                    <label class="form-label" for="uraian">Status Mesin Sekarang</label>
+                                    <input type="hidden" class="form-control" id="id_spk" name="id_spk">
+                                    <input type="hidden" class="form-control" id="nomor_mesin_spk" name="nomor_mesin_spk">
+                                    <input type="hidden" class="form-control" id="model_spk" name="model_spk">
+                                    <select name="status" id="status" class="form-control">
+                                        <option value="RENTAL">Rental</option>
+                                        <option value="JUAL">Jual</option>
+                                        <option value="JUAL LEPAS">Jual Lepas</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -88,6 +135,35 @@
     </div>
 </div>
 <!-- END Normal Modal -->
+<div class="modal" id="modal-uraian" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="block block-rounded shadow-none mb-0">
+                <div class="block-header block-header-default">
+                    <h3 class="block-title">Uraian Pekerjaan</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <form id="form-data-teknisi">
+                    <div class="block-content fs-sm" id="body-modal3">
+                        <div class="row push">
+
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full block-content-sm text-end border-top">
+                        <button type="button" class="btn btn-alt-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- select2 -->
 <script src="<?= base_url() ?>resources/select2/select2.min.js"></script>
 
@@ -120,6 +196,14 @@
             }, {
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
+                "data": "data.model",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data.status_mesin",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
                 "data": "data",
                 "render": function(data) {
                     if (data.jenis == "INVOICE") {
@@ -142,6 +226,19 @@
                     return data.lokasi + `<br><a href="https://www.google.com/maps/place/` + data.latitude + `,` + data.longitude + `" target="_blank" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Lokasi Map">
                                     <i class="fa fa-location-dot"></i> Lokasi
                                 </a>`
+                }
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data.teknisi",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data",
+                "render": function(data) {
+                    if (data.uraian == '')
+                        return `-`
+                    return `<button class="btn btn-sm btn-danger" onclick="modal_uraian('` + data.uraian + `')"><i class="fa fa-file"></i> Uraian</button>`
                 }
             }, {
                 "target": [<?= $target ?>],
@@ -170,13 +267,16 @@
                     } else if (data.jenis == 'SERVIS' || data.jenis == 'INSTAL') {
                         return `<button type="button" class="btn btn-sm btn-secondary" onclick=tentukan_data(` + data.id + `) data-bs-toggle="tooltip" title="Ganti Teknisi">
                                     <i class="fa fa-file-lines"></i> Machine Record
-                                </button><br style="margin-bottom: 10px;">
+                                </button><br style="margin-bottom: 30px;">
                                 <a href="<?= base_url('kerjaluar/formkirim?id=') ?>` + data.id + `" target="_blank" type="button" class="btn btn-sm btn-success" data-bs-toggle="tooltip" title="Cetak Form Kirim">
                                     <i class="fa fa-print"></i> Form Kirim
-                                </a><br style="margin-bottom: 10px;">
+                                </a><br style="margin-bottom: 30px;">
+                                <button type="button" class="btn btn-sm btn-warning" onclick="ubah_status('` + data.id + `', '` + data.nomor_mesin + `','` + data.model + `')" data-bs-toggle="tooltip" title="Ubah Status Mesin">
+                                    <i class="si si-refresh"></i> Ubah Status Mesin
+                                </button><br style="margin-bottom: 30px;">
                                 <button type="button" class="btn btn-sm btn-danger" onclick="selesai_data('` + data.id + `', '` + data.nomor_mesin + `','` + data.model + `')" data-bs-toggle="tooltip" title="Selesai">
                                     <i class="fa fa-circle-check"></i> Selesai
-                                </button><br style="margin-bottom: 10px;">
+                                </button><br style="margin-bottom: 30px;">
                                 `
                     } else {
                         return `<button type="button" class="btn btn-sm btn-danger" onclick="selesai_data('` + data.id + `', '` + data.nomor_mesin + `','` + data.model + `')" data-bs-toggle="tooltip" title="Selesai">
@@ -325,6 +425,52 @@
         })
     })
 
+    $("#form-data-status").submit(function(e) {
+        e.preventDefault()
+        //   loading_submit()
+
+
+        var form_data = new FormData();
+        form_data.append('table', 'overhaul');
+        form_data.append('nomor_mesin', $("#nomor_mesin_spk").val());
+        form_data.append('status', $("#status").val());
+
+        url_ajax = '<?= base_url() ?>kerjaluar/ubah_status'
+
+        $.ajax({
+            url: url_ajax,
+            type: "post",
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form_data,
+            dataType: "json",
+            success: function(result) {
+                if (result.status == "success") {
+                    Swal.fire(
+                        'Success!',
+                        result.message,
+                        'success'
+                    )
+                    reload_table()
+                } else {
+                    Swal.fire(
+                        'error!',
+                        result.message,
+                        'error'
+                    )
+                }
+            },
+            error: function(err) {
+                Swal.fire(
+                    'error!',
+                    err.responseText,
+                    'error'
+                )
+            }
+        })
+    })
+
     function tentukan_data(id) {
         console.log(id)
         $('#id').val(id)
@@ -383,5 +529,22 @@
         })
 
 
+    }
+
+    function ubah_status(id, nomor_mesin, model) {
+        console.log(nomor_mesin)
+        console.log(model)
+        $('#modal-status').modal('show')
+        $('#id_spk').val(id)
+        $('#nomor_mesin_spk').val(nomor_mesin)
+        $('#model_spk').val(model)
+    }
+
+    function modal_uraian(uraian) {
+        console.log(uraian)
+        $('#modal-uraian').modal('show')
+        var html = '<div class="row push"><div class="col-lg-12 col-xl-12"><div class="mb-4">' + uraian + '</div></div></div>'
+
+        $('#body-modal3').html(html)
     }
 </script>

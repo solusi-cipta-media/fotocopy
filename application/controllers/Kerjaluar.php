@@ -114,9 +114,9 @@ class Kerjaluar extends CI_Controller
 
 
         $table = 'kerjaluar'; //nama tabel dari database
-        $column_order = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'time_in', 'time_out', 'status', 'date_created', 'id'); //field yang ada di table user
-        $column_search = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'time_in', 'time_out', 'status', 'date_created'); //field yang diizin untuk pencarian 
-        $select = 'id, customer, jenis, tgl_kerja, lokasi, latitude, longitude, teknisi, id_karyawan, time_in, time_out, status, date_created';
+        $column_order = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'time_in', 'time_out', 'status', 'date_created', 'uraian', 'model', 'id'); //field yang ada di table user
+        $column_search = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'time_in', 'time_out', 'status', 'date_created', 'uraian', 'model'); //field yang diizin untuk pencarian 
+        $select = 'id, customer, jenis, tgl_kerja, lokasi, latitude, longitude, teknisi, id_karyawan, time_in, time_out, status, date_created, uraian, model';
         $order = array('id' => 'asc'); // default order 
         $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order);
         $data = array();
@@ -138,6 +138,8 @@ class Kerjaluar extends CI_Controller
             $row['data']['time_out'] = $key->time_out;
             $row['data']['status'] = $key->status;
             $row['data']['date_created'] = $key->date_created;
+            $row['data']['uraian'] = $key->uraian;
+            $row['data']['model'] = $key->model;
 
             $data[] = $row;
         }
@@ -255,9 +257,9 @@ class Kerjaluar extends CI_Controller
         }
 
         $table = 'kerjaluar'; //nama tabel dari database
-        $column_order = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'time_in', 'time_out', 'status', 'date_created', 'id'); //field yang ada di table user
-        $column_search = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'time_in', 'time_out', 'status', 'date_created'); //field yang diizin untuk pencarian 
-        $select = 'id, customer, jenis, tgl_kerja, lokasi, latitude, longitude, teknisi, id_karyawan, time_in, time_out, status, date_created';
+        $column_order = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'time_in', 'time_out', 'status', 'nomor_mesin', 'model', 'uraian', 'date_created', 'id'); //field yang ada di table user
+        $column_search = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'time_in', 'time_out', 'status', 'nomor_mesin', 'model', 'uraian', 'date_created'); //field yang diizin untuk pencarian 
+        $select = 'id, customer, jenis, tgl_kerja, lokasi, latitude, longitude, teknisi, id_karyawan, time_in, time_out, status, nomor_mesin, model, uraian, date_created';
         $order = array('id' => 'asc'); // default order 
         $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order, $where);
         $data = array();
@@ -275,9 +277,20 @@ class Kerjaluar extends CI_Controller
             $row['data']['longitude'] = $key->longitude;
             $row['data']['id_karyawan'] = $key->id_karyawan;
             $row['data']['teknisi'] = $key->teknisi;
-            $row['data']['time_in'] = $key->time_in;
-            $row['data']['time_out'] = $key->time_out;
+            $row['data']['time_in'] = date('d-M-Y H:i:sa', strtotime($key->time_in));
+            $row['data']['time_out'] = date('d-M-Y H:i:sa', strtotime($key->time_in));
             $row['data']['status'] = $key->status;
+            $row['data']['uraian'] = $key->uraian;
+            $row['data']['nomor_mesin'] = $key->nomor_mesin;
+            //ambil status mesin
+            $where1 = array(
+                'nomor_mesin' => $key->nomor_mesin
+            );
+            $getstatus = $this->crud->get_where('overhaul', $where1)->row_array();
+            $row['data']['status_mesin'] = $getstatus['status'];
+            //end status mesin
+
+            $row['data']['model'] = $key->model;
             $row['data']['date_created'] = $key->date_created;
 
             $data[] = $row;
@@ -374,6 +387,36 @@ class Kerjaluar extends CI_Controller
             $response = ['status' => 'success', 'message' => 'Berhasil Tambah Teknisi!'];
         } else
             $response = ['status' => 'error', 'message' => 'Gagal Tambah Teknisi!'];
+
+        echo json_encode($response);
+    }
+
+    public function ubah_status()
+    {
+
+        $table = $this->input->post("table");
+        $nomor_mesin = $this->input->post("nomor_mesin");
+        $status = $this->input->post("status");
+
+
+
+
+        $data = array(
+            'status' => $status
+        );
+
+        $where = array(
+            'nomor_mesin' => $nomor_mesin
+        );
+
+
+        $update = $this->crud->update($table, $data, $where);
+
+
+        if ($update > 0) {
+            $response = ['status' => 'success', 'message' => 'Berhasil Ubah Status!'];
+        } else
+            $response = ['status' => 'error', 'message' => 'Gagal Ubah Status!'];
 
         echo json_encode($response);
     }
@@ -566,5 +609,17 @@ class Kerjaluar extends CI_Controller
             $response = ['status' => 'failed', 'message' => 'Error Delete Data!'];
 
         echo json_encode($response);
+    }
+
+    function cetakmachinerecord()
+    {
+        $where = array(
+            'nomor_mesin' => $_GET['nomor']
+        );
+        $data['customer'] = $this->crud->get_where('kerjaluar', $where)->row_array();
+        $data['details'] = $this->crud->get_where('kerjaluar', $where)->result_array();
+
+
+        $this->load->view('report/machinerecord', $data);
     }
 }

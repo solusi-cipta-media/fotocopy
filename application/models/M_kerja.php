@@ -15,6 +15,7 @@ class M_kerja extends CI_Model
         // print_r($this->input->post('search_nomor'));
         // echo "</pre>";
         $this->db->where('jenis <>', 'INVOICE');
+        if ($this->input->post('search_customer') != '') $this->db->like('customer', $this->input->post('search_customer'));
         if ($this->input->post('search_nomor') != '') $this->db->like('nomor_mesin', $this->input->post('search_nomor'));
         if ($this->input->post('search_serial') != '') $this->db->like('serial_number', $this->input->post('search_serial'));
         if ($this->input->post('search_model') != '') $this->db->like('model', $this->input->post('search_model'));

@@ -21,6 +21,7 @@
                     <thead>
                         <tr>
                             <th class="text-center">#</th>
+                            <th>Customer</th>
                             <th>Nomor Mesin</th>
                             <th>Serial Number</th>
                             <th>Model</th>
@@ -28,9 +29,11 @@
                             <th>Uraian</th>
                             <th>Tanggal Servis</th>
                             <th>Teknisi</th>
+                            <th>Aksi</th>
                         </tr>
                         <tr>
                             <td></td>
+                            <td><input type="text" class="form-control search-cepat" id="search_customer" name="search_customer" placeholder="search"></td>
                             <td><input type="text" class="form-control search-cepat" id="search_nomor" name="search_nomor" placeholder="search"></td>
                             <td><input type="text" class="form-control search-cepat" id="search_serial" name="search_serial" placeholder="search"></td>
                             <td><input type="text" class="form-control search-cepat" id="search_model" name="search_model" placeholder="search"></td>
@@ -38,6 +41,7 @@
                             <td><input type="text" class="form-control search-cepat" id="search_uraian" name="search_uraian" placeholder="search"></td>
                             <td><input type="text" class="form-control search-cepat" id="search_tanggal" name="search_tanggal" placeholder="search"></td>
                             <td><input type="text" class="form-control search-cepat" id="search_teknisi" name="search_teknisi" placeholder="search"></td>
+                            <td><input type="text" class="form-control search-cepat" id="search_nomor" name="search_nomor" placeholder="search"></td>
                         </tr>
                     </thead>
 
@@ -67,6 +71,9 @@
                 'url': '<?= base_url() ?>kerjaluar/ajax_table_machinerecord',
                 'type': 'post',
                 'data': {
+                    search_customer: function() {
+                        return $('#search_customer').val()
+                    },
                     search_nomor: function() {
                         return $('#search_nomor').val()
                     },
@@ -97,6 +104,10 @@
             }, {
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
+                "data": "data.customer",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
                 "data": "data.nomor_mesin",
             }, {
                 "target": [<?= $target ?>],
@@ -122,6 +133,15 @@
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
                 "data": "data.teknisi",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data",
+                "render": function(data) {
+                    return `<a href="<?= base_url('kerjaluar/cetakmachinerecord?nomor=') ?>` + data.nomor_mesin + `" target="_blank" type="button" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Machine Record">
+                                    <i class="fa fa-print"></i> Machine Record
+                                </a>`
+                }
             }, ],
             "dom": '<"row" <"col-md-6" l><"col-md-6" f>>rt<"row" <"col-md-6" i><"col-md-6" p>>',
             "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]

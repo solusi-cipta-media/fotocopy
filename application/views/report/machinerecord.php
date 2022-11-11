@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>CMS - Hasil Report Overhaul</title>
+    <title>CMS - Machine Record</title>
     <!-- Icons -->
     <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
     <link rel="shortcut icon" href="<?= base_url('') ?>assets/media/favicons/cms.png">
@@ -12,7 +12,6 @@
     <!-- END Icons -->
 
     <link rel="stylesheet" id="css-main" href="<?= base_url('') ?>assets/css/codebase.min.css">
-
 
 </head>
 
@@ -130,7 +129,6 @@
     }
 </style>
 
-
 <body>
     <div class="book" style="font-size: 10px;">
         <div class="page">
@@ -146,75 +144,78 @@
             </div>
             <div class="row" style="margin-top: 30px;">
                 <div class="col-12 text-center">
-                    <h4>FORM FINISHING MESIN FOTOCOPY - <?= $identitas['nomor_mesin'] ?></h4>
+                    <h4>MACHINE RECORD</h4>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-1">
-                    <small>TEKNISI</small><br>
-                    <small>TANGGAL</small>
+                <div class="col-2">
+                    <p>Nama</p>
+                    <p>Alamat</p>
+                    <p>Telp</p>
+                    <p>Operator</p>
+                </div>
+                <div class="col-4">
+                    <p>: <?= $customer['customer'] ?></p>
+                    <p>: <?= $customer['lokasi'] ?></p>
+                    <p>: <?= $customer['handphone'] ?></p>
+                    <p>: ALL</p>
                 </div>
                 <div class="col-2">
-                    <small>: <?= $identitas['teknisi'] ?></small><br>
-                    <small>: <?= date('d-M-Y', strtotime($identitas['finish_oh'])) ?></small>
+                    <p>Model</p>
+                    <p>Tegangan</p>
+                    <p>Tanggal Instal</p>
+                    <p>Teknisi</p>
+                    <p>Status</p>
                 </div>
-                <div class="col-2">
-                    <small>TIPE MESIN</small><br>
-                    <small>ASAL MESIN</small>
-                </div>
-                <div class="col-2">
-                    <small>: <?= $identitas['model'] ?></small><br>
-                    <small>: <?= $identitas['supplier'] ?></small>
-                </div>
-                <div class="col-2">
-                    <small>SERIAL NUMBER</small><br>
-                    <small>METER MESIN</small>
-                    <!-- <small>METER MESIN : M1/C:0 M2/B:2709 M3/L:0 M4/T:0</small> -->
-                </div>
-                <div class="col-3">
-                    <small>: <?= $identitas['serial_number'] ?></small><br>
-                    <small>: <?= $identitas['meter'] ?></small>
-                    <!-- <small>METER MESIN : M1/C:0 M2/B:2709 M3/L:0 M4/T:0</small> -->
+                <div class="col-4">
+                    <p>: <?= $customer['model'] ?></p>
+                    <p>: <?= $customer['tegangan'] ?></p>
+                    <p>: <?= date('d-M-Y', strtotime($customer['tgl_instal'])) ?></p>
+                    <p>: <?= $customer['teknisi'] ?></p>
+                    <p>: <?= $customer['klasifikasi'] ?></p>
                 </div>
             </div>
 
             <div class="row" style="margin-top: 20px;">
                 <div class="col-12 text-center">
-                    <table border="0" style="width: 100%;">
-                        <thead>
-                            <tr style="height: 30px; border-bottom: 1px solid black;border-top: 1px solid black;">
-                                <th class="text-center" style="vertical-align: middle;padding-top: 10px;padding-bottom: 10px;">NO</th>
-                                <th class="text-center" style="vertical-align: middle;padding-top: 10px;padding-bottom: 10px;">NAMA</th>
-                                <th class=" text-center" style="vertical-align: middle;padding-top: 10px;padding-bottom: 10px;">CHECK AWAL</th>
-                                <th class="text-center" style="vertical-align: middle;padding-top: 10px;padding-bottom: 10px;">FINISHING</th>
-                                <th class=" text-center" style="vertical-align: middle;padding-top: 10px;padding-bottom: 10px;">PENGGANTIAN BARANG</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $no = 1;
-                            foreach ($details as $key => $value) {
-                            ?>
-                                <tr>
-                                    <td style="padding-top: 3px;padding-bottom: 3px;"><?= $no ?></td>
-                                    <td><?= $value['komponen_check'] ?></td>
-                                    <td><?= $value['check_awal'] ?></td>
-                                    <td><?= $value['finishing'] ?></td>
-                                    <td><?= $value['penggantian_barang'] ?></td>
-                                </tr>
-                            <?php
-                                $no++;
-                            }
-                            ?>
-                        </tbody>
+                    <table border="1" style="width: 100%;">
+
+                        <tr style="height: 30px;">
+                            <td style="border: solid black 1px; width: 5%;"><strong>NO</strong></td>
+                            <td style="border: solid black 1px;"><strong>TANGGAL</strong></td>
+                            <td style="border: solid black 1px;"><strong>URAIAN</strong></td>
+                            <td style="border: solid black 1px;"><strong>TIME IN</strong></td>
+                            <td style="border: solid black 1px;"><strong>TIME OUT</strong></td>
+                            <td style="border: solid black 1px;"><strong>METER</strong></td>
+                            <td style="border: solid black 1px;"><strong>TEKNISI</strong></td>
+                        </tr>
+
+                        <?php
+                        $r = 1;
+                        foreach ($details as $key => $value) {
+
+                            echo '<tr style="height: 40px;">';
+                            echo '<td style="border: solid black 1px;">' . $r . '</td>';
+                            echo '<td style="border: solid black 1px;">' . $value['tgl_kerja'] . '</td>';
+                            echo '<td style="border: solid black 1px;">' . $value['uraian'] . '</td>';
+                            echo '<td style="border: solid black 1px;">' . date('d-M-Y H:i:sa', strtotime($value['time_in'])) . '</td>';
+                            echo '<td style="border: solid black 1px;">' . date('d-M-Y H:i:sa', strtotime($value['time_out'])) . '</td>';
+                            echo '<td style="border: solid black 1px;">' . $value['meter'] . '</td>';
+                            echo '<td style="border: solid black 1px;">' . $value['teknisi'] . '</td>';
+                            echo '</tr>';
+
+                            $r++;
+                        }
+
+                        ?>
+
+
                     </table>
                 </div>
             </div>
         </div>
     </div>
-
-
 
 
 

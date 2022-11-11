@@ -27,10 +27,12 @@
                         <tr>
                             <th class="text-center">#</th>
                             <th>Customer</th>
-                            <th>Jenis</th>
+                            <th>Tipe Mesin</th>
+                            <th>Jenis Pekerjaan</th>
                             <th>Tgl Kerja</th>
                             <th class="text-center">Lokasi</th>
                             <th class="text-center">Teknisi</th>
+                            <th class="text-center">Uraian Pekerjaan</th>
                             <th class="text-center" style="width: 15%;">Aksi</th>
                         </tr>
                     </thead>
@@ -113,8 +115,10 @@
                                     <label class="form-label" for="jenis">Jenis Pekerjaan</label>
                                     <select class="form-select" id="jenis" name="jenis">
                                         <option value="INVOICE">Invoice</option>
-                                        <option value="INSTAL">Instal</option>
                                         <option value="SERVIS">Servis</option>
+                                        <option value="MAINTENANCE">Maintenance</option>
+                                        <option value="INSTAL">Install</option>
+                                        <option value="TARIK">Tarik</option>
                                     </select>
                                 </div>
                             </div>
@@ -194,6 +198,36 @@
         </div>
     </div>
 </div>
+
+<div class="modal" id="modal-uraian" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="block block-rounded shadow-none mb-0">
+                <div class="block-header block-header-default">
+                    <h3 class="block-title">Uraian Pekerjaan</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <form id="form-data-teknisi">
+                    <div class="block-content fs-sm" id="body-modal2">
+                        <div class="row push">
+
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full block-content-sm text-end border-top">
+                        <button type="button" class="btn btn-alt-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- END Normal Modal -->
 <script src="<?= base_url() ?>resources/select2/select2.min.js"></script>
 
@@ -226,14 +260,22 @@
             }, {
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
+                "data": "data.model",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
                 "data": "data",
                 "render": function(data) {
                     if (data.jenis == "INVOICE") {
                         return `<span class="badge bg-danger"> Invoice</span>`
                     } else if (data.jenis == 'INSTAL') {
                         return `<span class="badge bg-primary"> Instal</span>`
+                    } else if (data.jenis == 'SERVIS') {
+                        return `<span class="badge bg-success"> Servis</span>`
+                    } else if (data.jenis == 'MAINTENANCE') {
+                        return `<span class="badge bg-warning"> Maintenance</span>`
                     } else {
-                        return `<span class="badge bg-success"> Invoice</span>`
+                        return `<span class="badge bg-dark"> Invoice</span>`
                     }
                 }
             }, {
@@ -263,6 +305,15 @@
                 "className": 'text-center py-1',
                 "data": "data",
                 "render": function(data) {
+                    if (data.uraian == '')
+                        return `-`
+                    return `<button class="btn btn-sm btn-danger" onclick="modal_uraian('` + data.uraian + `')"><i class="fa fa-file"></i> Uraian</button>`
+                }
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data",
+                "render": function(data) {
                     return `<button type="button" class="btn btn-sm btn-primary" onclick="tentukan_data(` + data.id + `)" data-bs-toggle="tooltip" title="Pilih Teknisi"><i class="fa fa-gear"></i> Pilih Teknisi</button>`
                 }
             }, ],
@@ -283,7 +334,7 @@
     });
 
     $('#jenis').on('change', function() {
-        if ($('#jenis').val() == 'SERVIS' || $('#jenis').val() == 'INSTAL') {
+        if ($('#jenis').val() == 'SERVIS' || $('#jenis').val() == 'INSTAL' || $('#jenis').val() == 'TARIK' || $('#jenis').val() == 'MAINTENANCE') {
             $('#q_nomor_mesin').show()
         } else if ($('#jenis').val() == 'INVOICE') {
             $('#q_nomor_mesin').hide()
@@ -485,5 +536,12 @@
 
             });
         });
+    }
+
+    function modal_uraian(uraian) {
+        $('#modal-uraian').modal('show')
+        var html = '<div class="row push"><div class="col-lg-12 col-xl-12"><div class="mb-4">' + uraian + '</div></div></div>'
+
+        $('#body-modal2').html(html)
     }
 </script>
