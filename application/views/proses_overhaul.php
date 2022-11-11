@@ -159,6 +159,9 @@
                                 <a href="<?= base_url('overhaul/cetakqr?SN=') ?>` + data.serial_number + `" target="_blank" type="button" class="btn btn-sm btn-warning" data-bs-toggle="tooltip" title="Cetak QR">
                                     <i class="fa fa-qrcode"></i> Cetak QR
                                 </a><br style="margin-bottom: 10px;">
+                                <a href="<?= base_url('overhaul/prosesohawalform?id=') ?>` + data.id + `" type="button" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Kondisi Awal">
+                                    <i class="fa fa-plus"></i> Kondisi Awal
+                                </a><br style="margin-bottom: 10px;">
                                 <a href="<?= base_url('overhaul/prosesohform?id=') ?>` + data.id + `" type="button" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Tambah Item">
                                     <i class="fa fa-plus"></i> Tambah Item
                                 </a><br style="margin-bottom: 10px;">

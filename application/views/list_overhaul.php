@@ -13,7 +13,7 @@
         <div class="block block-rounded" id="list-mesin">
             <div class="block-header block-header-default">
                 <h3 class="block-title">
-                    List Mesin
+                    List Mesin Import
                 </h3>
                 <!-- <button type="button" class="btn btn-outline-primary min-width-125" id="btn-add">
                     <i class="fa fa-plus mr-5"></i> Register Master
@@ -31,8 +31,9 @@
                             <th>Serial Number</th>
                             <th>Asal</th>
                             <th>Meter</th>
+                            <th>Uraian</th>
                             <th>Teknisi</th>
-                            <th class="text-center" style="width: 35%;">Aksi</th>
+                            <th class="text-center" style="width: 15%;">Aksi</th>
                         </tr>
                     </thead>
                 </table>
@@ -90,6 +91,43 @@
         </div>
     </div>
 </div>
+
+<div class="modal" id="modal-uraian" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="block block-rounded shadow-none mb-0">
+                <div class="block-header block-header-default">
+                    <h3 class="block-title2">Catatan Mesin</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <form id="form-data-teknisi">
+                    <div class="block-content fs-sm" id="body-modal2">
+                        <div class="row push">
+                            <div class="col-lg-12 col-xl-12">
+                                <div class="mb-4" id="info-uraian">
+                                    <label class="form-label" for="example-text-input">Catatan Mesin</label>
+                                    <input type="text" class="form-control" id="uraian_modal" name="uraian_modal">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full block-content-sm text-end border-top">
+                        <button type="button" class="btn btn-alt-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <!-- <button type="submit" class="btn btn-alt-primary" data-bs-dismiss="modal">
+                            Submit
+                        </button> -->
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- END Normal Modal -->
 <!-- select2 -->
 <script src="<?= base_url() ?>resources/select2/select2.min.js"></script>
@@ -141,6 +179,13 @@
                 "className": 'text-center py-1',
                 "data": "data",
                 "render": function(data) {
+                    return `<button type="button" class="btn btn-sm btn-danger" onclick="show_uraian('` + data.uraian + `')"><i class="fa fa-file"></i> Uraian</button>`
+                }
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'text-center py-1',
+                "data": "data",
+                "render": function(data) {
                     if (data.approval_pengajuan == 0 && data.teknisi != '') {
                         return `<span class="badge bg-danger">` + data.teknisi + ` - Menunggu Approval</span>`
                     } else if (data.teknisi != '') {
@@ -151,12 +196,12 @@
                 }
             }, {
                 "target": [<?= $target ?>],
-                "className": 'text-center py-1',
+                "className": 'py-1',
                 "data": "data",
                 "render": function(data) {
                     if (data.teknisi == '')
-                        return `<button type="button" class="btn btn-sm btn-primary" onclick="pilih_data('` + data.id + `','` + data.nomor_mesin + `','` + data.serial_number + `')" data-bs-toggle="tooltip" title="Pilih"><i class="fa fa-circle-check"></i> Pilih</button>&nbsp;<button type="button" class="btn btn-sm btn-primary" onclick="tentukan_data(` + data.id + `)" data-bs-toggle="tooltip" title="Pilih Teknisi"><i class="fa fa-gear"></i> Pilih Teknisi</button>`
-                    return `<button type="button" class="btn btn-sm btn-success" onclick="approve_data(` + data.id + `)" data-bs-toggle="tooltip" title="Setujui"><i class="si si-like"></i> Approve</button>&nbsp;<button type="button" class="btn btn-sm btn-primary" onclick="tentukan_data(` + data.id + `)" data-bs-toggle="tooltip" title="Pilih Teknisi"><i class="fa fa-gear"></i> Pilih Teknisi</button>`
+                        return `<button type="button" class="btn btn-sm btn-primary" onclick="pilih_data('` + data.id + `','` + data.nomor_mesin + `','` + data.serial_number + `')" data-bs-toggle="tooltip" title="Pilih"><i class="fa fa-circle-check"></i> Pilih</button><br style="margin-bottom: 10px;"><button type="button" class="btn btn-sm btn-primary" onclick="tentukan_data(` + data.id + `)" data-bs-toggle="tooltip" title="Pilih Teknisi"><i class="fa fa-gear"></i> Pilih Teknisi</button>`
+                    return `<button type="button" class="btn btn-sm btn-success" onclick="approve_data(` + data.id + `)" data-bs-toggle="tooltip" title="Setujui"><i class="si si-like"></i> Approve</button><br style="margin-bottom: 10px;"><button type="button" class="btn btn-sm btn-danger" onclick="reject_data(` + data.id + `)" data-bs-toggle="tooltip" title="Tolak"><i class="si si-dislike"></i> Reject</button><br style="margin-bottom: 10px;"><button type="button" class="btn btn-sm btn-primary" onclick="tentukan_data(` + data.id + `)" data-bs-toggle="tooltip" title="Pilih Teknisi"><i class="fa fa-gear"></i> Pilih Teknisi</button>`
                 }
             }, ],
             "dom": '<"row" <"col-md-6" l><"col-md-6" f>>rt<"row" <"col-md-6" i><"col-md-6" p>>',
@@ -252,7 +297,45 @@
                         if (result.status == "success") {
                             Swal.fire(
                                 'Berhasil!',
-                                'Menunggu persetujuan Supervisor untuk proses overhaul.',
+                                'Proses overhaul bisa dimulai.',
+                                'success'
+                            )
+                            reload_table()
+                        } else
+                            toast('error', result.message)
+                    }
+                })
+            }
+        })
+
+
+    }
+
+    function reject_data(id) {
+
+        Swal.fire({
+            title: 'Apakah Anda Yakin ?',
+            text: "Anda akan menolak proses Start Overhaul!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, saya yakin!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '<?= base_url() ?>overhaul/reject_proses',
+                    data: {
+                        id: id,
+                        table: "overhaul"
+                    },
+                    type: 'post',
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result.status == "success") {
+                            Swal.fire(
+                                'Berhasil!',
+                                'Proses Overhaul direject.',
                                 'success'
                             )
                             reload_table()
@@ -331,4 +414,15 @@
             }
         })
     })
+
+    function show_uraian(uraian) {
+        // $('#uraian_modal').val(uraian)
+        var html = '<label class="form-label" for="example-text-input">Uraian</label><textarea name="uraian_modal" id="uraian_modal" cols="30" rows="5" class="form-control">' + uraian + '</textarea>'
+        // var nama
+        $('#modal-uraian').modal('show')
+        // nama = '<h3 class="block-title">Bukti Ketidakhadiran - Agus Salim</h3>'
+        // html = '<img src="<?= base_url('assets/media/leave/agus.jpg') ?>" class="img-fluid" alt="bukti_leave">'
+        $('#info-uraian').html(html)
+        // $('.block-title').html(nama)
+    }
 </script>

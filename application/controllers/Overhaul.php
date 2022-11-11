@@ -65,6 +65,23 @@ class Overhaul extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    function prosesohawalform()
+    {
+        //ambil data notifikasi
+        // $data['notifikasi'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->result_array();
+        // $data['jumlah_notif'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->num_rows();
+        //end
+
+        //ambil data teknisi
+        // $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 'TEKNISI'])->result_array();
+
+        $data['sess_menu'] = 'prosesoh';
+
+        $this->load->view('template/header', $data);
+        $this->load->view('prosesawalform');
+        $this->load->view('template/footer');
+    }
+
     public function selesaioh()
     {
         //ambil data notifikasi
@@ -395,6 +412,12 @@ class Overhaul extends CI_Controller
         $this->load->view('report/hasiloh2', $data);
     }
 
+    function cetakspk()
+    {
+        $data['detail'] = $this->crud->get_where('overhaul', ['id' => $_GET['id']])->row_array();
+        $this->load->view('report/spk', $data);
+    }
+
     function cetakqr()
     {
         date_default_timezone_set('Asia/Jakarta');
@@ -491,9 +514,9 @@ class Overhaul extends CI_Controller
         );
 
         $table = 'overhaul'; //nama tabel dari database
-        $column_order = array('id', 'nomor_mesin', 'model', 'serial_number', 'asal', 'meter', 'teknisi', 'approval_pengajuan', 'date_created', 'id'); //field yang ada di table user
-        $column_search = array('id', 'nomor_mesin', 'model', 'serial_number', 'asal', 'meter', 'teknisi', 'approval_pengajuan', 'date_created'); //field yang diizin untuk pencarian 
-        $select = 'id, nomor_mesin, model, serial_number, asal, meter, teknisi, approval_pengajuan, date_created';
+        $column_order = array('id', 'nomor_mesin', 'model', 'serial_number', 'asal', 'meter', 'teknisi', 'approval_pengajuan', 'uraian', 'date_created', 'id'); //field yang ada di table user
+        $column_search = array('id', 'nomor_mesin', 'model', 'serial_number', 'asal', 'meter', 'teknisi', 'approval_pengajuan', 'uraian', 'date_created'); //field yang diizin untuk pencarian 
+        $select = 'id, nomor_mesin, model, serial_number, asal, meter, teknisi, approval_pengajuan, uraian, date_created';
         $order = array('id' => 'asc'); // default order 
         $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order, $where);
         $data = array();
@@ -509,6 +532,7 @@ class Overhaul extends CI_Controller
             $row['data']['asal'] = $key->asal;
             $row['data']['meter'] = $key->meter;
             $row['data']['teknisi'] = $key->teknisi;
+            $row['data']['uraian'] = $key->uraian;
             $row['data']['approval_pengajuan'] = $key->approval_pengajuan;
             $row['data']['date_created'] = $key->date_created;
 
@@ -534,9 +558,9 @@ class Overhaul extends CI_Controller
         );
 
         $table = 'overhaul'; //nama tabel dari database
-        $column_order = array('id', 'nomor_mesin', 'model', 'serial_number', 'asal', 'meter', 'tegangan', 'teknisi', 'id_karyawan', 'approval_pengajuan', 'approval_selesai', 'status', 'tgl_masuk', 'start_oh', 'finish_oh', 'date_created', 'id'); //field yang ada di table user
-        $column_search = array('id', 'nomor_mesin', 'model', 'serial_number', 'asal', 'meter', 'tegangan', 'teknisi', 'id_karyawan', 'approval_pengajuan', 'approval_selesai', 'status', 'tgl_masuk', 'start_oh', 'finish_oh', 'date_created'); //field yang diizin untuk pencarian 
-        $select = 'id, nomor_mesin, model, serial_number, asal, meter, tegangan, teknisi, id_karyawan, approval_pengajuan, approval_selesai, status, tgl_masuk, start_oh, finish_oh, date_created';
+        $column_order = array('id', 'nomor_mesin', 'model', 'serial_number', 'asal', 'meter', 'tegangan', 'teknisi', 'id_karyawan', 'approval_pengajuan', 'approval_selesai', 'status', 'uraian', 'tgl_masuk', 'start_oh', 'finish_oh', 'date_created', 'id'); //field yang ada di table user
+        $column_search = array('id', 'nomor_mesin', 'model', 'serial_number', 'asal', 'meter', 'tegangan', 'teknisi', 'id_karyawan', 'approval_pengajuan', 'approval_selesai', 'status', 'uraian', 'tgl_masuk', 'start_oh', 'finish_oh', 'date_created'); //field yang diizin untuk pencarian 
+        $select = 'id, nomor_mesin, model, serial_number, asal, meter, tegangan, teknisi, id_karyawan, approval_pengajuan, approval_selesai, status, uraian, tgl_masuk, start_oh, finish_oh, date_created';
         $order = array('id' => 'asc'); // default order 
         $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order, $where);
         $data = array();
@@ -557,6 +581,7 @@ class Overhaul extends CI_Controller
             $row['data']['approval_pengajuan'] = $key->approval_pengajuan;
             $row['data']['approval_selesai'] = $key->approval_selesai;
             $row['data']['status'] = $key->status;
+            $row['data']['uraian'] = $key->uraian;
             $row['data']['tgl_masuk'] = $key->tgl_masuk;
             $row['data']['start_oh'] = $key->start_oh;
             $row['data']['finish_oh'] = $key->finish_oh;
@@ -584,9 +609,9 @@ class Overhaul extends CI_Controller
         );
 
         $table = 'overhaul'; //nama tabel dari database
-        $column_order = array('id', 'nomor_mesin', 'model', 'serial_number', 'asal', 'meter', 'teknisi', 'approval_pengajuan', 'date_created', 'id'); //field yang ada di table user
-        $column_search = array('id', 'nomor_mesin', 'model', 'serial_number', 'asal', 'meter', 'teknisi', 'approval_pengajuan', 'date_created'); //field yang diizin untuk pencarian 
-        $select = 'id, nomor_mesin, model, serial_number, asal, meter, teknisi, approval_pengajuan, date_created';
+        $column_order = array('id', 'nomor_mesin', 'model', 'serial_number', 'asal', 'meter', 'teknisi', 'approval_pengajuan', 'finish_oh', 'date_created', 'id'); //field yang ada di table user
+        $column_search = array('id', 'nomor_mesin', 'model', 'serial_number', 'asal', 'meter', 'teknisi', 'approval_pengajuan', 'finish_oh', 'date_created'); //field yang diizin untuk pencarian 
+        $select = 'id, nomor_mesin, model, serial_number, asal, meter, teknisi, approval_pengajuan, finish_oh, date_created';
         $order = array('id' => 'asc'); // default order 
         $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order, $where);
         $data = array();
@@ -603,6 +628,7 @@ class Overhaul extends CI_Controller
             $row['data']['meter'] = $key->meter;
             $row['data']['teknisi'] = $key->teknisi;
             $row['data']['approval_pengajuan'] = $key->approval_pengajuan;
+            $row['data']['finish_oh'] = date('d-M-Y H:i:sa', strtotime($key->finish_oh));
             $row['data']['date_created'] = $key->date_created;
 
             $data[] = $row;
@@ -753,6 +779,32 @@ class Overhaul extends CI_Controller
             $response = ['status' => 'success', 'message' => 'Success Approve Overhaul!'];
         } else
             $response = ['status' => 'failed', 'message' => 'Error Approve Overhaul!'];
+
+        echo json_encode($response);
+    }
+
+
+    public function reject_proses()
+    {
+        //set time jakarta WIB
+        date_default_timezone_set('Asia/Jakarta');
+
+        $table = $this->input->post('table');
+        $id = $this->input->post('id');
+
+        $data = array(
+            'teknisi' => '',
+            'id_karyawan' => 0
+        );
+        $where = array(
+            'id' => $id
+        );
+
+
+        if ($this->crud->update($table, $data, $where)) {
+            $response = ['status' => 'success', 'message' => 'Success Reject Overhaul!'];
+        } else
+            $response = ['status' => 'failed', 'message' => 'Error Reject Overhaul!'];
 
         echo json_encode($response);
     }

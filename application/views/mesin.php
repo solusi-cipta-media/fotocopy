@@ -562,7 +562,7 @@
 
     function show_uraian(uraian) {
         // $('#uraian_modal').val(uraian)
-        var html = '<label class="form-label" for="example-text-input">Catatan Mesin</label><textarea name="uraian_modal" id="uraian_modal" cols="30" rows="5" class="form-control">' + uraian + '</textarea>'
+        var html = '<label class="form-label" for="example-text-input">Uraian</label><textarea name="uraian_modal" id="uraian_modal" cols="30" rows="5" class="form-control">' + uraian + '</textarea>'
         // var nama
         $('#exampleModalCenter').modal('show')
         // nama = '<h3 class="block-title">Bukti Ketidakhadiran - Agus Salim</h3>'

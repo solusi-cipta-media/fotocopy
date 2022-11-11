@@ -29,10 +29,8 @@
                         <input type="hidden" name="serial_number" id="serial_number">
                         <input type="hidden" name="tipe" id="tipe" value="tambah">
                         <div class="col-sm-2">
-                            <select name="caver_body_awal" id="caver_body_awal" class="form-select">
-                                <option value="Baik">Baik</option>
-                                <option value="Rusak">Rusak</option>
-                            </select>
+                            <input type="text" class="form-control" id="caver_body_awal" name="caver_body_awal" readonly>
+
                         </div>
                         <div class="col-sm-2">
                             <select name="caver_body_akhir" id="caver_body_akhir" class="form-select">
@@ -48,10 +46,7 @@
                     <div class="row mb-4">
                         <label class="col-sm-4 col-form-label" for="dadf_awal">DADF</label>
                         <div class="col-sm-2">
-                            <select name="dadf_awal" id="dadf_awal" class="form-select">
-                                <option value="Baik">Baik</option>
-                                <option value="Rusak">Rusak</option>
-                            </select>
+                            <input type="text" class="form-control" id="dadf_awal" name="dadf_awal" readonly>
                         </div>
                         <div class="col-sm-2">
                             <select name="dadf_akhir" id="dadf_akhir" class="form-select">
@@ -67,10 +62,7 @@
                     <div class="row mb-4">
                         <label class="col-sm-4 col-form-label" for="kaca_platen_awal">Kaca Platen</label>
                         <div class="col-sm-2">
-                            <select name="kaca_platen_awal" id="kaca_platen_awal" class="form-select">
-                                <option value="Baik">Baik</option>
-                                <option value="Rusak">Rusak</option>
-                            </select>
+                            <input type="text" class="form-control" id="kaca_platen_awal" name="kaca_platen_awal" readonly>
                         </div>
                         <div class="col-sm-2">
                             <select name="kaca_platen_akhir" id="kaca_platen_akhir" class="form-select">
@@ -86,10 +78,8 @@
                     <div class="row mb-4">
                         <label class="col-sm-4 col-form-label" for="tombol_panel_awal">Tombol Panel</label>
                         <div class="col-sm-2">
-                            <select name="tombol_panel_awal" id="tombol_panel_awal" class="form-select">
-                                <option value="Baik">Baik</option>
-                                <option value="Rusak">Rusak</option>
-                            </select>
+                            <input type="text" class="form-control" id="tombol_panel_awal" name="tombol_panel_awal" readonly>
+
                         </div>
                         <div class="col-sm-2">
                             <select name="tombol_planel_akhir" id="tombol_planel_akhir" class="form-select">
@@ -105,12 +95,8 @@
                     <div class="row mb-4">
                         <label class="col-sm-4 col-form-label" for="paper_supply_awal">Paper Supply (Tray 1sd 4)</label>
                         <div class="col-sm-2">
-                            <select name="paper_supply_awal" id="paper_supply_awal" class="form-select">
-                                <option value="Tray-1">Tray-1</option>
-                                <option value="tray-2">tray-2</option>
-                                <option value="tray-3">tray-3</option>
-                                <option value="tray-4">tray-4</option>
-                            </select>
+                            <input type="text" class="form-control" id="paper_supply_awal" name="paper_supply_awal" readonly>
+
                         </div>
                         <div class="col-sm-2">
                             <select name="paper_supply_akhir" id="paper_supply_akhir" class="form-select">
@@ -126,10 +112,8 @@
                     <div class="row mb-4">
                         <label class="col-sm-4 col-form-label" for="drum_catridge_awal">Drum Catridge</label>
                         <div class="col-sm-2">
-                            <select name="drum_catridge_awal" id="drum_catridge_awal" class="form-select">
-                                <option value="Baik">Baik</option>
-                                <option value="Rusak">Rusak</option>
-                            </select>
+                            <input type="text" class="form-control" id="drum_catridge_awal" name="drum_catridge_awal" readonly>
+
                         </div>
                         <div class="col-sm-2">
                             <select name="drum_catridge_akhir" id="drum_catridge_akhir" class="form-select">
@@ -145,10 +129,8 @@
                     <div class="row mb-4">
                         <label class="col-sm-4 col-form-label" for="toner_catridge_awal">Toner Catridge</label>
                         <div class="col-sm-2">
-                            <select name="toner_catridge_awal" id="toner_catridge_awal" class="form-select">
-                                <option value="Baik">Baik</option>
-                                <option value="Rusak">Rusak</option>
-                            </select>
+                            <input type="text" class="form-control" id="toner_catridge_awal" name="toner_catridge_awal" readonly>
+
                         </div>
                         <div class="col-sm-2">
                             <select name="toner_catridge_akhir" id="toner_catridge_akhir" class="form-select">
@@ -164,10 +146,8 @@
                     <div class="row mb-4">
                         <label class="col-sm-4 col-form-label" for="drum_opc_awal">Drum OPC</label>
                         <div class="col-sm-2">
-                            <select name="drum_opc_awal" id="drum_opc_awal" class="form-select">
-                                <option value="Baik">Baik</option>
-                                <option value="Rusak">Rusak</option>
-                            </select>
+                            <input type="text" class="form-control" id="drum_opc_awal" name="drum_opc_awal" readonly>
+
                         </div>
                         <div class="col-sm-2">
                             <select name="drum_opc_akhir" id="drum_opc_akhir" class="form-select">
@@ -183,10 +163,7 @@
                     <div class="row mb-4">
                         <label class="col-sm-4 col-form-label" for="chip_drum_awal">Chip Drum</label>
                         <div class="col-sm-2">
-                            <select name="chip_drum_awal" id="chip_drum_awal" class="form-select">
-                                <option value="Baik">Baik</option>
-                                <option value="Rusak">Rusak</option>
-                            </select>
+                            <input type="text" class="form-control" id="chip_drum_awal" name="chip_drum_awal" readonly>
                         </div>
                         <div class="col-sm-2">
                             <select name="chip_drum_akhir" id="chip_drum_akhir" class="form-select">
@@ -202,10 +179,7 @@
                     <div class="row mb-4">
                         <label class="col-sm-4 col-form-label" for="chip_toner_awal">Chip Toner</label>
                         <div class="col-sm-2">
-                            <select name="chip_toner_awal" id="chip_toner_awal" class="form-select">
-                                <option value="Baik">Baik</option>
-                                <option value="Rusak">Rusak</option>
-                            </select>
+                            <input type="text" class="form-control" id="chip_toner_awal" name="chip_toner_awal" readonly>
                         </div>
                         <div class="col-sm-2">
                             <select name="chip_toner_akhir" id="chip_toner_akhir" class="form-select">
@@ -221,10 +195,7 @@
                     <div class="row mb-4">
                         <label class="col-sm-4 col-form-label" for="pemanas_awal">Pemanas</label>
                         <div class="col-sm-2">
-                            <select name="pemanas_awal" id="pemanas_awal" class="form-select">
-                                <option value="Baik">Baik</option>
-                                <option value="Rusak">Rusak</option>
-                            </select>
+                            <input type="text" class="form-control" id="pemanas_awal" name="pemanas_awal" readonly>
                         </div>
                         <div class="col-sm-2">
                             <select name="pemanas_akhir" id="pemanas_akhir" class="form-select">
@@ -240,10 +211,8 @@
                     <div class="row mb-4">
                         <label class="col-sm-4 col-form-label" for="print_awal">Print</label>
                         <div class="col-sm-2">
-                            <select name="print_awal" id="print_awal" class="form-select">
-                                <option value="Baik">Baik</option>
-                                <option value="Rusak">Rusak</option>
-                            </select>
+                            <input type="text" class="form-control" id="print_awal" name="print_awal" readonly>
+
                         </div>
                         <div class="col-sm-2">
                             <select name="print_akhir" id="print_akhir" class="form-select">
@@ -259,10 +228,7 @@
                     <div class="row mb-4">
                         <label class="col-sm-4 col-form-label" for="fax_awal">Fax</label>
                         <div class="col-sm-2">
-                            <select name="fax_awal" id="fax_awal" class="form-select">
-                                <option value="Baik">Baik</option>
-                                <option value="Rusak">Rusak</option>
-                            </select>
+                            <input type="text" class="form-control" id="fax_awal" name="fax_awal" readonly>
                         </div>
                         <div class="col-sm-2">
                             <select name="fax_akhir" id="fax_akhir" class="form-select">
@@ -278,10 +244,7 @@
                     <div class="row mb-4">
                         <label class="col-sm-4 col-form-label" for="scan_awal">Scan</label>
                         <div class="col-sm-2">
-                            <select name="scan_awal" id="scan_awal" class="form-select">
-                                <option value="Baik">Baik</option>
-                                <option value="Rusak">Rusak</option>
-                            </select>
+                            <input type="text" class="form-control" id="scan_awal" name="scan_awal" readonly>
                         </div>
                         <div class="col-sm-2">
                             <select name="scan_akhir" id="scan_akhir" class="form-select">
@@ -297,10 +260,8 @@
                     <div class="row mb-4">
                         <label class="col-sm-4 col-form-label" for="oct_awal">OCT</label>
                         <div class="col-sm-2">
-                            <select name="oct_awal" id="oct_awal" class="form-select">
-                                <option value="Baik">Baik</option>
-                                <option value="Rusak">Rusak</option>
-                            </select>
+                            <input type="text" class="form-control" id="oct_awal" name="oct_awal" readonly>
+
                         </div>
                         <div class="col-sm-2">
                             <select name="oct_akhir" id="oct_akhir" class="form-select">
@@ -316,10 +277,8 @@
                     <div class="row mb-4">
                         <label class="col-sm-4 col-form-label" for="bypass_tray_awal">Bypass Tray</label>
                         <div class="col-sm-2">
-                            <select name="bypass_tray_awal" id="bypass_tray_awal" class="form-select">
-                                <option value="Baik">Baik</option>
-                                <option value="Rusak">Rusak</option>
-                            </select>
+                            <input type="text" class="form-control" id="bypass_tray_awal" name="bypass_tray_awal" readonly>
+
                         </div>
                         <div class="col-sm-2">
                             <select name="bypass_tray_akhir" id="bypass_tray_akhir" class="form-select">
@@ -335,10 +294,7 @@
                     <div class="row mb-4">
                         <label class="col-sm-4 col-form-label" for="caver_ae_awal">Caver A sd E</label>
                         <div class="col-sm-2">
-                            <select name="caver_ae_awal" id="caver_ae_awal" class="form-select">
-                                <option value="Baik">Baik</option>
-                                <option value="Rusak">Rusak</option>
-                            </select>
+                            <input type="text" class="form-control" id="caver_ae_awal" name="caver_ae_awal" readonly>
                         </div>
                         <div class="col-sm-2">
                             <select name="caver_ae_akhir" id="caver_ae_akhir" class="form-select">

@@ -27,6 +27,7 @@
                             <th>Asal</th>
                             <th>Meter</th>
                             <th>Teknisi</th>
+                            <th>Selesai Overhaul</th>
                             <th class="text-center" style="width: 15%;">Aksi</th>
                         </tr>
                     </thead>
@@ -88,10 +89,17 @@
             }, {
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
+                "data": "data.finish_oh",
+            }, {
+                "target": [<?= $target ?>],
+                "className": 'py-1',
                 "data": "data",
                 "render": function(data) {
                     return ` <a href="<?= base_url('overhaul/prosesohdetail?id=') ?>` + data.id + `&status=selesai" type="button" class="btn btn-sm btn-success" data-bs-toggle="tooltip" title="Detail">
                                     <i class="fa fa-eye"></i> Lihat Detail
+                                </a><br style="margin-bottom: 10px;">
+                                <a href="<?= base_url('overhaul/cetakspk?id=') ?>` + data.id + `" target="_blank" type="button" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Cetak SPK">
+                                    <i class="fa fa-file"></i> Cetak SPK
                                 </a>`
                 }
             }, ],
