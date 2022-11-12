@@ -54,6 +54,7 @@ class Auth extends CI_Controller
                         'role_id' => $user['role_id'],
                         'name' => $user['nama'],
                         'photo' => $user['photo'],
+                        'nik' => $user['nik'],
                     );
                     //buat session
                     $this->session->set_userdata($data);
@@ -90,7 +91,11 @@ class Auth extends CI_Controller
                         }
                     }
                     // die;
-                    redirect('dashboard');
+                    if ($user['role_id'] == 'ADMIN' || $user['role_id'] == '1') {
+                        redirect('dashboard');
+                    } else {
+                        redirect('absen_selfie');
+                    }
                 } else {
                     $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
             Salah Password</div>');
