@@ -31,3 +31,17 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /tests/results/
 application/config/config.php
 application/config/database.php
+
+
+
+# assets file image clock_in
+assets/media/clock_in/*
+!assets/media/clock_in/index.html
+
+# assets file image clock_out
+assets/media/clock_out/*
+!assets/media/clock_out/index.html
+
+# assets file image ketidakhadiran
+assets/media/ketidakhadiran/*
+!assets/media/ketidakhadiran/index.html
