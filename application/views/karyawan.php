@@ -73,14 +73,17 @@
                             </div>
                             <div class="mb-4">
                                 <label class="form-label" for="jenis_kelamin">Jenis Kelamin</label>
-                                <select class="form-select" id="jenis_kelamin" name="jenis_kelamin">
-                                    <option value="LAKI-LAKI">LAKI-LAKI</option>
-                                    <option value="PEREMPUAN">PEREMPUAN</option>
-                                </select>
+                                <div class="jenis_kelamin_pst jenis_kelamin">
+                                    <select class="form-select" id="jenis_kelamin" name="jenis_kelamin">
+                                        <option value="LAKI-LAKI">LAKI-LAKI</option>
+                                        <option value="PEREMPUAN">PEREMPUAN</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label" for="file">Photo Karyawan</label>
                                 <input class="form-control" type="file" id="file" name="file">
+                                <input type="hidden" class="form-control mt-3" id="name_upload_edit" name="name_upload_edit">
                             </div>
                             <hr>
                             <div class="mb-4">
@@ -89,13 +92,15 @@
                                 <small style="color: red; display: none;" id="error-userid">* UserID sudah digunakan</small>
                             </div>
                             <div class="mb-4">
-                                <label class="form-label" for="role_id">Role ID</label>
-                                <select class="form-select" id="role_id" name="role_id">
-                                    <option value="ADMIN">ADMIN</option>
+                                <label class="form-label" for="role">Role ID</label>
+                                <div class="role_pst role">
+                                    <select class="form-select" id="role" name="role">
+                                        <!-- <option value="ADMIN">ADMIN</option>
                                     <option value="SUPERVISOR">SUPERVISOR</option>
                                     <option value="TEKNISI">TEKNISI</option>
-                                    <option value="STAFF">STAFF</option>
-                                </select>
+                                    <option value="STAFF">STAFF</option> -->
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-12 col-xl-12">
@@ -120,9 +125,15 @@
 </main>
 <!-- END Main Container -->
 
+<script src="<?= base_url() ?>resources/select2/select2.min.js"></script>
+
 <script>
     <?php $target = 0; ?>
-    var a = '<?= $this->session->userdata('userid') ?>'
+    var a = '<?= $this->session->userdata('userid') ?>',
+        select2Role,
+        formData = $('#form-data'),
+        base_url = '<?= base_url() ?>',
+        global_status = ''
     $(function() {
         $("#table-user").DataTable({
             "responsive": true,
@@ -155,14 +166,16 @@
                 "className": 'text-center py-1',
                 "data": "data",
                 "render": function(data) {
-                    if (data.role_id == 'ADMIN') {
-                        return `<span class="badge bg-danger">` + data.role_id + `</span>`
-                    } else if (data.role_id == 'SUPERVISOR') {
-                        return `<span class="badge bg-warning">` + data.role_id + `</span>`
-                    } else if (data.role_id == 'TEKNISI') {
-                        return `<span class="badge bg-primary">` + data.role_id + `</span>`
+                    if (data.role_id == '1') {
+                        return `<span class="badge bg-danger">` + data.role + `</span>`
+                    } else if (data.role_id == '2') {
+                        return `<span class="badge bg-warning">` + data.role + `</span>`
+                    } else if (data.role_id == '3') {
+                        return `<span class="badge bg-primary">` + data.role + `</span>`
+                    } else if (data.role_id == '4') {
+                        return `<span class="badge bg-success">` + data.role + `</span>`
                     } else {
-                        return `<span class="badge bg-success">` + data.role_id + `</span>`
+                        return `<span class="badge bg-info">` + data.role + `</span>`
                     }
                 }
             }, {
@@ -201,6 +214,58 @@
         });
 
         //   $('#tambah-user').hide();
+        $(document).on("select2:open", () => {
+            document.querySelector(".select2-search__field").focus();
+        });
+        select2Role = formData
+            .find("#role")
+            .select2({
+                dropdownParent: formData.find(".role_pst"),
+                ajax: {
+                    url: base_url + "karyawan/select2_role",
+                    dataType: "json",
+                    data: function(params) {
+                        return {
+                            q: params.term,
+                            page: params.page,
+                        };
+                    },
+                    processResults: function(data, params) {
+                        return {
+                            results: data.items,
+                            pagination: {
+                                more: data.count == 10,
+                            },
+                            cache: true,
+                        };
+                    },
+
+                    error: function(xhr, status, error) {
+                        toast("warning", "not found");
+                    },
+                },
+                id: function(data) {
+                    return data.id;
+                },
+                templateResult: function(data) {
+                    return $(`
+						<div class='select2-result-repository clearfix d-flex'>
+							<div class="me-1"> ${data.role} </div>
+						</div>
+						`);
+
+                },
+                templateSelection: function(data) {
+                    $(this).val(data.id);
+                    return data.role || data.text;
+                },
+                placeholder: "Pilih Role",
+                allowClear: true,
+                // width: "resolve",
+            })
+            .on("select2:selecting", function(event) {
+                $("#role").find("option").remove();
+            });
     });
 
     function reload_table() {
@@ -211,7 +276,7 @@
         e.preventDefault()
         //   loading_submit()
 
-        if ($('#nama').val() == '' || $('#email').val() == '' || $('#userid').val() == '' || $('#role_id').val() == '' || $('#nik').val() == '' || $('#alamat').val() == '' || $('#no_ktp').val() == '' || $('#handphone').val() == '' || $('#file').val() == '') {
+        if ($('#nama').val() == '' || $('#email').val() == '' || $('#userid').val() == '' || ($('#role').val() == '' || $('#role').val() == 'null' || $('#role').val() == null || $('#role').val() == undefined) || $('#nik').val() == '' || $('#alamat').val() == '' || $('#no_ktp').val() == '' || $('#handphone').val() == '' || ($('#file').val() == '' && global_status == 'tambah')) {
             Swal.fire(
                 'error!',
                 'Tidak boleh ada kolom kosong!',
@@ -231,17 +296,22 @@
             },
             dataType: "json",
             success: function(result) {
-                if (result == 200) {
+                if (global_status == "tambah") {
+                    if (result == 200) {
 
+                        form()
+                        return
+                    }
+
+                    Swal.fire(
+                        'Error!',
+                        'UserID sudah digunakan, gunakan UserID lain!.',
+                        'error'
+                    )
+                } else {
                     form()
                     return
                 }
-
-                Swal.fire(
-                    'Error!',
-                    'UserID sudah digunakan, gunakan UserID lain!.',
-                    'error'
-                )
 
             },
             error: function(err) {
@@ -264,12 +334,13 @@
         form_data.append('nama', $("#nama").val());
         form_data.append('email', $("#email").val());
         form_data.append('userid', $("#userid").val());
-        form_data.append('role_id', $("#role_id").val());
+        form_data.append('role_id', $("#role").val());
         form_data.append('nik', $("#nik").val());
         form_data.append('alamat', $("#alamat").val());
         form_data.append('no_ktp', $("#no_ktp").val());
         form_data.append('handphone', $("#handphone").val());
         form_data.append('jenis_kelamin', $("#jenis_kelamin").val());
+        form_data.append('name_upload_edit', $("#name_upload_edit").val());
         if ($('#file').val() !== "") {
             var file_data = $('#file').prop('files')[0];
             form_data.append('file', file_data);
@@ -296,6 +367,7 @@
                         result.message,
                         'success'
                     )
+                    clear_form()
                     $('#nama').val('')
                     $('#nik').val('')
                     $('#alamat').val('')
@@ -326,8 +398,15 @@
         })
     }
 
+    function clear_form() {
+        $("option:selected").prop("selected", false);
+        $("div.role select").val("").change();
+        $("div.jenis_kelamin select").val("LAKI-LAKI").change();
+        formData.find('input').val('')
+    }
 
     $('#btn-add').on('click', function() {
+        clear_form()
         $('#add-new').show(500);
         $('#list-karyawan').hide();
         global_status = "tambah"
@@ -343,6 +422,7 @@
     });
 
     $('#clear-form').on('click', function() {
+        clear_form()
         $('#nama').val('')
         $('#nik').val('')
         $('#alamat').val('')
@@ -460,7 +540,7 @@
     }
 
     function edit_data(id) {
-
+        clear_form()
         global_status = 'edit'
         global_id = id
         //   $('#psw1').hide()
@@ -478,6 +558,10 @@
             dataType: 'json',
             success: function(result) {
                 result.forEach(d => {
+                    $("div.role option:selected").prop("selected", false);
+                    var option1 = new Option(d.role, d.role_id, false, true);
+                    select2Role.append(option1).trigger("change");
+
                     $('#list-karyawan').hide();
                     $('#add-new').show(500);
 
@@ -487,14 +571,22 @@
                     $('#alamat').val(d.alamat)
                     $('#no_ktp').val(d.no_ktp)
                     $('#handphone').val(d.handphone)
-                    $('#jenis_kelamin').val(d.jenis_kelamin)
+                    $("div.jenis_kelamin option:selected").prop("selected", false);
+                    $('#jenis_kelamin').val(d.jenis_kelamin).change()
                     $('#userid').val(d.userid)
-                    $('#role_id').val(d.role_id)
                     $('#email').val(d.email)
-                    $('#file').val(d.photo)
+                    // $('#file').val(d.photo)
+                    $('#name_upload_edit').val(d.photo)
+                    // $('#role_id').val(d.role_id)
+
+
                 });
             }
         })
 
     }
+
+    $('#jenis_kelamin').select2({
+        dropdownParent: formData.find(".jenis_kelamin_pst"),
+    })
 </script>

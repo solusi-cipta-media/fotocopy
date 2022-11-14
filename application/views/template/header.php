@@ -45,7 +45,7 @@
 
     <!-- summernote -->
     <link href="<?= base_url() ?>summernote/summernote.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="<?= base_url('assets/css/style_new.css') ?>">
 </head>
 
 <body>
@@ -107,11 +107,19 @@
                                         <i class="fa fa-burn"></i>
                                     </a>
                                 </li>
+                                <?php if ($this->session->userdata('role_id') != 1) { ?>
+                                    <li class="list-inline-item">
+                                        <a class="link-fx text-dual" href="<?= base_url('absen_selfie') ?>">
+                                            <i class="fa fa-arrow-circle-left"></i>
+                                        </a>
+                                    </li>
+                                <?php } ?>
                                 <li class="list-inline-item">
                                     <a class="link-fx text-dual" href="<?= base_url('auth/logout') ?>">
                                         <i class="fa fa-sign-out-alt"></i>
                                     </a>
                                 </li>
+
                             </ul>
                         </div>
                         <!-- END Visible only in normal mode -->
@@ -259,6 +267,14 @@
                                     <span class="nav-main-link-name">User</span>
                                 </a>
                             </li> -->
+                            <?php if ($this->session->userdata('role_id') != 1) { ?>
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link" href="<?= base_url('absen_selfie') ?>">
+                                        <i class="nav-main-link-icon fa fa-arrow-circle-left"></i>
+                                        <span class="nav-main-link-name">Back to Absen Selfie</span>
+                                    </a>
+                                </li>
+                            <?php } ?>
                             <li class="nav-main-item">
                                 <a class="nav-main-link" href="<?= base_url('auth/logout') ?>">
                                     <i class="nav-main-link-icon fa fa-sign-out-alt"></i>
