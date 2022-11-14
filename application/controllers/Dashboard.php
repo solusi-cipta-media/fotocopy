@@ -30,11 +30,13 @@ class Dashboard extends CI_Controller
 
     public function profil()
     {
+        // echo $this->session->userdata('role_id');
         //ambil data notifikasi
         // $data['notifikasi'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->result_array();
         // $data['jumlah_notif'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->num_rows();
         //end
-
+        $data['role'] = $this->crud->get_where('user_role', ['id' => $this->session->userdata('role_id')])->row_array()['role'];
+        // var_dump($data['role']);
         $data['sess_menu'] = 'dashboard';
 
         $this->load->view('template/header', $data);
