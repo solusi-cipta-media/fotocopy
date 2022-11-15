@@ -43,7 +43,34 @@
     <!-- END Page Content -->
 </main>
 <!-- END Main Container -->
-
+<div class="modal" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="block block-rounded shadow-none mb-0">
+                <div class="block-header block-header-default">
+                    <h3 class="block-title">Bukti Absen <span id="type_absen"></span></h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- <form id="form-data-teknisi"> -->
+                <div class="block-content fs-sm" id="body-modal" style="padding: 2rem !important;text-align:center;">
+                </div>
+                <div class="block-content block-content-full block-content-sm text-end border-top">
+                    <button type="button" class="btn btn-alt-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <!-- <button type="submit" class="btn btn-alt-primary" data-bs-dismiss="modal">
+                            Submit
+                        </button> -->
+                </div>
+                <!-- </form> -->
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     <?php $target = 0; ?>
     $(function() {
@@ -90,18 +117,44 @@
                 "className": 'text-center py-1',
                 "data": "data",
                 "render": function(data) {
-                    return `<a href="https://www.google.com/maps/place/` + data.latitude_in + `,` + data.longitude_in + `" target="_blank" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Lokasi IN">
-                                    <i class="fa fa-location-dot"></i> Lokasi IN
-                                </a>`
+                    if (data.latitude_in != '' && data.longitude_in != '') {
+                        return `
+                            <div style="line-height:3rem;">
+                                <a href="https://www.google.com/maps/place/` + data.latitude_in + `,` + data.longitude_in + `" target="_blank" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Lokasi IN">
+                                    <small><i class="fa fa-location-dot"></i> Lokasi IN</small>
+                                </a>
+                            </div>
+                            <div style="line-height:3rem;">
+                                <button type="button" class="btn btn-sm btn-success" onclick=show_data('${data.image_in}','clock_in') data-bs-toggle="tooltip" title="Bukti">
+                                    <small><i class="si si-picture"></i> Bukti</small>
+                                </button>
+                            </div>`
+                    } else {
+                        return ``
+                    }
+
                 }
             }, {
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
                 "data": "data",
                 "render": function(data) {
-                    return `<a href="https://www.google.com/maps/place/` + data.latitude_out + `,` + data.longitude_out + `" target="_blank" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Lokasi OUT">
-                                    <i class="fa fa-location-dot"></i> Lokasi OUT
-                                </a>`
+                    if (data.latitude_out != '' && data.longitude_out != '') {
+                        return `
+                                <div style="line-height:3rem;">
+                                    <a href="https://www.google.com/maps/place/` + data.latitude_out + `,` + data.longitude_out + `" target="_blank" class="btn btn-sm btn-danger" data-bs-toggle="tooltip" title="Lokasi OUT">
+                                        <small style="font-size:11px;"> <i class="fa fa-location-dot"></i> Lokasi OUT </small>
+                                    </a>
+                                    </div>
+                                <div style="line-height:3rem;">
+                                    <button type="button" class="btn btn-sm btn-success" onclick=show_data('${data.image_out}','clock_out') data-bs-toggle="tooltip" title="Bukti">
+                                        <small><i class="si si-picture"></i> Bukti</small>
+                                    </button>
+                                </div>   
+                                `
+                    } else {
+                        return ``
+                    }
                 }
             }, {
                 "target": [<?= $target ?>],
@@ -122,4 +175,27 @@
 
         //   $('#tambah-user').hide();
     });
+
+    function show_data(img, type) {
+
+        var ft = ''
+        var render = ''
+        var ft_url = ''
+        if (img != '' && img != null && img != 'null' && img != undefined && img != 'undefined') {
+            ft = img
+            if (type == 'clock_in') {
+                ft_url = 'clock_in/'
+            } else {
+                ft_url = 'clock_out/'
+            }
+        } else {
+            ft = "image-not-found.png"
+            ft_url = 'default/'
+        }
+        console.log(ft)
+        $('#type_absen').html(`${(type == 'clock_in')?'Masuk':((type == 'clock_out')?'Pulang':'')}`)
+        $('#exampleModalCenter').modal('show')
+        html = `<img src="<?= base_url() ?>assets/media/${ft_url}${ft}" class="img-fluid" alt="bukti_leave">`
+        $('#body-modal').html(html)
+    }
 </script>
