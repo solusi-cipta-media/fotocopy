@@ -17,6 +17,8 @@ class Absen_selfie extends CI_Controller
         }
         $this->load->model("Crud", "crud");
         $this->load->model("Crud2", "crud2");
+
+        date_default_timezone_set('Asia/Jakarta');
     }
 
     public function index()
@@ -125,7 +127,6 @@ class Absen_selfie extends CI_Controller
 
                             $telat = $ho . ':' . $mi . ':' . $se;
                         }
-
                         //selesai hitung telat
                         $data = array(
                             // 'id_attendance' => $id_attendance,
@@ -401,84 +402,237 @@ class Absen_selfie extends CI_Controller
                 //end cek 
 
             } else {
-                //selesai hitung telat
-                $nik = $this->input->post('nik');
-                $data = array(
-                    'nomor_induk' => $this->input->post('nik'),
-                    'tanggal' => $this->input->post('attendance_date'),
-                    'tipe' => strtoupper($this->input->post('alasan')),
-                    'status' => 'WAITING',
-                    'nama_karyawan' => $this->session->userdata('name')
+                $check_data_cuti = [];
+                $waktu_cuti = '';
+                $jika = array(
+                    'tanggal' => date('Y-m-d')
                 );
-                $this->crud2->insert_clock_w_camera('absensi_ketidakhadiran', $data);
+                $r = $this->crud2->get_where('absensi_periode', $jika)->row_array();
+                $r_r = $this->crud2->get_where('absensi_periode', $jika)->result();
 
-                if ($this->db->affected_rows() == true) {
+                $jika_cuti = array(
 
-                    $b = array(
-                        'nomor_induk' => $this->input->post('nik'),
-                        'tanggal' => $this->input->post('attendance_date'),
-                    );
+                    'id' => $this->input->post('cuti')
+                );
+                $tc = $this->crud2->get_where('cuti', $jika_cuti)->row_array();
+                $tc_tc = $this->crud2->get_where('cuti', $jika_cuti)->result();
+                if (count($tc_tc) > 0) {
+                    $waktu_cuti = $tc['waktu'];
+                }
 
-                    $fileupload = $this->input->post('fileupload');
 
-                    if ($fileupload != 'undefined') {
-                        $this->db->select('bukti');
-                        $this->db->from('absensi_ketidakhadiran');
-                        $this->db->where($b);
-                        $data_lampiran = $this->db->get()->result();
-                        foreach ($data_lampiran as $r) {
-                            $file = $r->bukti;
+                if (count($r_r) > 0) {
+                    if ($r['status'] == 'LIBUR') {
+                        $d['result'] = 503;
 
-                            $files = './assets/media/ketidakhadiran/' . $file;
+                        $temp[] = $d;
+                        echo json_encode($temp);
+                    } else {
+                        if ($this->input->post('alasan') == 'cuti') {
+                            if ($waktu_cuti != '' && $waktu_cuti != 0) {
+                                $cek_status_cuti = [];
+                                $cek_status_cuti_approve = [];
+                                $this->db->from('absensi_ketidakhadiran');
+                                $this->db->where('nomor_induk', $this->input->post('nik'));
+                                $this->db->where('cuti_id', $this->input->post('cuti'));
+                                $this->db->where('YEAR(tanggal)', date('Y'));
+                                $check_data_cuti = $this->db->get()->result();
+                                if (count($check_data_cuti) > 0) {
+                                    foreach ($check_data_cuti as $dca) {
+                                        $cek_status_cuti[] = $dca->status;
+                                        if ($dca->status == 'APPROVED') {
+                                            $cek_status_cuti_approve[] = $dca->status;
+                                        }
+                                    }
+                                }
+                                // echo count($cek_status_cuti_approve);
+                                // die();
+                                if (in_array('WAITING', $cek_status_cuti)) {
+                                    $d['result'] = 506;
+                                    $temp[] = $d;
+                                    echo json_encode($temp);
+                                } else {
+                                    if (count($cek_status_cuti_approve) < $waktu_cuti) {
+                                        //selesai hitung telat
+                                        $nik = $this->input->post('nik');
+                                        $data = array(
+                                            'nomor_induk' => $this->input->post('nik'),
+                                            'tanggal' => $this->input->post('attendance_date'),
+                                            'tipe' => strtoupper($this->input->post('alasan')),
+                                            'status' => 'WAITING',
+                                            'nama_karyawan' => $this->session->userdata('name')
+                                        );
+                                        $data['cuti_id'] = $this->input->post('cuti');
 
-                            if (file_exists($files)) :
-                                if ($file != 'null') :
-                                    if ($file != '') :
-                                        $temp = "./assets/media/ketidakhadiran/";
-                                        unlink($temp . $file);
-                                    endif;
-                                endif;
-                            endif;
-                        }
-                        $countfiles = count($_FILES['fileupload']['name']);
-                        $config['upload_path']          = './assets/media/ketidakhadiran/';
-                        $config['allowed_types']        = 'pdf|gif|jpg|png|jpeg|GIF|JPG|PNG|JPEG|svg|SVG';
-                        $config['overwrite']            = true;
-                        $config['max_size']             = 0; // unlimited
-                        $config['max_width']            = 0;
-                        $config['max_height']           = 0;
-                        $config['encrypt_name']         = TRUE;
-                        $this->load->library('upload', $config);
+                                        $this->crud2->insert_clock_w_camera('absensi_ketidakhadiran', $data);
 
-                        $files = $_FILES;
-                        $data_file_name_encrypt = array();
-                        for ($i = 0; $i < $countfiles; $i++) {
-                            $_FILES['fileupload']['name'] = $files['fileupload']['name'][$i];
-                            $_FILES['fileupload']['type'] = $files['fileupload']['type'][$i];
-                            $_FILES['fileupload']['tmp_name'] = $files['fileupload']['tmp_name'][$i];
-                            $_FILES['fileupload']['error'] = $files['fileupload']['error'][$i];
-                            $_FILES['fileupload']['size'] = $files['fileupload']['size'][$i];
+                                        if ($this->db->affected_rows() == true) {
 
-                            if ($this->upload->do_upload('fileupload')) {
-                                $uploaded = $this->upload->data();
+                                            $b = array(
+                                                'nomor_induk' => $this->input->post('nik'),
+                                                'tanggal' => $this->input->post('attendance_date'),
+                                            );
 
-                                $data_file_name_encrypt = array(
-                                    'bukti' => $uploaded['file_name'],
-                                );
+                                            $fileupload = $this->input->post('fileupload');
+
+                                            if ($fileupload != 'undefined') {
+                                                $this->db->select('bukti');
+                                                $this->db->from('absensi_ketidakhadiran');
+                                                $this->db->where($b);
+                                                $data_lampiran = $this->db->get()->result();
+                                                foreach ($data_lampiran as $r) {
+                                                    $file = $r->bukti;
+
+                                                    $files = './assets/media/ketidakhadiran/' . $file;
+
+                                                    if (file_exists($files)) :
+                                                        if ($file != 'null') :
+                                                            if ($file != '') :
+                                                                $temp = "./assets/media/ketidakhadiran/";
+                                                                unlink($temp . $file);
+                                                            endif;
+                                                        endif;
+                                                    endif;
+                                                }
+                                                $countfiles = count($_FILES['fileupload']['name']);
+                                                $config['upload_path']          = './assets/media/ketidakhadiran/';
+                                                $config['allowed_types']        = 'pdf|gif|jpg|png|jpeg|GIF|JPG|PNG|JPEG|svg|SVG';
+                                                $config['overwrite']            = true;
+                                                $config['max_size']             = 0; // unlimited
+                                                $config['max_width']            = 0;
+                                                $config['max_height']           = 0;
+                                                $config['encrypt_name']         = TRUE;
+                                                $this->load->library('upload', $config);
+
+                                                $files = $_FILES;
+                                                $data_file_name_encrypt = array();
+                                                for ($i = 0; $i < $countfiles; $i++) {
+                                                    $_FILES['fileupload']['name'] = $files['fileupload']['name'][$i];
+                                                    $_FILES['fileupload']['type'] = $files['fileupload']['type'][$i];
+                                                    $_FILES['fileupload']['tmp_name'] = $files['fileupload']['tmp_name'][$i];
+                                                    $_FILES['fileupload']['error'] = $files['fileupload']['error'][$i];
+                                                    $_FILES['fileupload']['size'] = $files['fileupload']['size'][$i];
+
+                                                    if ($this->upload->do_upload('fileupload')) {
+                                                        $uploaded = $this->upload->data();
+
+                                                        $data_file_name_encrypt = array(
+                                                            'bukti' => $uploaded['file_name'],
+                                                        );
+                                                    } else {
+                                                        $error = array('error' => $this->upload->display_errors());
+                                                        $response = ['status' => 'error', 'message' => $error];
+                                                        echo json_encode($response);
+                                                    }
+                                                }
+                                                $this->crud2->update('absensi_ketidakhadiran', $data_file_name_encrypt, $b);
+                                            }
+                                            $d['result'] = 200;
+                                            $d['clock'] = $cr[1];
+                                            $temp[] = $d;
+                                            echo json_encode($temp);
+                                        } else {
+                                            $d['result'] = 500;
+                                            $temp[] = $d;
+                                            echo json_encode($temp);
+                                        }
+                                    } else {
+                                        $d['result'] = 505;
+                                        $temp[] = $d;
+                                        echo json_encode($temp);
+                                    }
+                                }
                             } else {
-                                $error = array('error' => $this->upload->display_errors());
-                                $response = ['status' => 'error', 'message' => $error];
-                                echo json_encode($response);
+                                $d['result'] = 504;
+                                $temp[] = $d;
+                                echo json_encode($temp);
+                            }
+                        } else {
+                            $nik = $this->input->post('nik');
+                            $data = array(
+                                'nomor_induk' => $this->input->post('nik'),
+                                'tanggal' => $this->input->post('attendance_date'),
+                                'tipe' => strtoupper($this->input->post('alasan')),
+                                'status' => 'WAITING',
+                                'nama_karyawan' => $this->session->userdata('name')
+                            );
+
+                            $this->crud2->insert_clock_w_camera('absensi_ketidakhadiran', $data);
+
+                            if ($this->db->affected_rows() == true) {
+
+                                $b = array(
+                                    'nomor_induk' => $this->input->post('nik'),
+                                    'tanggal' => $this->input->post('attendance_date'),
+                                );
+
+                                $fileupload = $this->input->post('fileupload');
+
+                                if ($fileupload != 'undefined') {
+                                    $this->db->select('bukti');
+                                    $this->db->from('absensi_ketidakhadiran');
+                                    $this->db->where($b);
+                                    $data_lampiran = $this->db->get()->result();
+                                    foreach ($data_lampiran as $r) {
+                                        $file = $r->bukti;
+
+                                        $files = './assets/media/ketidakhadiran/' . $file;
+
+                                        if (file_exists($files)) :
+                                            if ($file != 'null') :
+                                                if ($file != '') :
+                                                    $temp = "./assets/media/ketidakhadiran/";
+                                                    unlink($temp . $file);
+                                                endif;
+                                            endif;
+                                        endif;
+                                    }
+                                    $countfiles = count($_FILES['fileupload']['name']);
+                                    $config['upload_path']          = './assets/media/ketidakhadiran/';
+                                    $config['allowed_types']        = 'pdf|gif|jpg|png|jpeg|GIF|JPG|PNG|JPEG|svg|SVG';
+                                    $config['overwrite']            = true;
+                                    $config['max_size']             = 0; // unlimited
+                                    $config['max_width']            = 0;
+                                    $config['max_height']           = 0;
+                                    $config['encrypt_name']         = TRUE;
+                                    $this->load->library('upload', $config);
+
+                                    $files = $_FILES;
+                                    $data_file_name_encrypt = array();
+                                    for ($i = 0; $i < $countfiles; $i++) {
+                                        $_FILES['fileupload']['name'] = $files['fileupload']['name'][$i];
+                                        $_FILES['fileupload']['type'] = $files['fileupload']['type'][$i];
+                                        $_FILES['fileupload']['tmp_name'] = $files['fileupload']['tmp_name'][$i];
+                                        $_FILES['fileupload']['error'] = $files['fileupload']['error'][$i];
+                                        $_FILES['fileupload']['size'] = $files['fileupload']['size'][$i];
+
+                                        if ($this->upload->do_upload('fileupload')) {
+                                            $uploaded = $this->upload->data();
+
+                                            $data_file_name_encrypt = array(
+                                                'bukti' => $uploaded['file_name'],
+                                            );
+                                        } else {
+                                            $error = array('error' => $this->upload->display_errors());
+                                            $response = ['status' => 'error', 'message' => $error];
+                                            echo json_encode($response);
+                                        }
+                                    }
+                                    $this->crud2->update('absensi_ketidakhadiran', $data_file_name_encrypt, $b);
+                                }
+                                $d['result'] = 200;
+                                $d['clock'] = $cr[1];
+                                $temp[] = $d;
+                                echo json_encode($temp);
+                            } else {
+                                $d['result'] = 500;
+                                $temp[] = $d;
+                                echo json_encode($temp);
                             }
                         }
-                        $this->crud2->update('absensi_ketidakhadiran', $data_file_name_encrypt, $b);
                     }
-                    $d['result'] = 200;
-                    $d['clock'] = $cr[1];
-                    $temp[] = $d;
-                    echo json_encode($temp);
                 } else {
-                    $d['result'] = 500;
+                    $d['result'] = 502;
                     $temp[] = $d;
                     echo json_encode($temp);
                 }
@@ -534,5 +688,21 @@ class Absen_selfie extends CI_Controller
         $data['type'] = $type;
         $data['url_file'] = $url_file;
         echo json_encode($data);
+    }
+
+    public function select2_cuti()
+    {
+        $data = [];
+        $q = $this->input->get("q");
+        $page = $this->input->get("page");
+
+        $this->db->select('jenis_cuti cuti,id as id');
+        $this->db->from("cuti");
+        $this->db->like("jenis_cuti", $q);
+        $this->db->order_by('id', 'desc');
+        $this->db->limit(10, (10 * $page));
+        $data = $this->db->get()->result();
+
+        exit(json_encode(["items" => $data, "count" => count($data)]));
     }
 }

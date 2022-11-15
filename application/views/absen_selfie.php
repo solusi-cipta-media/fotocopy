@@ -23,6 +23,7 @@
 
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <link rel="stylesheet" href="<?= base_url('') ?>assets/js/plugins/sweetalert2/sweetalert2.min.css">
+    <link rel="stylesheet" href="<?= base_url() ?>resources/select2/select2.min.css">
 </head>
 <style>
     /* spinner */
@@ -35,6 +36,28 @@
         left: 0;
         z-index: 999;
         background: rgba(255, 255, 255, 0.8) url("<?php base_url("assets/media/default/spin.gif") ?>") center no-repeat;
+    }
+
+    .select2-container--default .select2-selection--single {
+        background-color: transparent;
+        border: 1px solid #d8dde5;
+        border-radius: 5px;
+        /* padding-right: 65.8rem; */
+        width: 435px;
+        padding-bottom: 2rem;
+        padding-top: 0.4rem;
+    }
+
+    @media screen and (max-width: 400px) {
+        .select2-container--default .select2-selection--single {
+            background-color: transparent;
+            border: 1px solid #d8dde5;
+            border-radius: 5px;
+            /* padding-right: 65.8rem; */
+            width: 295px;
+            padding-bottom: 2rem;
+            padding-top: 0.4rem;
+        }
     }
 </style>
 
@@ -233,14 +256,18 @@
                                 <i class="fa fa-clock"></i><br>Cuti
                             </button>
                             <button id="btn_reset_pilihan" type="button" class="btn btn-dark waves-effect" style="margin-right:5px;margin-bottom: 0px;font-size: 12px;">
-                                <i class="fa fa-clock"></i><br>Reset Pilihan
+                                <i class="fa fa-trash"></i><br>Reset Pilihan
                             </button>
                         </div>
-                        <!-- <div id="body_alasan">
-                            <div class="col-12" style="margin-bottom: 1rem;margin-top: 1rem;text-align:center;">
-                                <textarea name="alasan_detail" id="alasan_detail" cols="35" rows="5" placeholder="Isikan Alasan"></textarea>
+                        <div id="body_cuti">
+                            <div class="col-12" style="margin-top: 1rem;text-align:center;">
+                                <div class="cuti_pst cuti">
+                                    <select class="form-select" id="cuti" name="cuti">
+                                    </select>
+                                </div>
+                                <!-- <textarea name="alasan_detail" id="alasan_detail" cols="35" rows="5" placeholder="Isikan Alasan"></textarea> -->
                             </div>
-                        </div> -->
+                        </div>
                     </div>
 
                     <div class="row">
@@ -299,6 +326,7 @@
 <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="//cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script src="<?= base_url('assets/js/plugins/sweetalert2/sweetalert2.min.js') ?>"></script>
+<script src="<?= base_url() ?>resources/select2/select2.min.js"></script>
 <script>
     var base_url = '<?= base_url() ?>',
         u_back = '<?= base_url('absen_selfie') ?>',
@@ -309,7 +337,8 @@
         end_date,
         check_tutup = '',
         start_date_kendala,
-        end_date_kendala
+        end_date_kendala,
+        select2Cuti
     $(document).ready(function() {
 
         $.ajax({
@@ -341,6 +370,63 @@
         document.getElementById("jam").innerHTML = waktu.getHours();
         document.getElementById("menit").innerHTML = waktu.getMinutes();
         document.getElementById("detik").innerHTML = waktu.getSeconds();
+    }
+
+    $(document).on("select2:open", () => {
+        document.querySelector(".select2-search__field").focus();
+    });
+    select2Cuti = $('#modal-absen').find("#cuti").select2({
+            dropdownParent: $('#modal-absen').find(".cuti_pst"),
+            ajax: {
+                url: base_url + "absen_selfie/select2_cuti",
+                dataType: "json",
+                data: function(params) {
+                    return {
+                        q: params.term,
+                        page: params.page,
+                    };
+                },
+                processResults: function(data, params) {
+                    return {
+                        results: data.items,
+                        pagination: {
+                            more: data.count == 10,
+                        },
+                        cache: true,
+                    };
+                },
+
+                error: function(xhr, status, error) {
+                    toast("warning", "not found");
+                },
+            },
+            id: function(data) {
+                return data.id;
+            },
+            templateResult: function(data) {
+                return $(`
+						<div class='select2-result-repository clearfix d-flex'>
+							<div class="me-1"> ${data.cuti} </div>
+						</div>
+						`);
+
+            },
+            templateSelection: function(data) {
+                $(this).val(data.id);
+                return data.cuti || data.text;
+            },
+            placeholder: "Pilih Cuti",
+            allowClear: true,
+            // width: "resolve",
+        })
+        .on("select2:selecting", function(event) {
+            $("#cuti").find("option").remove();
+        });
+
+    function clear_cuti() {
+        $("option:selected").prop("selected", false);
+        $("div.cuti select").val("").change();
+        $('#body_cuti').hide()
     }
 </script>
 
@@ -600,6 +686,20 @@
                                                     })
                                                     window.location = '<?= base_url("absen_selfie") ?>'
                                                 }, 500);
+                                                Swal.fire({
+                                                    title: 'Perhatian!',
+                                                    text: 'Telah absen sebelumnya.',
+                                                    showDenyButton: false,
+                                                    showCancelButton: false,
+                                                    icon: 'warning',
+                                                    confirmButtonText: 'OK!',
+                                                    denyButtonText: `Don't save`,
+                                                    allowOutsideClick: false
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location = '<?= base_url("absen_selfie") ?>'
+                                                    }
+                                                })
                                                 $('.btn-simpan').removeAttr("disabled")
                                                 $('.btn-back').show()
                                             } else if (e.result == 500) {
@@ -614,17 +714,21 @@
                                                 $("#head").show()
                                                 $("#body").show()
                                                 $("#absen").hide()
-                                                setTimeout(() => {
-                                                    Swal.fire({
-                                                        position: 'top-center',
-                                                        showConfirmButton: false,
-                                                        timer: 2000,
-                                                        icon: 'warning',
-                                                        title: 'Perhatian!',
-                                                        text: 'Anda belum CLOCK IN.'
-                                                    })
-                                                    window.location = '<?= base_url("absen_selfie") ?>'
-                                                }, 500);
+                                                Swal.fire({
+                                                    title: 'Perhatian!',
+                                                    text: 'Anda belum CLOCK IN.',
+                                                    showDenyButton: false,
+                                                    showCancelButton: false,
+                                                    icon: 'warning',
+                                                    confirmButtonText: 'OK!',
+                                                    denyButtonText: `Don't save`,
+                                                    allowOutsideClick: false
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location = '<?= base_url("absen_selfie") ?>'
+                                                    }
+                                                })
+
                                                 $('.btn-simpan').removeAttr("disabled")
                                                 $('.btn-back').show()
                                             } else if (e.result == 501) {
@@ -639,17 +743,20 @@
                                                 $("#head").show()
                                                 $("#body").show()
                                                 $("#absen").hide()
-                                                setTimeout(() => {
-                                                    Swal.fire({
-                                                        position: 'top-center',
-                                                        showConfirmButton: false,
-                                                        timer: 2000,
-                                                        icon: 'warning',
-                                                        title: 'Perhatian!',
-                                                        text: 'File Foto Corrupted, refresh halaman terlebih dahulu untuk kembali normal.'
-                                                    })
-                                                    window.location = '<?= base_url("absen_selfie") ?>'
-                                                }, 500);
+                                                Swal.fire({
+                                                    title: 'Perhatian!',
+                                                    text: 'File Foto Corrupted, refresh halaman terlebih dahulu untuk kembali normal.',
+                                                    showDenyButton: false,
+                                                    showCancelButton: false,
+                                                    icon: 'warning',
+                                                    confirmButtonText: 'OK!',
+                                                    denyButtonText: `Don't save`,
+                                                    allowOutsideClick: false
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location = '<?= base_url("absen_selfie") ?>'
+                                                    }
+                                                })
                                                 $('.btn-simpan').removeAttr("disabled")
                                                 $('.btn-back').show()
                                             } else if (e.result == 502) {
@@ -664,17 +771,20 @@
                                                 $("#head").show()
                                                 $("#body").show()
                                                 $("#absen").hide()
-                                                setTimeout(() => {
-                                                    Swal.fire({
-                                                        position: 'top-center',
-                                                        showConfirmButton: false,
-                                                        timer: 2000,
-                                                        icon: 'warning',
-                                                        title: 'Perhatian!',
-                                                        text: 'Tidak ada periode jadwal absen untuk hari ini.'
-                                                    })
-                                                    window.location = '<?= base_url("absen_selfie") ?>'
-                                                }, 500);
+                                                Swal.fire({
+                                                    title: 'Perhatian!',
+                                                    text: 'Tidak ada periode jadwal absen untuk hari ini, mohon menghubungi Admin untuk mendaftarkan Periode untuk hari ini.',
+                                                    showDenyButton: false,
+                                                    showCancelButton: false,
+                                                    icon: 'warning',
+                                                    confirmButtonText: 'OK!',
+                                                    denyButtonText: `Don't save`,
+                                                    allowOutsideClick: false
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location = '<?= base_url("absen_selfie") ?>'
+                                                    }
+                                                })
                                                 $('.btn-simpan').removeAttr("disabled")
                                                 $('.btn-back').show()
                                             } else if (e.result == 503) {
@@ -689,17 +799,20 @@
                                                 $("#head").show()
                                                 $("#body").show()
                                                 $("#absen").hide()
-                                                setTimeout(() => {
-                                                    Swal.fire({
-                                                        position: 'top-center',
-                                                        showConfirmButton: false,
-                                                        timer: 2000,
-                                                        icon: 'warning',
-                                                        title: 'Perhatian!',
-                                                        text: 'Anda Libur hari ini.'
-                                                    })
-                                                    window.location = '<?= base_url("absen_selfie") ?>'
-                                                }, 500);
+                                                Swal.fire({
+                                                    title: 'Perhatian!',
+                                                    text: 'Anda Libur hari ini.',
+                                                    showDenyButton: false,
+                                                    showCancelButton: false,
+                                                    icon: 'warning',
+                                                    confirmButtonText: 'OK!',
+                                                    denyButtonText: `Don't save`,
+                                                    allowOutsideClick: false
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location = '<?= base_url("absen_selfie") ?>'
+                                                    }
+                                                })
                                                 $('.btn-simpan').removeAttr("disabled")
                                                 $('.btn-back').show()
                                             } else if (e.result == 401) {
@@ -714,17 +827,20 @@
                                                 $("#head").show()
                                                 $("#body").show()
                                                 $("#absen").hide()
-                                                setTimeout(() => {
-                                                    Swal.fire({
-                                                        position: 'top-center',
-                                                        showConfirmButton: false,
-                                                        timer: 2000,
-                                                        icon: 'warning',
-                                                        title: 'Perhatian!',
-                                                        text: 'Anda Tidak Hadir hari ini.'
-                                                    })
-                                                    window.location = '<?= base_url("absen_selfie") ?>'
-                                                }, 500);
+                                                Swal.fire({
+                                                    title: 'Perhatian!',
+                                                    text: 'Anda Tidak Hadir hari ini.',
+                                                    showDenyButton: false,
+                                                    showCancelButton: false,
+                                                    icon: 'warning',
+                                                    confirmButtonText: 'OK!',
+                                                    denyButtonText: `Don't save`,
+                                                    allowOutsideClick: false
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location = '<?= base_url("absen_selfie") ?>'
+                                                    }
+                                                })
                                                 $('.btn-simpan').removeAttr("disabled")
                                                 $('.btn-back').show()
                                             } else {
@@ -733,17 +849,20 @@
                                                 $("#head").show()
                                                 $("#body").show()
                                                 $("#absen").hide()
-                                                setTimeout(() => {
-                                                    Swal.fire({
-                                                        position: 'top-center',
-                                                        showConfirmButton: false,
-                                                        timer: 2000,
-                                                        icon: 'warning',
-                                                        title: 'Perhatian!',
-                                                        text: 'Mohon ada kesalahan pada sistem ini.'
-                                                    })
-                                                    window.location = '<?= base_url("absen_selfie") ?>'
-                                                }, 500);
+                                                Swal.fire({
+                                                    title: 'Perhatian!',
+                                                    text: 'Mohon ada kesalahan pada sistem ini.',
+                                                    showDenyButton: false,
+                                                    showCancelButton: false,
+                                                    icon: 'warning',
+                                                    confirmButtonText: 'OK!',
+                                                    denyButtonText: `Don't save`,
+                                                    allowOutsideClick: false
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location = '<?= base_url("absen_selfie") ?>'
+                                                    }
+                                                })
                                                 $('.btn-simpan').removeAttr("disabled")
                                                 $('.btn-back').show()
                                             }
@@ -755,17 +874,20 @@
                                         $("#head").show()
                                         $("#body").show()
                                         $("#absen").hide()
-                                        setTimeout(() => {
-                                            Swal.fire({
-                                                position: 'top-center',
-                                                showConfirmButton: false,
-                                                timer: 2000,
-                                                icon: 'warning',
-                                                title: 'Perhatian!',
-                                                text: 'Mohon ada kesalahan pada sistem ini.'
-                                            })
-                                            window.location = '<?= base_url("absen_selfie") ?>'
-                                        }, 500);
+                                        Swal.fire({
+                                            title: 'Perhatian!',
+                                            text: 'Mohon ada kesalahan pada sistem ini.',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
                                         $(".upload-loading").html("")
                                         $("#canvas").show()
                                         $('.btn-simpan').removeAttr("disabled")
@@ -783,17 +905,20 @@
                                         $("#head").show()
                                         $("#body").show()
                                         $("#absen").hide()
-                                        setTimeout(() => {
-                                            Swal.fire({
-                                                position: 'top-center',
-                                                showConfirmButton: false,
-                                                timer: 2000,
-                                                icon: 'warning',
-                                                title: 'Perhatian!',
-                                                text: 'Maaf anda menolak akses geolocation.'
-                                            })
-                                            window.location = '<?= base_url("absen_selfie") ?>'
-                                        }, 500);
+                                        Swal.fire({
+                                            title: 'Perhatian!',
+                                            text: 'Maaf anda menolak akses geolocation.',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
                                         $('.btn-simpan').removeAttr("disabled")
                                         $('body').removeClass('loading');
                                         $('#loading-text').hide()
@@ -803,17 +928,20 @@
                                         $("#head").show()
                                         $("#body").show()
                                         $("#absen").hide()
-                                        setTimeout(() => {
-                                            Swal.fire({
-                                                position: 'top-center',
-                                                showConfirmButton: false,
-                                                timer: 2000,
-                                                icon: 'warning',
-                                                title: 'Perhatian!',
-                                                text: 'Maaf lokasi tidak ditemukan.'
-                                            })
-                                            window.location = '<?= base_url("absen_selfie") ?>'
-                                        }, 500);
+                                        Swal.fire({
+                                            title: 'Perhatian!',
+                                            text: 'Maaf lokasi tidak ditemukan.',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
                                         $('.btn-simpan').removeAttr("disabled")
                                         $('body').removeClass('loading');
                                         $('#loading-text').hide()
@@ -823,17 +951,21 @@
                                         $("#head").show()
                                         $("#body").show()
                                         $("#absen").hide()
-                                        setTimeout(() => {
-                                            Swal.fire({
-                                                position: 'top-center',
-                                                showConfirmButton: false,
-                                                timer: 2000,
-                                                icon: 'warning',
-                                                title: 'Perhatian!',
-                                                text: 'Maaf gps anda terlalu lemot.'
-                                            })
-                                            window.location = '<?= base_url("absen_selfie") ?>'
-                                        }, 500);
+
+                                        Swal.fire({
+                                            title: 'Perhatian!',
+                                            text: 'Maaf gps anda terlalu lemot.',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
                                         $('.btn-simpan').removeAttr("disabled")
                                         $('body').removeClass('loading');
                                         $('#loading-text').hide()
@@ -842,17 +974,20 @@
                                         $("#head").show()
                                         $("#body").show()
                                         $("#absen").hide()
-                                        setTimeout(() => {
-                                            Swal.fire({
-                                                position: 'top-center',
-                                                showConfirmButton: false,
-                                                timer: 2000,
-                                                icon: 'warning',
-                                                title: 'Perhatian!',
-                                                text: 'Maaf gps anda error.'
-                                            })
-                                            window.location = '<?= base_url("absen_selfie") ?>'
-                                        }, 500);
+                                        Swal.fire({
+                                            title: 'Perhatian!',
+                                            text: 'Maaf gps anda error.',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
                                         $('.btn-simpan').removeAttr("disabled")
                                         $('body').removeClass('loading');
                                         $('#loading-text').hide()
@@ -865,17 +1000,20 @@
                         $("#head").show()
                         $("#body").show()
                         $("#absen").hide()
-                        setTimeout(() => {
-                            Swal.fire({
-                                position: 'top-center',
-                                showConfirmButton: false,
-                                timer: 2000,
-                                icon: 'warning',
-                                title: 'Perhatian!',
-                                text: 'Maaf device anda tidak support dengan geolocation.'
-                            })
-                            window.location = '<?= base_url("absen_selfie") ?>'
-                        }, 500);
+                        Swal.fire({
+                            title: 'Perhatian!',
+                            text: 'Maaf device anda tidak support dengan geolocation.',
+                            showDenyButton: false,
+                            showCancelButton: false,
+                            icon: 'warning',
+                            confirmButtonText: 'OK!',
+                            denyButtonText: `Don't save`,
+                            allowOutsideClick: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location = '<?= base_url("absen_selfie") ?>'
+                            }
+                        })
                         $('.btn-simpan').removeAttr("disabled")
                         $('body').removeClass('loading');
                         $('#loading-text').hide()
@@ -885,17 +1023,20 @@
                     $("#head").show()
                     $("#body").show()
                     $("#absen").hide()
-                    setTimeout(() => {
-                        Swal.fire({
-                            position: 'top-center',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            icon: 'warning',
-                            title: 'Perhatian!',
-                            text: 'Mohon ambil photo terlebih dahulu.'
-                        })
-                        window.location = '<?= base_url("absen_selfie") ?>'
-                    }, 500);
+                    Swal.fire({
+                        title: 'Perhatian!',
+                        text: 'Mohon ambil photo terlebih dahulu.',
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        icon: 'warning',
+                        confirmButtonText: 'OK!',
+                        denyButtonText: `Don't save`,
+                        allowOutsideClick: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location = '<?= base_url("absen_selfie") ?>'
+                        }
+                    })
                     $('.btn-simpan').removeAttr("disabled")
                     $('body').removeClass('loading');
                     $('#loading-text').hide()
@@ -1137,17 +1278,20 @@
                                                 $("#head").show()
                                                 $("#body").show()
                                                 $("#absen").hide()
-                                                setTimeout(() => {
-                                                    Swal.fire({
-                                                        position: 'top-center',
-                                                        showConfirmButton: false,
-                                                        timer: 2000,
-                                                        icon: 'warning',
-                                                        title: 'Perhatian!',
-                                                        text: 'Telah Absen sebelumnya.'
-                                                    })
-                                                    window.location = '<?= base_url("absen_selfie") ?>'
-                                                }, 500);
+                                                Swal.fire({
+                                                    title: 'Perhatian!',
+                                                    text: 'Telah Absen sebelumnya.',
+                                                    showDenyButton: false,
+                                                    showCancelButton: false,
+                                                    icon: 'warning',
+                                                    confirmButtonText: 'OK!',
+                                                    denyButtonText: `Don't save`,
+                                                    allowOutsideClick: false
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location = '<?= base_url("absen_selfie") ?>'
+                                                    }
+                                                })
                                                 $('.btn-simpan2').removeAttr("disabled")
                                                 $('.btn-back2').show()
                                             } else if (e.result == 500) {
@@ -1161,17 +1305,20 @@
                                                 $("#head").show()
                                                 $("#body").show()
                                                 $("#absen").hide()
-                                                setTimeout(() => {
-                                                    Swal.fire({
-                                                        position: 'top-center',
-                                                        showConfirmButton: false,
-                                                        timer: 2000,
-                                                        icon: 'warning',
-                                                        title: 'Perhatian!',
-                                                        text: 'Anda belum Clock IN.'
-                                                    })
-                                                    window.location = '<?= base_url("absen_selfie") ?>'
-                                                }, 500);
+                                                Swal.fire({
+                                                    title: 'Perhatian!',
+                                                    text: 'Anda belum Clock IN.',
+                                                    showDenyButton: false,
+                                                    showCancelButton: false,
+                                                    icon: 'warning',
+                                                    confirmButtonText: 'OK!',
+                                                    denyButtonText: `Don't save`,
+                                                    allowOutsideClick: false
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location = '<?= base_url("absen_selfie") ?>'
+                                                    }
+                                                })
                                                 $('.btn-simpan2').removeAttr("disabled")
                                                 $('.btn-back2').show()
                                             } else if (e.result == 501) {
@@ -1185,17 +1332,20 @@
                                                 $("#head").show()
                                                 $("#body").show()
                                                 $("#absen").hide()
-                                                setTimeout(() => {
-                                                    Swal.fire({
-                                                        position: 'top-center',
-                                                        showConfirmButton: false,
-                                                        timer: 2000,
-                                                        icon: 'warning',
-                                                        title: 'Perhatian!',
-                                                        text: 'File Foto Corrupted, refresh halaman terlebih dahulu untuk kembali normal.'
-                                                    })
-                                                    window.location = '<?= base_url("absen_selfie") ?>'
-                                                }, 500);
+                                                Swal.fire({
+                                                    title: 'Perhatian!',
+                                                    text: 'File Foto Corrupted, refresh halaman terlebih dahulu untuk kembali normal.',
+                                                    showDenyButton: false,
+                                                    showCancelButton: false,
+                                                    icon: 'warning',
+                                                    confirmButtonText: 'OK!',
+                                                    denyButtonText: `Don't save`,
+                                                    allowOutsideClick: false
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location = '<?= base_url("absen_selfie") ?>'
+                                                    }
+                                                })
                                                 $('.btn-simpan2').removeAttr("disabled")
                                                 $('.btn-back2').show()
                                             } else if (e.result == 502) {
@@ -1209,17 +1359,20 @@
                                                 $("#head").show()
                                                 $("#body").show()
                                                 $("#absen").hide()
-                                                setTimeout(() => {
-                                                    Swal.fire({
-                                                        position: 'top-center',
-                                                        showConfirmButton: false,
-                                                        timer: 2000,
-                                                        icon: 'warning',
-                                                        title: 'Perhatian!',
-                                                        text: 'Pilih Shift terlebih dahulu.'
-                                                    })
-                                                    window.location = '<?= base_url("absen_selfie") ?>'
-                                                }, 500);
+                                                Swal.fire({
+                                                    title: 'Perhatian!',
+                                                    text: 'Tidak ada periode jadwal absen untuk hari ini, mohon menghubungi Admin untuk mendaftarkan Periode untuk hari ini.',
+                                                    showDenyButton: false,
+                                                    showCancelButton: false,
+                                                    icon: 'warning',
+                                                    confirmButtonText: 'OK!',
+                                                    denyButtonText: `Don't save`,
+                                                    allowOutsideClick: false
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location = '<?= base_url("absen_selfie") ?>'
+                                                    }
+                                                })
                                                 $('.btn-simpan2').removeAttr("disabled")
                                                 $('.btn-back2').show()
 
@@ -1234,17 +1387,20 @@
                                                 $("#head").show()
                                                 $("#body").show()
                                                 $("#absen").hide()
-                                                setTimeout(() => {
-                                                    Swal.fire({
-                                                        position: 'top-center',
-                                                        showConfirmButton: false,
-                                                        timer: 2000,
-                                                        icon: 'warning',
-                                                        title: 'Perhatian!',
-                                                        text: 'Anda libur hari ini.'
-                                                    })
-                                                    window.location = '<?= base_url("absen_selfie") ?>'
-                                                }, 500);
+                                                Swal.fire({
+                                                    title: 'Perhatian!',
+                                                    text: 'Anda libur hari ini.',
+                                                    showDenyButton: false,
+                                                    showCancelButton: false,
+                                                    icon: 'warning',
+                                                    confirmButtonText: 'OK!',
+                                                    denyButtonText: `Don't save`,
+                                                    allowOutsideClick: false
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location = '<?= base_url("absen_selfie") ?>'
+                                                    }
+                                                })
                                                 $('.btn-simpan2').removeAttr("disabled")
                                                 $('.btn-back2').show()
 
@@ -1259,17 +1415,20 @@
                                                 $("#head").show()
                                                 $("#body").show()
                                                 $("#absen").hide()
-                                                setTimeout(() => {
-                                                    Swal.fire({
-                                                        position: 'top-center',
-                                                        showConfirmButton: false,
-                                                        timer: 2000,
-                                                        icon: 'warning',
-                                                        title: 'Perhatian!',
-                                                        text: 'Anda tidak hadir hari ini.'
-                                                    })
-                                                    window.location = '<?= base_url("absen_selfie") ?>'
-                                                }, 500);
+                                                Swal.fire({
+                                                    title: 'Perhatian!',
+                                                    text: 'Anda tidak hadir hari ini.',
+                                                    showDenyButton: false,
+                                                    showCancelButton: false,
+                                                    icon: 'warning',
+                                                    confirmButtonText: 'OK!',
+                                                    denyButtonText: `Don't save`,
+                                                    allowOutsideClick: false
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location = '<?= base_url("absen_selfie") ?>'
+                                                    }
+                                                })
                                                 $('.btn-simpan2').removeAttr("disabled")
                                                 $('.btn-back2').show()
 
@@ -1277,17 +1436,20 @@
                                                 $("#head").show()
                                                 $("#body").show()
                                                 $("#absen").hide()
-                                                setTimeout(() => {
-                                                    Swal.fire({
-                                                        position: 'top-center',
-                                                        showConfirmButton: false,
-                                                        timer: 2000,
-                                                        icon: 'warning',
-                                                        title: 'Perhatian!',
-                                                        text: 'Maaf ada kesalahan pada sistem ini.'
-                                                    })
-                                                    window.location = '<?= base_url("absen_selfie") ?>'
-                                                }, 500);
+                                                Swal.fire({
+                                                    title: 'Perhatian!',
+                                                    text: 'Maaf ada kesalahan pada sistem ini.',
+                                                    showDenyButton: false,
+                                                    showCancelButton: false,
+                                                    icon: 'warning',
+                                                    confirmButtonText: 'OK!',
+                                                    denyButtonText: `Don't save`,
+                                                    allowOutsideClick: false
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location = '<?= base_url("absen_selfie") ?>'
+                                                    }
+                                                })
                                                 $('body').removeClass('loading');
                                                 $('#loading-text').hide()
                                                 $('.btn-simpan2').removeAttr("disabled")
@@ -1304,17 +1466,20 @@
                                         $("#head").show()
                                         $("#body").show()
                                         $("#absen").hide()
-                                        setTimeout(() => {
-                                            Swal.fire({
-                                                position: 'top-center',
-                                                showConfirmButton: false,
-                                                timer: 2000,
-                                                icon: 'warning',
-                                                title: 'Perhatian!',
-                                                text: 'Maaf ada kesalahan pada sistem ini.'
-                                            })
-                                            window.location = '<?= base_url("absen_selfie") ?>'
-                                        }, 500);
+                                        Swal.fire({
+                                            title: 'Perhatian!',
+                                            text: 'Maaf ada kesalahan pada sistem ini.',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
                                         $(".upload-loading").html("")
                                         $("#canvas2").show()
                                         $('.btn-simpan2').removeAttr("disabled")
@@ -1330,80 +1495,93 @@
                                         $("#head").show()
                                         $("#body").show()
                                         $("#absen").hide()
-                                        setTimeout(() => {
-                                            Swal.fire({
-                                                position: 'top-center',
-                                                showConfirmButton: false,
-                                                timer: 2000,
-                                                icon: 'warning',
-                                                title: 'Perhatian!',
-                                                text: 'Maaf anda menolak akses geolocation.'
-                                            })
-                                            window.location = '<?= base_url("absen_selfie") ?>'
-                                        }, 500);
-                                        $('.btn-simpan').removeAttr("disabled")
+                                        Swal.fire({
+                                            title: 'Perhatian!',
+                                            text: 'Maaf anda menolak akses geolocation.',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
+                                        $('.btn-simpan2').removeAttr("disabled")
                                         $('body').removeClass('loading');
                                         $('#loading-text').hide()
-                                        $('.btn-back').show()
+                                        $('.btn-back2').show()
                                         break;
                                     case error.POSITION_UNAVAILABLE:
                                         $("#head").show()
                                         $("#body").show()
                                         $("#absen").hide()
-                                        setTimeout(() => {
-                                            Swal.fire({
-                                                position: 'top-center',
-                                                showConfirmButton: false,
-                                                timer: 2000,
-                                                icon: 'warning',
-                                                title: 'Perhatian!',
-                                                text: 'Maaf lokasi tidak ditemukan.'
-                                            })
-                                            window.location = '<?= base_url("absen_selfie") ?>'
-                                        }, 500);
-                                        $('.btn-simpan').removeAttr("disabled")
+                                        Swal.fire({
+                                            title: 'Perhatian!',
+                                            text: 'Maaf lokasi tidak ditemukan.',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
+                                        $('.btn-simpan2').removeAttr("disabled")
                                         $('body').removeClass('loading');
                                         $('#loading-text').hide()
-                                        $('.btn-back').show()
+                                        $('.btn-back2').show()
                                         break;
                                     case error.TIMEOUT:
                                         $("#head").show()
                                         $("#body").show()
                                         $("#absen").hide()
-                                        setTimeout(() => {
-                                            Swal.fire({
-                                                position: 'top-center',
-                                                showConfirmButton: false,
-                                                timer: 2000,
-                                                icon: 'warning',
-                                                title: 'Perhatian!',
-                                                text: 'Maaf gps anda terlalu lemot.'
-                                            })
-                                            window.location = '<?= base_url("absen_selfie") ?>'
-                                        }, 500);
-                                        $('.btn-simpan').removeAttr("disabled")
+
+                                        Swal.fire({
+                                            title: 'Perhatian!',
+                                            text: 'Maaf gps anda terlalu lemot.',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
+                                        $('.btn-simpan2').removeAttr("disabled")
                                         $('body').removeClass('loading');
                                         $('#loading-text').hide()
-                                        $('.btn-back').show()
+                                        $('.btn-back2').show()
                                     default:
                                         $("#head").show()
                                         $("#body").show()
                                         $("#absen").hide()
-                                        setTimeout(() => {
-                                            Swal.fire({
-                                                position: 'top-center',
-                                                showConfirmButton: false,
-                                                timer: 2000,
-                                                icon: 'warning',
-                                                title: 'Perhatian!',
-                                                text: 'Maaf gps anda error.'
-                                            })
-                                            window.location = '<?= base_url("absen_selfie") ?>'
-                                        }, 500);
-                                        $('.btn-simpan').removeAttr("disabled")
+                                        Swal.fire({
+                                            title: 'Perhatian!',
+                                            text: 'Maaf gps anda error.',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
+                                        $('.btn-simpan2').removeAttr("disabled")
                                         $('body').removeClass('loading');
                                         $('#loading-text').hide()
-                                        $('.btn-back').show()
+                                        $('.btn-back2').show()
                                         break;
                                 }
                             }
@@ -1412,17 +1590,20 @@
                         $("#head").show()
                         $("#body").show()
                         $("#absen").hide()
-                        setTimeout(() => {
-                            Swal.fire({
-                                position: 'top-center',
-                                showConfirmButton: false,
-                                timer: 2000,
-                                icon: 'warning',
-                                title: 'Perhatian!',
-                                text: 'Maaf device anda tidak support dengan geolocation.'
-                            })
-                            window.location = '<?= base_url("absen_selfie") ?>'
-                        }, 500);
+                        Swal.fire({
+                            title: 'Perhatian!',
+                            text: 'Maaf device anda tidak support dengan geolocation.',
+                            showDenyButton: false,
+                            showCancelButton: false,
+                            icon: 'warning',
+                            confirmButtonText: 'OK!',
+                            denyButtonText: `Don't save`,
+                            allowOutsideClick: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location = '<?= base_url("absen_selfie") ?>'
+                            }
+                        })
                         $('.btn-simpan2').removeAttr("disabled")
                         $('body').removeClass('loading');
                         $('#loading-text').hide()
@@ -1432,17 +1613,20 @@
                     $("#head").show()
                     $("#body").show()
                     $("#absen").hide()
-                    setTimeout(() => {
-                        Swal.fire({
-                            position: 'top-center',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            icon: 'warning',
-                            title: 'Perhatian!',
-                            text: 'Mohon ambil photo terlebih dahulu.'
-                        })
-                        window.location = '<?= base_url("absen_selfie") ?>'
-                    }, 500);
+                    Swal.fire({
+                        title: 'Perhatian!',
+                        text: 'Mohon ambil photo terlebih dahulu.',
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        icon: 'warning',
+                        confirmButtonText: 'OK!',
+                        denyButtonText: `Don't save`,
+                        allowOutsideClick: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location = '<?= base_url("absen_selfie") ?>'
+                        }
+                    })
                     $('.btn-simpan2').removeAttr("disabled")
                     $('body').removeClass('loading');
                     $('#loading-text').hide()
@@ -1503,6 +1687,7 @@
     $('#btn-lembur1').hide()
     $('#bar_unhadir').hide()
     $('#btn_reset_pilihan').hide()
+    $('#body_cuti').hide()
 
     var global_method = ''
     var get_alasan = ''
@@ -1586,6 +1771,7 @@
         $('#btn_izin').hide()
         $('#btn_cuti').hide()
         $('#btn_reset_pilihan').show()
+        clear_cuti()
     })
 
     $('#btn_izin').on('click', function(e) {
@@ -1596,6 +1782,7 @@
         $('#btn_sakit').hide()
         $('#btn_cuti').hide()
         $('#btn_reset_pilihan').show()
+        clear_cuti()
     })
 
     $('#btn_cuti').on('click', function(e) {
@@ -1606,6 +1793,8 @@
         $('#btn_sakit').hide()
         $('#btn_izin').hide()
         $('#btn_reset_pilihan').show()
+        // clear_cuti()
+        $('#body_cuti').show()
     })
 
     $('#btn_reset_pilihan').on('click', function(e) {
@@ -1615,6 +1804,7 @@
         $('#btn_izin').show()
         $('#btn_cuti').show()
         $('#btn_reset_pilihan').hide()
+        clear_cuti()
     })
 
     $('#close-modal-absen').on('click', function(e) {
@@ -1665,7 +1855,6 @@
         let formData = new FormData();
         var totalfiles = document.getElementById('upload_lampiran').files.length;
         if (start_date == '' || start_date == 'null' || start_date == undefined || start_date == null) {
-
             Swal.fire(
                 'Peringatan!',
                 'Pilih Tanggal Terlebih Dahulu!',
@@ -1674,130 +1863,225 @@
         } else {
             if (totalfiles > 0) {
                 if (get_alasan == '') {
-
                     Swal.fire(
                         'Peringatan!',
                         'Pilih Alasan Tidak Hadir Terlebih Dahulu!',
                         'warning'
                     )
                 } else {
-                    for (var index = 0; index < totalfiles; index++) {
-                        formData.append("fileupload[]", document.getElementById('upload_lampiran').files[index]);
-                    }
-                    formData.append('img', canvas.toDataURL("image/png", 0.5));
-                    formData.append('nik', '<?= $this->session->userdata('nik') ?>');
-                    formData.append('attendance_date', start_date);
-                    formData.append('typeButton', global_method);
-                    formData.append('alasan', get_alasan);
-                    // formData.append('alasan_detail', $('#alasan_detail').val());
-                    formData.append('start_date', start_date);
-                    formData.append('end_date', end_date);
-
-                    $.ajax({
-                        url: '<?= base_url('absen_selfie/addInUpload') ?>',
-                        data: formData,
-                        type: "POST",
-                        dataType: 'json',
-                        cache: false,
-                        processData: false,
-                        contentType: false,
-                        success: function(data) {
-                            data.forEach((e) => {
-                                if (e.result == 200) {
-                                    check_file()
-                                    $('#name_upload').val('')
-                                    $('#upload_lampiran').val('')
-                                    $('#modal-absen').modal('hide')
-                                    Swal.fire({
-                                        title: 'Success Absen Tidak Hadir',
-                                        showDenyButton: false,
-                                        showCancelButton: false,
-                                        icon: 'success',
-                                        confirmButtonText: 'OK!',
-                                        denyButtonText: `Don't save`,
-                                        allowOutsideClick: false
-                                    }).then((result) => {
-
-                                        if (result.isConfirmed) {
-
-                                            window.location = '<?= base_url("absen_selfie") ?>'
-                                        }
-                                    })
-                                } else if (e.result == 400) {
-                                    $('#modal-absen').modal('hide')
-                                    Swal.fire({
-                                        title: 'Peringatan!',
-                                        text: `Anda telah absen pada tanggal ` + change_date(start_date) + '.',
-                                        showDenyButton: false,
-                                        showCancelButton: false,
-                                        icon: 'warning',
-                                        confirmButtonText: 'OK!',
-                                        denyButtonText: `Don't save`,
-                                        allowOutsideClick: false
-                                    }).then((result) => {
-
-                                        if (result.isConfirmed) {
-                                            window.location = '<?= base_url("absen_selfie") ?>'
-                                        }
-                                    })
-                                } else if (e.result == 500) {
-                                    $('#modal-absen').modal('hide')
-                                    Swal.fire({
-                                        title: 'Peringatan!',
-                                        text: 'Anda Belum Absen',
-                                        showDenyButton: false,
-                                        showCancelButton: false,
-                                        icon: 'warning',
-                                        confirmButtonText: 'OK!',
-                                        denyButtonText: `Don't save`,
-                                        allowOutsideClick: false
-                                    }).then((result) => {
-
-                                        if (result.isConfirmed) {
-                                            window.location = '<?= base_url("absen_selfie") ?>'
-                                        }
-                                    })
-                                } else {
-                                    $('#modal-absen').modal('hide')
-                                    Swal.fire({
-                                        title: 'Peringatan!',
-                                        text: 'Mohon maaf ada kesalahan pada sistem ini!',
-                                        showDenyButton: false,
-                                        showCancelButton: false,
-                                        icon: 'error',
-                                        confirmButtonText: 'OK!',
-                                        denyButtonText: `Don't save`,
-                                        allowOutsideClick: false
-                                    }).then((result) => {
-
-                                        if (result.isConfirmed) {
-                                            window.location = '<?= base_url("absen_selfie") ?>'
-                                        }
-                                    })
-                                }
-
-
-                            })
-                        },
-                        error: function(x, s, e) {
-                            $('#modal-absen').modal('hide')
-                            Swal.fire({
-                                title: 'Peringatan!',
-                                text: 'Mohon maaf ada kesalahan pada sistem ini!',
-                                showDenyButton: false,
-                                showCancelButton: false,
-                                icon: 'error',
-                                confirmButtonText: 'OK!',
-                                denyButtonText: `Don't save`,
-                                allowOutsideClick: false
-                            }).then((result) => {
-
-                                if (result.isConfirmed) {
-                                    window.location = '<?= base_url("absen_selfie") ?>'
-                                }
-                            })
+                    if (get_alasan == 'cuti' && ($('#cuti').val() == '' || $('#cuti').val() == 'null' || $('#cuti').val() == null || $('#cuti').val() == undefined)) {
+                        Swal.fire(
+                            'Peringatan!',
+                            'Tipe Cuti Terlebih Dahulu!',
+                            'warning'
+                        )
+                    } else {
+                        for (var index = 0; index < totalfiles; index++) {
+                            formData.append("fileupload[]", document.getElementById('upload_lampiran').files[index]);
                         }
-                    })
+                        formData.append('img', canvas.toDataURL("image/png", 0.5));
+                        formData.append('nik', '<?= $this->session->userdata('nik') ?>');
+                        formData.append('attendance_date', start_date);
+                        formData.append('typeButton', global_method);
+                        formData.append('alasan', get_alasan);
+                        formData.append('cuti', $('#cuti').val());
+                        formData.append('start_date', start_date);
+                        formData.append('end_date', end_date);
+
+                        $.ajax({
+                            url: '<?= base_url('absen_selfie/addInUpload') ?>',
+                            data: formData,
+                            type: "POST",
+                            dataType: 'json',
+                            cache: false,
+                            processData: false,
+                            contentType: false,
+                            success: function(data) {
+                                data.forEach((e) => {
+                                    if (e.result == 200) {
+                                        check_file()
+                                        $('#name_upload').val('')
+                                        $('#upload_lampiran').val('')
+                                        $('#modal-absen').modal('hide')
+                                        Swal.fire({
+                                            title: 'Success Absen Tidak Hadir',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'success',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+
+                                            if (result.isConfirmed) {
+
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
+                                    } else if (e.result == 400) {
+                                        $('#modal-absen').modal('hide')
+                                        Swal.fire({
+                                            title: 'Peringatan!',
+                                            text: `Anda telah absen pada tanggal ` + change_date(start_date) + '.',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+
+                                            if (result.isConfirmed) {
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
+                                    } else if (e.result == 500) {
+                                        $('#modal-absen').modal('hide')
+                                        Swal.fire({
+                                            title: 'Peringatan!',
+                                            text: 'Gagal Simpan Data.',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+
+                                            if (result.isConfirmed) {
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
+                                    } else if (e.result == 502) {
+                                        $('#modal-absen').modal('hide')
+                                        Swal.fire({
+                                            title: 'Peringatan!',
+                                            text: 'Tidak ada periode jadwal absen untuk tanggal tanggal ' + change_date(start_date) + ', mohon menghubungi Admin untuk mendaftarkan Periode untuk tanggal tsb.',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+
+                                            if (result.isConfirmed) {
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
+                                    } else if (e.result == 503) {
+                                        $('#modal-absen').modal('hide')
+                                        Swal.fire({
+                                            title: 'Peringatan!',
+                                            text: 'Anda Libur pada tanggal ' + change_date(start_date) + '.',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+
+                                            if (result.isConfirmed) {
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
+                                    } else if (e.result == 504) {
+                                        $('#modal-absen').modal('hide')
+                                        Swal.fire({
+                                            title: 'Peringatan!',
+                                            text: 'Tidak ada data cuti tsb.',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+
+                                            if (result.isConfirmed) {
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
+
+                                    } else if (e.result == 505) {
+                                        $('#modal-absen').modal('hide')
+                                        Swal.fire({
+                                            title: 'Peringatan!',
+                                            text: 'Kesempatan Cuti Anda pilih telah habis.',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+
+                                            if (result.isConfirmed) {
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
+
+                                    } else if (e.result == 506) {
+                                        $('#modal-absen').modal('hide')
+                                        Swal.fire({
+                                            title: 'Peringatan!',
+                                            text: 'Terdapat Pengajuan Cuti Anda sebelumnya yang masih belum di beri Keputusan oleh Admin.',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'warning',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+
+                                            if (result.isConfirmed) {
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
+
+                                    } else {
+                                        $('#modal-absen').modal('hide')
+                                        Swal.fire({
+                                            title: 'Peringatan!',
+                                            text: 'Mohon maaf ada kesalahan pada sistem ini!',
+                                            showDenyButton: false,
+                                            showCancelButton: false,
+                                            icon: 'error',
+                                            confirmButtonText: 'OK!',
+                                            denyButtonText: `Don't save`,
+                                            allowOutsideClick: false
+                                        }).then((result) => {
+
+                                            if (result.isConfirmed) {
+                                                window.location = '<?= base_url("absen_selfie") ?>'
+                                            }
+                                        })
+                                    }
+
+
+                                })
+                            },
+                            error: function(x, s, e) {
+                                $('#modal-absen').modal('hide')
+                                Swal.fire({
+                                    title: 'Peringatan!',
+                                    text: 'Mohon maaf ada kesalahan pada sistem ini!',
+                                    showDenyButton: false,
+                                    showCancelButton: false,
+                                    icon: 'error',
+                                    confirmButtonText: 'OK!',
+                                    denyButtonText: `Don't save`,
+                                    allowOutsideClick: false
+                                }).then((result) => {
+
+                                    if (result.isConfirmed) {
+                                        window.location = '<?= base_url("absen_selfie") ?>'
+                                    }
+                                })
+                            }
+                        })
+                    }
                 }
 
             } else {
@@ -1828,12 +2112,12 @@
                 if (result != 500) {
                     var check_approval = ''
                     check_approval = result.status
-                    if (check_approval == 'approved') {
+                    if (check_approval == 'APPROVED') {
                         $('#approval_text').show();
                         $('#approval_status').html(`Pengajuan ketidakhadiran Anda karena ${result.tipe.toUpperCase()} telah di setujui. <br> Anda tidak perlu absen hari ini.`);
                         $('#clock_in').hide();
                         $('#clock_out').hide();
-                    } else if (check_approval == 'rejected') {
+                    } else if (check_approval == 'REJECTED') {
                         $('#approval_text').show();
                         $('#approval_status').html(`Pengajuan ketidakhadiran Anda karena ${result.tipe.toUpperCase()} tidak di setujui. <br> Anda WAJIB absen hari ini.`);
                         $('#clock_in').show();

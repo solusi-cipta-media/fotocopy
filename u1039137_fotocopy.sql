@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 14 Nov 2022 pada 12.23
+-- Waktu pembuatan: 15 Nov 2022 pada 05.38
 -- Versi server: 10.4.20-MariaDB
 -- Versi PHP: 8.0.9
 
@@ -52,7 +52,8 @@ CREATE TABLE `absensi` (
 --
 
 INSERT INTO `absensi` (`id`, `nama_karyawan`, `nomor_induk`, `tanggal`, `clock_in`, `clock_out`, `status_clock`, `latitude_in`, `longitude_in`, `latitude_out`, `longitude_out`, `image_in`, `image_out`, `terlambat`, `pulang_cepat`, `working_hours`, `date_created`) VALUES
-(1, 'AGUS', '0001', '2022-11-04', '2022-11-04 12:43:51', '2022-11-04 12:43:52', '', '123', '345', '123', '456', NULL, NULL, '12:44:03', '12:44:03', '12:44:03', '2022-11-04 05:44:17');
+(1, 'AGUS', '0001', '2022-11-04', '2022-11-04 12:43:51', '2022-11-04 12:43:52', '', '123', '345', '123', '456', NULL, NULL, '12:44:03', '12:44:03', '12:44:03', '2022-11-04 05:44:17'),
+(12, 'RIZAL', '00002', '2022-11-15', '2022-11-15 11:02:56', '2022-11-15 11:28:05', '0', '-7.8249984', '112.7088128', '-7.8249984', '112.7088128', '8068e115fcde07080b413b1d36dbc1f4.png', '6d616244b7331aa6bd149578e3454bcd.png', '03:02:56', '05:31:55', '00:25:09', '2022-11-15 04:02:56');
 
 -- --------------------------------------------------------
 
@@ -66,6 +67,7 @@ CREATE TABLE `absensi_ketidakhadiran` (
   `nomor_induk` varchar(100) NOT NULL,
   `tanggal` date NOT NULL,
   `tipe` varchar(50) NOT NULL,
+  `cuti_id` int(11) DEFAULT NULL,
   `status` varchar(50) NOT NULL,
   `bukti` text NOT NULL,
   `date_created` timestamp NOT NULL DEFAULT current_timestamp()
@@ -75,9 +77,11 @@ CREATE TABLE `absensi_ketidakhadiran` (
 -- Dumping data untuk tabel `absensi_ketidakhadiran`
 --
 
-INSERT INTO `absensi_ketidakhadiran` (`id`, `nama_karyawan`, `nomor_induk`, `tanggal`, `tipe`, `status`, `bukti`, `date_created`) VALUES
-(1, 'AGUS', '00001', '2022-11-04', 'CUTI', 'WAITING', 'asa.jpg', '2022-11-04 05:47:58'),
-(12, 'RIZAL', '00002', '2022-11-14', 'CUTI', 'WAITING', '4fde7c90aa0cc004f5d3130e4d8a0f6e.jpg', '2022-11-14 11:19:43');
+INSERT INTO `absensi_ketidakhadiran` (`id`, `nama_karyawan`, `nomor_induk`, `tanggal`, `tipe`, `cuti_id`, `status`, `bukti`, `date_created`) VALUES
+(1, 'AGUS', '00001', '2022-11-04', 'CUTI', NULL, 'WAITING', 'asa.jpg', '2022-11-04 05:47:58'),
+(13, 'RIZAL', '00002', '2022-11-16', 'CUTI', 3, 'REJECTED', 'acfd93888a5e0eb80786c1ed1dff36be.jpg', '2022-11-15 03:15:46'),
+(14, 'RIZAL', '00002', '2022-11-17', 'IZIN', NULL, 'REJECTED', 'a84988e5bdc29b2dfd323c54b88a1ca5.jpg', '2022-11-15 03:27:19'),
+(15, 'RIZAL', '00002', '2022-11-19', 'SAKIT', NULL, 'APPROVED', 'ea176454fc0eea95e910a9227a203d60.jpg', '2022-11-15 03:27:35');
 
 -- --------------------------------------------------------
 
@@ -110,7 +114,7 @@ INSERT INTO `absensi_periode` (`id`, `tanggal`, `status`, `masuk`, `pulang`, `da
 (9, '2022-11-12', 'LIBUR', '08:00:00', '17:00:00', '2022-11-04 05:49:31'),
 (10, '2022-11-13', 'LIBUR', '08:00:00', '17:00:00', '2022-11-04 05:49:31'),
 (12, '2022-11-14', 'AKTIF', '08:00:00', '17:00:00', '2022-11-05 00:17:07'),
-(13, '2022-11-15', 'AKTIF', '08:00:00', '17:00:00', '2022-11-14 10:25:57');
+(16, '2022-11-15', 'AKTIF', '08:00:00', '17:00:00', '2022-11-15 03:28:49');
 
 -- --------------------------------------------------------
 
@@ -192,7 +196,8 @@ CREATE TABLE `cuti` (
 
 INSERT INTO `cuti` (`id`, `jenis_cuti`, `waktu`, `date_created`) VALUES
 (1, 'CUTI TAHUNAN', 12, '2022-10-24 15:25:36'),
-(2, 'CUTI KHUSUS', 90, '2022-10-24 15:25:36');
+(2, 'CUTI KHUSUS', 90, '2022-10-24 15:25:36'),
+(3, 'CUTI HARI', 1, '2022-11-15 02:23:08');
 
 -- --------------------------------------------------------
 
@@ -496,7 +501,8 @@ ALTER TABLE `absensi`
 -- Indeks untuk tabel `absensi_ketidakhadiran`
 --
 ALTER TABLE `absensi_ketidakhadiran`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cuti_id` (`cuti_id`);
 
 --
 -- Indeks untuk tabel `absensi_periode`
@@ -526,7 +532,8 @@ ALTER TABLE `cuti`
 -- Indeks untuk tabel `karyawan`
 --
 ALTER TABLE `karyawan`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `role_id` (`role_id`);
 
 --
 -- Indeks untuk tabel `kerjaluar`
@@ -578,19 +585,19 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT untuk tabel `absensi`
 --
 ALTER TABLE `absensi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT untuk tabel `absensi_ketidakhadiran`
 --
 ALTER TABLE `absensi_ketidakhadiran`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT untuk tabel `absensi_periode`
 --
 ALTER TABLE `absensi_periode`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT untuk tabel `catatan_meter`
@@ -608,7 +615,7 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT untuk tabel `cuti`
 --
 ALTER TABLE `cuti`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `karyawan`
