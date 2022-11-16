@@ -16,7 +16,8 @@
                 <!-- Personal -->
                 <h1 class="h3 text-white fw-bold mb-2"><?= $this->session->userdata('name') ?></h1>
                 <h2 class="h5 text-white-75">
-                    <?= $this->session->userdata('role_id') ?> <a class="text-primary-light" href="javascript:void(0)">@CMS</a>
+                    <?= isset($role) ? strtoupper($role) : ''
+                    ?> <a class="text-primary-light" href="javascript:void(0)">@CMS</a>
                 </h2>
                 <!-- END Personal -->
 
@@ -260,7 +261,7 @@
                     $('#alamat').val(d.alamat)
                     $('#no_ktp').val(d.no_ktp)
                     $('#handphone').val(d.handphone)
-                    $('#role_id').val(d.role_id)
+                    $('#role_id').val('<?= isset($role) ? strtoupper($role) : '' ?>')
                 });
             }
         })

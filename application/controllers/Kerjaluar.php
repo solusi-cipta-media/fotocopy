@@ -23,7 +23,8 @@ class Kerjaluar extends CI_Controller
         //end
 
         //ambil data teknisi
-        $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 'TEKNISI'])->result_array();
+        // $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 'TEKNISI'])->result_array();
+        $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 3])->result_array();
         //ambil data customer
         $data['customer'] = $this->crud->get_all('customer')->result_array();
         //ambil data mesin
@@ -44,7 +45,8 @@ class Kerjaluar extends CI_Controller
         //end
 
         //ambil data teknisi
-        $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 'TEKNISI'])->result_array();
+        // $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 'TEKNISI'])->result_array();
+        $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 3])->result_array();
         //ambil data customer
         $data['customer'] = $this->crud->get_all('customer')->result_array();
 
@@ -249,7 +251,8 @@ class Kerjaluar extends CI_Controller
 
     public function ajax_table_proses_kerja()
     {
-        if ($this->session->userdata('role_id') == 'ADMIN') {
+        // if ($this->session->userdata('role_id') == 'ADMIN') {
+        if ($this->session->userdata('role_id') == 1) {
             $where = null;
         } else {
             $where = array(

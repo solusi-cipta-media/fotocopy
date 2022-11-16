@@ -22,7 +22,8 @@ class Overhaul extends CI_Controller
         //end
 
         //ambil data teknisi
-        $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 'TEKNISI'])->result_array();
+        // $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 'TEKNISI'])->result_array();
+        $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 3])->result_array();
 
         $data['sess_menu'] = 'listoh';
 
@@ -39,7 +40,8 @@ class Overhaul extends CI_Controller
         //end
 
         //ambil data teknisi
-        $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 'TEKNISI'])->result_array();
+        // $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 'TEKNISI'])->result_array();
+        $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 3])->result_array();
 
         $data['sess_menu'] = 'prosesoh';
 
@@ -57,6 +59,7 @@ class Overhaul extends CI_Controller
 
         //ambil data teknisi
         // $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 'TEKNISI'])->result_array();
+        // $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 3])->result_array();
 
         $data['sess_menu'] = 'prosesoh';
 
@@ -74,6 +77,7 @@ class Overhaul extends CI_Controller
 
         //ambil data teknisi
         // $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 'TEKNISI'])->result_array();
+        // $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 3])->result_array();
 
         $data['sess_menu'] = 'prosesoh';
 
@@ -429,6 +433,7 @@ class Overhaul extends CI_Controller
 
         //ambil data teknisi
         // $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 'TEKNISI'])->result_array();
+        // $data['teknisi'] = $this->crud->get_where('karyawan', ['role_id' => 3])->result_array();
 
         // $data['sess_menu'] = 'prosesoh';
 

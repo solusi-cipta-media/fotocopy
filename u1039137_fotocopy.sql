@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 11, 2022 at 02:47 AM
--- Server version: 10.1.39-MariaDB
--- PHP Version: 7.3.5
+-- Waktu pembuatan: 15 Nov 2022 pada 05.38
+-- Versi server: 10.4.20-MariaDB
+-- Versi PHP: 8.0.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -25,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `absensi`
+-- Struktur dari tabel `absensi`
 --
 
 CREATE TABLE `absensi` (
@@ -35,27 +34,31 @@ CREATE TABLE `absensi` (
   `tanggal` date NOT NULL,
   `clock_in` datetime NOT NULL,
   `clock_out` datetime NOT NULL,
+  `status_clock` varchar(50) NOT NULL,
   `latitude_in` varchar(256) NOT NULL,
   `longitude_in` varchar(256) NOT NULL,
   `latitude_out` varchar(256) NOT NULL,
   `longitude_out` varchar(256) NOT NULL,
+  `image_in` text DEFAULT NULL,
+  `image_out` text DEFAULT NULL,
   `terlambat` time NOT NULL,
   `pulang_cepat` time NOT NULL,
   `working_hours` time NOT NULL,
-  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `date_created` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `absensi`
+-- Dumping data untuk tabel `absensi`
 --
 
-INSERT INTO `absensi` (`id`, `nama_karyawan`, `nomor_induk`, `tanggal`, `clock_in`, `clock_out`, `latitude_in`, `longitude_in`, `latitude_out`, `longitude_out`, `terlambat`, `pulang_cepat`, `working_hours`, `date_created`) VALUES
-(1, 'AGUS', '0001', '2022-11-04', '2022-11-04 12:43:51', '2022-11-04 12:43:52', '123', '345', '123', '456', '12:44:03', '12:44:03', '12:44:03', '2022-11-04 05:44:17');
+INSERT INTO `absensi` (`id`, `nama_karyawan`, `nomor_induk`, `tanggal`, `clock_in`, `clock_out`, `status_clock`, `latitude_in`, `longitude_in`, `latitude_out`, `longitude_out`, `image_in`, `image_out`, `terlambat`, `pulang_cepat`, `working_hours`, `date_created`) VALUES
+(1, 'AGUS', '0001', '2022-11-04', '2022-11-04 12:43:51', '2022-11-04 12:43:52', '', '123', '345', '123', '456', NULL, NULL, '12:44:03', '12:44:03', '12:44:03', '2022-11-04 05:44:17'),
+(12, 'RIZAL', '00002', '2022-11-15', '2022-11-15 11:02:56', '2022-11-15 11:28:05', '0', '-7.8249984', '112.7088128', '-7.8249984', '112.7088128', '8068e115fcde07080b413b1d36dbc1f4.png', '6d616244b7331aa6bd149578e3454bcd.png', '03:02:56', '05:31:55', '00:25:09', '2022-11-15 04:02:56');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `absensi_ketidakhadiran`
+-- Struktur dari tabel `absensi_ketidakhadiran`
 --
 
 CREATE TABLE `absensi_ketidakhadiran` (
@@ -64,22 +67,26 @@ CREATE TABLE `absensi_ketidakhadiran` (
   `nomor_induk` varchar(100) NOT NULL,
   `tanggal` date NOT NULL,
   `tipe` varchar(50) NOT NULL,
+  `cuti_id` int(11) DEFAULT NULL,
   `status` varchar(50) NOT NULL,
-  `bukti` varchar(256) NOT NULL,
-  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `bukti` text NOT NULL,
+  `date_created` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `absensi_ketidakhadiran`
+-- Dumping data untuk tabel `absensi_ketidakhadiran`
 --
 
-INSERT INTO `absensi_ketidakhadiran` (`id`, `nama_karyawan`, `nomor_induk`, `tanggal`, `tipe`, `status`, `bukti`, `date_created`) VALUES
-(1, 'AGUS', '0001', '2022-11-04', 'CUTI', 'WAITING', 'asa.jpg', '2022-11-04 05:47:58');
+INSERT INTO `absensi_ketidakhadiran` (`id`, `nama_karyawan`, `nomor_induk`, `tanggal`, `tipe`, `cuti_id`, `status`, `bukti`, `date_created`) VALUES
+(1, 'AGUS', '00001', '2022-11-04', 'CUTI', NULL, 'WAITING', 'asa.jpg', '2022-11-04 05:47:58'),
+(13, 'RIZAL', '00002', '2022-11-16', 'CUTI', 3, 'REJECTED', 'acfd93888a5e0eb80786c1ed1dff36be.jpg', '2022-11-15 03:15:46'),
+(14, 'RIZAL', '00002', '2022-11-17', 'IZIN', NULL, 'REJECTED', 'a84988e5bdc29b2dfd323c54b88a1ca5.jpg', '2022-11-15 03:27:19'),
+(15, 'RIZAL', '00002', '2022-11-19', 'SAKIT', NULL, 'APPROVED', 'ea176454fc0eea95e910a9227a203d60.jpg', '2022-11-15 03:27:35');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `absensi_periode`
+-- Struktur dari tabel `absensi_periode`
 --
 
 CREATE TABLE `absensi_periode` (
@@ -88,11 +95,11 @@ CREATE TABLE `absensi_periode` (
   `status` varchar(10) NOT NULL,
   `masuk` time NOT NULL,
   `pulang` time NOT NULL,
-  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `date_created` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `absensi_periode`
+-- Dumping data untuk tabel `absensi_periode`
 --
 
 INSERT INTO `absensi_periode` (`id`, `tanggal`, `status`, `masuk`, `pulang`, `date_created`) VALUES
@@ -106,12 +113,13 @@ INSERT INTO `absensi_periode` (`id`, `tanggal`, `status`, `masuk`, `pulang`, `da
 (8, '2022-11-11', 'AKTIF', '08:00:00', '17:00:00', '2022-11-04 05:49:31'),
 (9, '2022-11-12', 'LIBUR', '08:00:00', '17:00:00', '2022-11-04 05:49:31'),
 (10, '2022-11-13', 'LIBUR', '08:00:00', '17:00:00', '2022-11-04 05:49:31'),
-(12, '2022-11-14', 'AKTIF', '08:00:00', '17:00:00', '2022-11-05 00:17:07');
+(12, '2022-11-14', 'AKTIF', '08:00:00', '17:00:00', '2022-11-05 00:17:07'),
+(16, '2022-11-15', 'AKTIF', '08:00:00', '17:00:00', '2022-11-15 03:28:49');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `catatan_meter`
+-- Struktur dari tabel `catatan_meter`
 --
 
 CREATE TABLE `catatan_meter` (
@@ -128,11 +136,11 @@ CREATE TABLE `catatan_meter` (
   `nomor_kontrak` varchar(100) NOT NULL,
   `awal` date NOT NULL,
   `akhir` date NOT NULL,
-  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `date_created` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `catatan_meter`
+-- Dumping data untuk tabel `catatan_meter`
 --
 
 INSERT INTO `catatan_meter` (`id`, `customer`, `alamat`, `kolektor`, `status`, `tgl_instal`, `model`, `lokasi`, `telp`, `fax`, `nomor_kontrak`, `awal`, `akhir`, `date_created`) VALUES
@@ -142,7 +150,7 @@ INSERT INTO `catatan_meter` (`id`, `customer`, `alamat`, `kolektor`, `status`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `customer`
+-- Struktur dari tabel `customer`
 --
 
 CREATE TABLE `customer` (
@@ -156,11 +164,11 @@ CREATE TABLE `customer` (
   `no_contact_kantor` varchar(50) NOT NULL,
   `longitude` varchar(50) NOT NULL,
   `latitude` varchar(50) NOT NULL,
-  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `date_created` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `customer`
+-- Dumping data untuk tabel `customer`
 --
 
 INSERT INTO `customer` (`id`, `kode`, `nama`, `alamat`, `klasifikasi`, `contact_person`, `hp_contact`, `no_contact_kantor`, `longitude`, `latitude`, `date_created`) VALUES
@@ -172,28 +180,29 @@ INSERT INTO `customer` (`id`, `kode`, `nama`, `alamat`, `klasifikasi`, `contact_
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cuti`
+-- Struktur dari tabel `cuti`
 --
 
 CREATE TABLE `cuti` (
   `id` int(11) NOT NULL,
   `jenis_cuti` varchar(50) NOT NULL,
-  `waktu` int(11) NOT NULL DEFAULT '0',
-  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `waktu` int(11) NOT NULL DEFAULT 0,
+  `date_created` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `cuti`
+-- Dumping data untuk tabel `cuti`
 --
 
 INSERT INTO `cuti` (`id`, `jenis_cuti`, `waktu`, `date_created`) VALUES
 (1, 'CUTI TAHUNAN', 12, '2022-10-24 15:25:36'),
-(2, 'CUTI KHUSUS', 90, '2022-10-24 15:25:36');
+(2, 'CUTI KHUSUS', 90, '2022-10-24 15:25:36'),
+(3, 'CUTI HARI', 1, '2022-11-15 02:23:08');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `karyawan`
+-- Struktur dari tabel `karyawan`
 --
 
 CREATE TABLE `karyawan` (
@@ -208,25 +217,25 @@ CREATE TABLE `karyawan` (
   `handphone` varchar(50) NOT NULL,
   `jenis_kelamin` varchar(50) NOT NULL,
   `photo` varchar(128) NOT NULL,
-  `is_active` int(11) NOT NULL DEFAULT '1',
-  `role_id` varchar(50) NOT NULL DEFAULT '4',
-  `reg_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `is_active` int(11) NOT NULL DEFAULT 1,
+  `role_id` int(11) NOT NULL,
+  `reg_date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `karyawan`
+-- Dumping data untuk tabel `karyawan`
 --
 
 INSERT INTO `karyawan` (`id`, `nik`, `nama`, `userid`, `password`, `email`, `alamat`, `no_ktp`, `handphone`, `jenis_kelamin`, `photo`, `is_active`, `role_id`, `reg_date`) VALUES
-(4, '00001', 'AGUS', 'agus', '$2y$10$hvdKGvfKpNoFAH/ejoeGxukDu9.SwAzYhTU5Z/FZDD7eVtyyuWZSW', 'agus@gmail.com', 'Jl. Subali IV Blok 13C No.5 Mangliawan Pakis Malang', '35730428109400033', '0812529387474', 'LAKI-LAKI', 'default.jpg', 1, 'ADMIN', '2022-04-27 04:54:22'),
-(5, '00002', 'RIZAL', 'rizal', '$2y$10$nvBgMSprlCz1xo1YXcTYQON/YfdgJ5XtkLGmyAdMSdpLtoQ3drw2e', 'rizal@gmail.com', 'Jl. Bandulan VIII B / 426 C RT.003 RW.001 Bandulan, Sukun, Malang - Jawa Timur', '3573042810940003', '081252938747', 'LAKI-LAKI', 'default.jpg', 1, 'SUPERVISOR', '2022-04-27 04:54:22'),
-(6, '123', 'BUDI', 'budi', '$2y$10$x3QgLRMCTbUIYa2Lr1U3beYqtFxxxx8UDWin.ohE40GN/x3KJBbN.', 'agus@gmail.com', 'malang', '123', '12121', 'LAKI-LAKI', 'default.jpg', 1, 'TEKNISI', '2022-10-25 06:09:25'),
-(7, '123', 'RIDWAN', 'ridwan', '$2y$10$uVB7L6OUfDwKoMF/bUE9NOHmvRPUgH/SIBYsscGzbz9zpqDwy0rUm', 'agus@gmail.com', 'malang', '123', '12121', 'LAKI-LAKI', 'default.jpg', 1, 'TEKNISI', '2022-10-25 06:09:25');
+(4, '00001', 'AGUS', 'agus', '$2y$10$hvdKGvfKpNoFAH/ejoeGxukDu9.SwAzYhTU5Z/FZDD7eVtyyuWZSW', 'agus@gmail.com', 'Jl. Subali IV Blok 13C No.5 Mangliawan Pakis Malang', '35730428109400033', '0812529387474', 'LAKI-LAKI', 'default.jpg', 1, 1, '2022-04-27 04:54:22'),
+(5, '00002', 'RIZAL', 'rizal', '$2y$10$nvBgMSprlCz1xo1YXcTYQON/YfdgJ5XtkLGmyAdMSdpLtoQ3drw2e', 'rizal@gmail.com', 'Jl. Bandulan VIII B / 426 C RT.003 RW.001 Bandulan, Sukun, Malang - Jawa Timur', '3573042810940003', '081252938747', 'LAKI-LAKI', 'default.jpg', 1, 2, '2022-04-27 04:54:22'),
+(6, '123', 'BUDI', 'budi', '$2y$10$x3QgLRMCTbUIYa2Lr1U3beYqtFxxxx8UDWin.ohE40GN/x3KJBbN.', 'agus@gmail.com', 'malang', '123', '12121', 'LAKI-LAKI', 'default.jpg', 1, 3, '2022-10-25 06:09:25'),
+(7, '123', 'RIDWAN', 'ridwan', '$2y$10$uVB7L6OUfDwKoMF/bUE9NOHmvRPUgH/SIBYsscGzbz9zpqDwy0rUm', 'agus@gmail.com', 'malang', '123', '12121', 'LAKI-LAKI', 'default.jpg', 1, 3, '2022-10-25 06:09:25');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kerjaluar`
+-- Struktur dari tabel `kerjaluar`
 --
 
 CREATE TABLE `kerjaluar` (
@@ -250,11 +259,11 @@ CREATE TABLE `kerjaluar` (
   `time_in` datetime NOT NULL,
   `time_out` datetime NOT NULL,
   `status` varchar(50) NOT NULL,
-  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `date_created` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `kerjaluar`
+-- Dumping data untuk tabel `kerjaluar`
 --
 
 INSERT INTO `kerjaluar` (`id`, `customer`, `contact_person`, `handphone`, `klasifikasi`, `jenis`, `tgl_kerja`, `lokasi`, `latitude`, `longitude`, `id_karyawan`, `teknisi`, `nomor_mesin`, `serial_number`, `model`, `meter`, `uraian`, `time_in`, `time_out`, `status`, `date_created`) VALUES
@@ -266,7 +275,7 @@ INSERT INTO `kerjaluar` (`id`, `customer`, `contact_person`, `handphone`, `klasi
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kontrak`
+-- Struktur dari tabel `kontrak`
 --
 
 CREATE TABLE `kontrak` (
@@ -276,13 +285,13 @@ CREATE TABLE `kontrak` (
   `awal_kontrak` date NOT NULL,
   `akhir_kontrak` date NOT NULL,
   `reminder` date NOT NULL,
-  `status_reminder` int(11) NOT NULL DEFAULT '0',
+  `status_reminder` int(11) NOT NULL DEFAULT 0,
   `dokumen` varchar(50) NOT NULL,
-  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `date_created` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `kontrak`
+-- Dumping data untuk tabel `kontrak`
 --
 
 INSERT INTO `kontrak` (`id`, `nomor_kontrak`, `customer`, `awal_kontrak`, `akhir_kontrak`, `reminder`, `status_reminder`, `dokumen`, `date_created`) VALUES
@@ -293,7 +302,7 @@ INSERT INTO `kontrak` (`id`, `nomor_kontrak`, `customer`, `awal_kontrak`, `akhir
 -- --------------------------------------------------------
 
 --
--- Table structure for table `notifikasi_kontrak`
+-- Struktur dari tabel `notifikasi_kontrak`
 --
 
 CREATE TABLE `notifikasi_kontrak` (
@@ -301,12 +310,12 @@ CREATE TABLE `notifikasi_kontrak` (
   `customer` varchar(50) NOT NULL,
   `pesan` text NOT NULL,
   `dokumen` varchar(50) NOT NULL,
-  `status_read` int(10) NOT NULL DEFAULT '0',
-  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `status_read` int(10) NOT NULL DEFAULT 0,
+  `date_created` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `notifikasi_kontrak`
+-- Dumping data untuk tabel `notifikasi_kontrak`
 --
 
 INSERT INTO `notifikasi_kontrak` (`id`, `customer`, `pesan`, `dokumen`, `status_read`, `date_created`) VALUES
@@ -318,7 +327,7 @@ INSERT INTO `notifikasi_kontrak` (`id`, `customer`, `pesan`, `dokumen`, `status_
 -- --------------------------------------------------------
 
 --
--- Table structure for table `overhaul`
+-- Struktur dari tabel `overhaul`
 --
 
 CREATE TABLE `overhaul` (
@@ -331,19 +340,19 @@ CREATE TABLE `overhaul` (
   `meter` varchar(50) NOT NULL,
   `tegangan` varchar(50) NOT NULL,
   `teknisi` varchar(100) NOT NULL,
-  `id_karyawan` int(11) NOT NULL DEFAULT '0',
-  `approval_pengajuan` int(11) NOT NULL DEFAULT '0',
-  `approval_selesai` int(11) NOT NULL DEFAULT '0',
+  `id_karyawan` int(11) NOT NULL DEFAULT 0,
+  `approval_pengajuan` int(11) NOT NULL DEFAULT 0,
+  `approval_selesai` int(11) NOT NULL DEFAULT 0,
   `status` varchar(50) NOT NULL,
   `uraian` text NOT NULL,
   `tgl_masuk` date NOT NULL,
   `start_oh` datetime NOT NULL,
   `finish_oh` datetime NOT NULL,
-  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `date_created` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `overhaul`
+-- Dumping data untuk tabel `overhaul`
 --
 
 INSERT INTO `overhaul` (`id`, `nomor_mesin`, `model`, `serial_number`, `asal`, `supplier`, `meter`, `tegangan`, `teknisi`, `id_karyawan`, `approval_pengajuan`, `approval_selesai`, `status`, `uraian`, `tgl_masuk`, `start_oh`, `finish_oh`, `date_created`) VALUES
@@ -359,7 +368,7 @@ INSERT INTO `overhaul` (`id`, `nomor_mesin`, `model`, `serial_number`, `asal`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `overhaul_record`
+-- Struktur dari tabel `overhaul_record`
 --
 
 CREATE TABLE `overhaul_record` (
@@ -418,11 +427,11 @@ CREATE TABLE `overhaul_record` (
   `caver_ae_awal` varchar(50) NOT NULL,
   `caver_ae_akhir` varchar(50) NOT NULL,
   `caver_ae_ganti` varchar(50) DEFAULT NULL,
-  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `date_created` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `overhaul_record`
+-- Dumping data untuk tabel `overhaul_record`
 --
 
 INSERT INTO `overhaul_record` (`id`, `id_overhaul`, `nomor_mesin`, `serial_number`, `caver_body_awal`, `caver_body_akhir`, `caver_body_ganti`, `dadf_awal`, `dadf_akhir`, `dadf_ganti`, `kaca_platen_awal`, `kaca_platen_akhir`, `kaca_platen_ganti`, `tombol_panel_awal`, `tombol_planel_akhir`, `tombol_planel_ganti`, `paper_supply_awal`, `paper_supply_akhir`, `paper_supply_ganti`, `drum_catridge_awal`, `drum_catridge_akhir`, `drum_catridge_ganti`, `toner_catridge_awal`, `toner_catridge_akhir`, `toner_catridge_ganti`, `drum_opc_awal`, `drum_opc_akhir`, `drum_opc_ganti`, `chip_drum_awal`, `chip_drum_akhir`, `chip_drum_ganti`, `chip_toner_awal`, `chip_toner_akhir`, `chip_toner_ganti`, `pemanas_awal`, `pemanas_akhir`, `pemanas_ganti`, `print_awal`, `print_akhir`, `print_ganti`, `fax_awal`, `fax_akhir`, `fax_ganti`, `scan_awal`, `scan_akhir`, `scan_ganti`, `oct_awal`, `oct_akhir`, `oct_ganti`, `bypass_tray_awal`, `bypass_tray_akhir`, `bypass_tray_ganti`, `caver_ae_awal`, `caver_ae_akhir`, `caver_ae_ganti`, `date_created`) VALUES
@@ -433,7 +442,7 @@ INSERT INTO `overhaul_record` (`id`, `id_overhaul`, `nomor_mesin`, `serial_numbe
 -- --------------------------------------------------------
 
 --
--- Table structure for table `overhaul_record2`
+-- Struktur dari tabel `overhaul_record2`
 --
 
 CREATE TABLE `overhaul_record2` (
@@ -445,11 +454,11 @@ CREATE TABLE `overhaul_record2` (
   `check_awal` varchar(50) DEFAULT NULL,
   `finishing` varchar(50) DEFAULT NULL,
   `penggantian_barang` varchar(256) DEFAULT NULL,
-  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `date_created` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `overhaul_record2`
+-- Dumping data untuk tabel `overhaul_record2`
 --
 
 INSERT INTO `overhaul_record2` (`id`, `id_overhaul`, `nomor_mesin`, `serial_number`, `komponen_check`, `check_awal`, `finishing`, `penggantian_barang`, `date_created`) VALUES
@@ -460,7 +469,7 @@ INSERT INTO `overhaul_record2` (`id`, `id_overhaul`, `nomor_mesin`, `serial_numb
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_role`
+-- Struktur dari tabel `user_role`
 --
 
 CREATE TABLE `user_role` (
@@ -469,7 +478,7 @@ CREATE TABLE `user_role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `user_role`
+-- Dumping data untuk tabel `user_role`
 --
 
 INSERT INTO `user_role` (`id`, `role`) VALUES
@@ -483,173 +492,175 @@ INSERT INTO `user_role` (`id`, `role`) VALUES
 --
 
 --
--- Indexes for table `absensi`
+-- Indeks untuk tabel `absensi`
 --
 ALTER TABLE `absensi`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `absensi_ketidakhadiran`
+-- Indeks untuk tabel `absensi_ketidakhadiran`
 --
 ALTER TABLE `absensi_ketidakhadiran`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cuti_id` (`cuti_id`);
 
 --
--- Indexes for table `absensi_periode`
+-- Indeks untuk tabel `absensi_periode`
 --
 ALTER TABLE `absensi_periode`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `catatan_meter`
+-- Indeks untuk tabel `catatan_meter`
 --
 ALTER TABLE `catatan_meter`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `customer`
+-- Indeks untuk tabel `customer`
 --
 ALTER TABLE `customer`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `cuti`
+-- Indeks untuk tabel `cuti`
 --
 ALTER TABLE `cuti`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `karyawan`
+-- Indeks untuk tabel `karyawan`
 --
 ALTER TABLE `karyawan`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `role_id` (`role_id`);
 
 --
--- Indexes for table `kerjaluar`
+-- Indeks untuk tabel `kerjaluar`
 --
 ALTER TABLE `kerjaluar`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `kontrak`
+-- Indeks untuk tabel `kontrak`
 --
 ALTER TABLE `kontrak`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `notifikasi_kontrak`
+-- Indeks untuk tabel `notifikasi_kontrak`
 --
 ALTER TABLE `notifikasi_kontrak`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `overhaul`
+-- Indeks untuk tabel `overhaul`
 --
 ALTER TABLE `overhaul`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `overhaul_record`
+-- Indeks untuk tabel `overhaul_record`
 --
 ALTER TABLE `overhaul_record`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `overhaul_record2`
+-- Indeks untuk tabel `overhaul_record2`
 --
 ALTER TABLE `overhaul_record2`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `user_role`
+-- Indeks untuk tabel `user_role`
 --
 ALTER TABLE `user_role`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `absensi`
+-- AUTO_INCREMENT untuk tabel `absensi`
 --
 ALTER TABLE `absensi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `absensi_ketidakhadiran`
---
-ALTER TABLE `absensi_ketidakhadiran`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `absensi_periode`
---
-ALTER TABLE `absensi_periode`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT for table `catatan_meter`
+-- AUTO_INCREMENT untuk tabel `absensi_ketidakhadiran`
+--
+ALTER TABLE `absensi_ketidakhadiran`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT untuk tabel `absensi_periode`
+--
+ALTER TABLE `absensi_periode`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT untuk tabel `catatan_meter`
 --
 ALTER TABLE `catatan_meter`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `customer`
+-- AUTO_INCREMENT untuk tabel `customer`
 --
 ALTER TABLE `customer`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `cuti`
+-- AUTO_INCREMENT untuk tabel `cuti`
 --
 ALTER TABLE `cuti`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `karyawan`
+-- AUTO_INCREMENT untuk tabel `karyawan`
 --
 ALTER TABLE `karyawan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT for table `kerjaluar`
+-- AUTO_INCREMENT untuk tabel `kerjaluar`
 --
 ALTER TABLE `kerjaluar`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- AUTO_INCREMENT for table `kontrak`
+-- AUTO_INCREMENT untuk tabel `kontrak`
 --
 ALTER TABLE `kontrak`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT for table `notifikasi_kontrak`
+-- AUTO_INCREMENT untuk tabel `notifikasi_kontrak`
 --
 ALTER TABLE `notifikasi_kontrak`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT for table `overhaul`
+-- AUTO_INCREMENT untuk tabel `overhaul`
 --
 ALTER TABLE `overhaul`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT for table `overhaul_record`
+-- AUTO_INCREMENT untuk tabel `overhaul_record`
 --
 ALTER TABLE `overhaul_record`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT for table `overhaul_record2`
+-- AUTO_INCREMENT untuk tabel `overhaul_record2`
 --
 ALTER TABLE `overhaul_record2`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `user_role`
+-- AUTO_INCREMENT untuk tabel `user_role`
 --
 ALTER TABLE `user_role`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;

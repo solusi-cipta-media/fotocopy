@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <!-- <form id="form-data-teknisi"> -->
-                <div class="block-content fs-sm" id="body-modal">
+                <div class="block-content fs-sm" id="body-modal" style="padding: 2rem !important;text-align:center;">
                 </div>
                 <div class="block-content block-content-full block-content-sm text-end border-top">
                     <button type="button" class="btn btn-alt-secondary" data-bs-dismiss="modal">
@@ -123,11 +123,11 @@
                 "data": "data",
                 "render": function(data) {
                     if (data.status == 'APPROVED' || data.status == 'REJECTED') {
-                        return `<button type="button" class="btn btn-sm btn-success" onclick=show_data() data-bs-toggle="tooltip" title="Bukti">
+                        return `<button type="button" class="btn btn-sm btn-success" onclick=show_data('${data.bukti}') data-bs-toggle="tooltip" title="Bukti">
                                         <i class="si si-picture"></i> Bukti
                                     </button>`
                     } else {
-                        return ` <button type="button" class="btn btn-sm btn-success" onclick=show_data() data-bs-toggle="tooltip" title="Bukti">
+                        return ` <button type="button" class="btn btn-sm btn-success" onclick=show_data('${data.bukti}') data-bs-toggle="tooltip" title="Bukti">
                                         <i class="si si-picture"></i> Bukti
                                     </button>
                                     <button type="button" class="btn btn-sm btn-primary" onclick=approve_data('` + data.id + `') data-bs-toggle="tooltip" title="Approve">
@@ -150,15 +150,31 @@
         $('#table-absensi').DataTable().ajax.reload(null, false);
     }
 
-    function show_data(id) {
-        $('#id').val(id)
-        // var html
-        // var nama
+    function show_data(img) {
+        // $('#id').val(id)
+        // // var html
+        // // var nama
+        // $('#exampleModalCenter').modal('show')
+        // // nama = '<h3 class="block-title">Bukti Ketidakhadiran - Agus Salim</h3>'
+        // html = '<img src="<?= base_url('assets/media/leave/asa.jpg') ?>" class="img-fluid" alt="bukti_leave">'
+        // $('#body-modal').html(html)
+        // // $('.block-title').html(nama)
+
+        var ft = ''
+        var render = ''
+        var ft_url = ''
+        if (img != '' && img != null && img != 'null' && img != undefined && img != 'undefined') {
+            ft = img
+            ft_url = 'ketidakhadiran/'
+
+        } else {
+            ft = "image-not-found.png"
+            ft_url = 'default/'
+        }
+        console.log(ft)
         $('#exampleModalCenter').modal('show')
-        // nama = '<h3 class="block-title">Bukti Ketidakhadiran - Agus Salim</h3>'
-        html = '<img src="<?= base_url('assets/media/leave/asa.jpg') ?>" class="img-fluid" alt="bukti_leave">'
+        html = `<img src="<?= base_url() ?>assets/media/${ft_url}${ft}" class="img-fluid" alt="bukti_leave">`
         $('#body-modal').html(html)
-        // $('.block-title').html(nama)
     }
 
     function approve_data(id) {

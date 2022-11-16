@@ -64,7 +64,7 @@ class Absensi extends CI_Controller
         $table = 'absensi'; //nama tabel dari database
         $column_order = array('id', 'nama_karyawan', 'nomor_induk', 'tanggal', 'clock_in', 'clock_out', 'latitude_in', 'longitude_in', 'latitude_out', 'longitude_out', 'terlambat', 'pulang_cepat', 'working_hours', 'date_created', 'id'); //field yang ada di table user
         $column_search = array('id', 'nama_karyawan', 'nomor_induk', 'tanggal', 'clock_in', 'clock_out', 'latitude_in', 'longitude_in', 'latitude_out', 'longitude_out', 'terlambat', 'pulang_cepat', 'working_hours', 'date_created'); //field yang diizin untuk pencarian 
-        $select = 'id, nama_karyawan, nomor_induk, tanggal, clock_in, clock_out, latitude_in, longitude_in, latitude_out,longitude_out, terlambat, pulang_cepat,working_hours, date_created';
+        $select = 'id, nama_karyawan, nomor_induk, tanggal, clock_in, clock_out, latitude_in, longitude_in, latitude_out,longitude_out, terlambat, pulang_cepat,working_hours, date_created,image_in,image_out';
         $order = array('id' => 'asc'); // default order 
         $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order);
         $data = array();
@@ -77,8 +77,8 @@ class Absensi extends CI_Controller
             $row['data']['nama_karyawan'] = $key->nama_karyawan;
             $row['data']['nomor_induk'] = $key->nomor_induk;
             $row['data']['tanggal'] = date('d-M-Y', strtotime($key->tanggal));
-            $row['data']['clock_in'] = date('d-M-Y H:i:sa', strtotime($key->clock_in));
-            $row['data']['clock_out'] = date('d-M-Y H:i:sa', strtotime($key->clock_out));
+            $row['data']['clock_in'] = ($key->clock_in == '0000-00-00 00:00:00') ? "" :  date('d-M-Y H:i:sa', strtotime($key->clock_in));
+            $row['data']['clock_out'] = ($key->clock_out == '0000-00-00 00:00:00') ? "" : date('d-M-Y H:i:sa', strtotime($key->clock_out));
             $row['data']['latitude_in'] = $key->latitude_in;
             $row['data']['longitude_in'] = $key->longitude_in;
             $row['data']['latitude_out'] = $key->latitude_out;
@@ -87,6 +87,28 @@ class Absensi extends CI_Controller
             $row['data']['pulang_cepat'] = $key->pulang_cepat;
             $row['data']['working_hours'] = $key->working_hours;
             $row['data']['date_created'] = $key->date_created;
+
+            $image = '';
+            $img = '';
+            $img = $key->image_in;
+
+            $files = 'assets/media/clock_in/' . $img;
+            if (file_exists($files)) {
+                $image = $img;
+            }
+
+            $row['data']['image_in'] = $image;
+
+            $image = '';
+            $img = '';
+            $img = $key->image_out;
+
+            $files = 'assets/media/clock_out/' . $img;
+            if (file_exists($files)) {
+                $image = $img;
+            }
+
+            $row['data']['image_out'] = $image;
 
             $data[] = $row;
         }
@@ -125,7 +147,17 @@ class Absensi extends CI_Controller
             $row['data']['tanggal'] = date('d-M-Y', strtotime($key->tanggal));
             $row['data']['tipe'] = $key->tipe;
             $row['data']['status'] = $key->status;
-            $row['data']['bukti'] = $key->bukti;
+            // $row['data']['bukti'] = $key->bukti;
+            $image = '';
+            $img = '';
+            $img = $key->bukti;
+
+            $files = 'assets/media/ketidakhadiran/' . $img;
+            if (file_exists($files)) {
+                $image = $img;
+            }
+
+            $row['data']['bukti'] = $image;
             $row['data']['date_created'] = $key->date_created;
 
             $data[] = $row;
