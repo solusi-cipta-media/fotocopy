@@ -114,9 +114,9 @@ class Kerjaluar extends CI_Controller
 
 
         $table = 'kerjaluar'; //nama tabel dari database
-        $column_order = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'time_in', 'time_out', 'status', 'date_created', 'uraian', 'model', 'id'); //field yang ada di table user
-        $column_search = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'time_in', 'time_out', 'status', 'date_created', 'uraian', 'model'); //field yang diizin untuk pencarian 
-        $select = 'id, customer, jenis, tgl_kerja, lokasi, latitude, longitude, teknisi, id_karyawan, time_in, time_out, status, date_created, uraian, model';
+        $column_order = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'time_in', 'time_out', 'status', 'date_created', 'uraian', 'nomor_mesin', 'model', 'id'); //field yang ada di table user
+        $column_search = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'time_in', 'time_out', 'status', 'date_created', 'uraian', 'nomor_mesin', 'model'); //field yang diizin untuk pencarian 
+        $select = 'id, customer, jenis, tgl_kerja, lokasi, latitude, longitude, teknisi, id_karyawan, time_in, time_out, status, date_created, uraian, nomor_mesin,model';
         $order = array('id' => 'asc'); // default order 
         $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order);
         $data = array();
@@ -140,6 +140,7 @@ class Kerjaluar extends CI_Controller
             $row['data']['date_created'] = $key->date_created;
             $row['data']['uraian'] = $key->uraian;
             $row['data']['model'] = $key->model;
+            $row['data']['nomor_mesin'] = $key->nomor_mesin;
 
             $data[] = $row;
         }
@@ -277,8 +278,8 @@ class Kerjaluar extends CI_Controller
             $row['data']['longitude'] = $key->longitude;
             $row['data']['id_karyawan'] = $key->id_karyawan;
             $row['data']['teknisi'] = $key->teknisi;
-            $row['data']['time_in'] = date('d-M-Y H:i:sa', strtotime($key->time_in));
-            $row['data']['time_out'] = date('d-M-Y H:i:sa', strtotime($key->time_in));
+            $row['data']['time_in'] = $key->time_in;
+            $row['data']['time_out'] = $key->time_out;
             $row['data']['status'] = $key->status;
             $row['data']['uraian'] = $key->uraian;
             $row['data']['nomor_mesin'] = $key->nomor_mesin;
@@ -397,7 +398,6 @@ class Kerjaluar extends CI_Controller
         $table = $this->input->post("table");
         $nomor_mesin = $this->input->post("nomor_mesin");
         $status = $this->input->post("status");
-
 
 
 

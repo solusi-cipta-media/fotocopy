@@ -266,24 +266,23 @@
                         return ``
                     } else if (data.jenis == 'SERVIS' || data.jenis == 'INSTAL') {
                         return `<div class="d-flex flex-column" style="row-gap: 10px;">
-                                        <button type="button" class="btn btn-sm btn-secondary" onclick=tentukan_data(` + data.id + `) data-bs-toggle="tooltip" title="Ganti Teknisi">
+                                        <button type="button" class="btn btn-sm btn-secondary" onclick=tentukan_data(` + data.id + `) data-bs-toggle="tooltip" title="Machine Record">
                                             <i class="fa fa-file-lines"></i> Machine Record
                                         </button>
                                         <a href="<?= base_url('kerjaluar/formkirim?id=') ?>` + data.id + `" target="_blank" type="button" class="btn btn-sm btn-success" data-bs-toggle="tooltip" title="Cetak Form Kirim">
                                         <i class="fa fa-print"></i> Form Kirim
                                     </a>
-                                        <button type="button" class="btn btn-sm btn-warning" onclick="ubah_status('` + data.id + `', '` + data.nomor_mesin + `','` + data.model + `')" data-bs-toggle="tooltip" title="Ubah Status Mesin">
-                                        <i class="si si-refresh"></i> Ubah Status Mesin
-                                    </button>
                                         <button type="button" class="btn btn-sm btn-danger" onclick="selesai_data('` + data.id + `', '` + data.nomor_mesin + `','` + data.model + `')" data-bs-toggle="tooltip" title="Selesai">
                                         <i class="fa fa-circle-check"></i> Selesai
                                     </button>
                                 </div>
                                 `
                     } else {
-                        return `<button type="button" class="btn btn-sm btn-danger" onclick="selesai_data('` + data.id + `', '` + data.nomor_mesin + `','` + data.model + `')" data-bs-toggle="tooltip" title="Selesai">
+                        return `<div class="d-flex flex-column" style="row-gap: 10px;">
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="selesai_data('` + data.id + `', '` + data.nomor_mesin + `','` + data.model + `')" data-bs-toggle="tooltip" title="Selesai">
                                     <i class="fa fa-circle-check"></i> Selesai
-                                </button><br style="margin-bottom: 10px;">`
+                                     </button>
+                                </div>`
                     }
                 }
             }, ],

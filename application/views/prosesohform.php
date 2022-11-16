@@ -36,6 +36,7 @@
                             <select name="caver_body_akhir" id="caver_body_akhir" class="form-select">
                                 <option value="Oke">Oke</option>
                                 <option value="Ganti">Ganti</option>
+                                <option value="Repair">Repair</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
@@ -52,6 +53,7 @@
                             <select name="dadf_akhir" id="dadf_akhir" class="form-select">
                                 <option value="Oke">Oke</option>
                                 <option value="Ganti">Ganti</option>
+                                <option value="Repair">Repair</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
@@ -68,6 +70,7 @@
                             <select name="kaca_platen_akhir" id="kaca_platen_akhir" class="form-select">
                                 <option value="Oke">Oke</option>
                                 <option value="Ganti">Ganti</option>
+                                <option value="Repair">Repair</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
@@ -85,6 +88,7 @@
                             <select name="tombol_planel_akhir" id="tombol_planel_akhir" class="form-select">
                                 <option value="Oke">Oke</option>
                                 <option value="Ganti">Ganti</option>
+                                <option value="Repair">Repair</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
@@ -102,6 +106,7 @@
                             <select name="paper_supply_akhir" id="paper_supply_akhir" class="form-select">
                                 <option value="Oke">Oke</option>
                                 <option value="Ganti">Ganti</option>
+                                <option value="Repair">Repair</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
@@ -119,6 +124,7 @@
                             <select name="drum_catridge_akhir" id="drum_catridge_akhir" class="form-select">
                                 <option value="Oke">Oke</option>
                                 <option value="Ganti">Ganti</option>
+                                <option value="Repair">Repair</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
@@ -136,6 +142,7 @@
                             <select name="toner_catridge_akhir" id="toner_catridge_akhir" class="form-select">
                                 <option value="Oke">Oke</option>
                                 <option value="Ganti">Ganti</option>
+                                <option value="Repair">Repair</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
@@ -153,6 +160,7 @@
                             <select name="drum_opc_akhir" id="drum_opc_akhir" class="form-select">
                                 <option value="Oke">Oke</option>
                                 <option value="Ganti">Ganti</option>
+                                <option value="Repair">Repair</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
@@ -169,6 +177,7 @@
                             <select name="chip_drum_akhir" id="chip_drum_akhir" class="form-select">
                                 <option value="Oke">Oke</option>
                                 <option value="Ganti">Ganti</option>
+                                <option value="Repair">Repair</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
@@ -185,6 +194,7 @@
                             <select name="chip_toner_akhir" id="chip_toner_akhir" class="form-select">
                                 <option value="Oke">Oke</option>
                                 <option value="Ganti">Ganti</option>
+                                <option value="Repair">Repair</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
@@ -201,6 +211,7 @@
                             <select name="pemanas_akhir" id="pemanas_akhir" class="form-select">
                                 <option value="Oke">Oke</option>
                                 <option value="Ganti">Ganti</option>
+                                <option value="Repair">Repair</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
@@ -218,6 +229,7 @@
                             <select name="print_akhir" id="print_akhir" class="form-select">
                                 <option value="Oke">Oke</option>
                                 <option value="Ganti">Ganti</option>
+                                <option value="Repair">Repair</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
@@ -234,6 +246,7 @@
                             <select name="fax_akhir" id="fax_akhir" class="form-select">
                                 <option value="Oke">Oke</option>
                                 <option value="Ganti">Ganti</option>
+                                <option value="Repair">Repair</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
@@ -250,6 +263,7 @@
                             <select name="scan_akhir" id="scan_akhir" class="form-select">
                                 <option value="Oke">Oke</option>
                                 <option value="Ganti">Ganti</option>
+                                <option value="Repair">Repair</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
@@ -267,6 +281,7 @@
                             <select name="oct_akhir" id="oct_akhir" class="form-select">
                                 <option value="Oke">Oke</option>
                                 <option value="Ganti">Ganti</option>
+                                <option value="Repair">Repair</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
@@ -284,6 +299,7 @@
                             <select name="bypass_tray_akhir" id="bypass_tray_akhir" class="form-select">
                                 <option value="Oke">Oke</option>
                                 <option value="Ganti">Ganti</option>
+                                <option value="Repair">Repair</option>
                             </select>
                         </div>
                         <div class="col-sm-4">

@@ -106,14 +106,14 @@
                                 </select>
                                 <!-- <input type="text" class="form-control" id="tegangan" name="tegangan" onkeyup="this.value = this.value.toUpperCase()"> -->
                             </div>
-                            <!-- <div class="mb-4">
+                            <div class="mb-4" id="edit-status" style="display: none;">
                                 <label class="form-label" for="status">Status</label>
                                 <select class="form-select" id="status" name="status">
                                     <option value="IMPORT">IMPORT</option>
-                                    <option value="OVERHAUL">OVERHAUL</option>
-                                    <option value="READY">READY</option>
+                                    <option value="KANIBAL">KANIBAL</option>
+                                    <option value="JUAL LEPAS">JUAL LEPAS</option>
                                 </select>
-                            </div> -->
+                            </div>
                             <div class="mb-4">
                                 <label class="form-label" for="uraian">Uraian</label>
                                 <textarea name="uraian" id="uraian" cols="30" rows="5" class="form-control"></textarea>
@@ -240,8 +240,16 @@
                         return `<span class="badge bg-danger">` + data.status + `</span>`
                     } else if (data.status == 'OVERHAUL') {
                         return `<span class="badge bg-warning">` + data.status + `</span>`
-                    } else {
+                    } else if (data.status == 'READY') {
                         return `<span class="badge bg-success">` + data.status + `</span>`
+                    } else if (data.status == 'KANIBAL') {
+                        return `<span class="badge bg-dark">` + data.status + `</span>`
+                    } else if (data.status == 'RENTAL') {
+                        return `<span class="badge bg-primary">` + data.status + `</span>`
+                    } else if (data.status == 'JUAL') {
+                        return `<span class="badge bg-elegance">` + data.status + `</span>`
+                    } else {
+                        return `<span class="badge bg-gd-aqua">` + data.status + `</span>`
                     }
                 }
             }, {
@@ -293,7 +301,7 @@
         form_data.append('tgl_masuk', $("#tgl_masuk").val());
         form_data.append('meter', $("#meter").val());
         form_data.append('tegangan', $("#tegangan").val());
-        form_data.append('status', 'IMPORT');
+        form_data.append('status', $("#status").val());
         form_data.append('uraian', $("#uraian").val());
 
         var url_ajax = '<?= base_url() ?>mesin/insert_data_mesin'
@@ -411,8 +419,16 @@
                         return `<span class="badge bg-danger">` + data.status + `</span>`
                     } else if (data.status == 'OVERHAUL') {
                         return `<span class="badge bg-warning">` + data.status + `</span>`
-                    } else {
+                    } else if (data.status == 'READY') {
                         return `<span class="badge bg-success">` + data.status + `</span>`
+                    } else if (data.status == 'KANIBAL') {
+                        return `<span class="badge bg-dark">` + data.status + `</span>`
+                    } else if (data.status == 'RENTAL') {
+                        return `<span class="badge bg-primary">` + data.status + `</span>`
+                    } else if (data.status == 'JUAL') {
+                        return `<span class="badge bg-elegance">` + data.status + `</span>`
+                    } else {
+                        return `<span class="badge bg-gd-aqua">` + data.status + `</span>`
                     }
                 }
             }, {
@@ -438,6 +454,9 @@
 
 
     $('#btn-add').on('click', function() {
+        $('#edit-status').hide();
+        $('#status').val('IMPORT');
+
         $('#add-new').show(500);
         $('#list-mesin').hide();
         global_status = "tambah"
@@ -481,6 +500,7 @@
     $('#btn-edit').on('click', function() {
         $('#add-new').show(500);
         $('#list-mesin').hide();
+
     });
 
     function delete_data(id) {
@@ -522,6 +542,7 @@
     }
 
     function edit_data(id) {
+        $('#edit-status').show();
 
         global_status = 'edit'
         global_id = id
@@ -554,6 +575,7 @@
                     $('#asal').val(d.asal)
                     $('#status').val(d.status)
                     $('#uraian').val(d.uraian)
+                    $('#supplier').val(d.supplier)
                 });
             }
         })
