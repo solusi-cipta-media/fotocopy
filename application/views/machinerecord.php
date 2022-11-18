@@ -23,9 +23,7 @@
                             <th class="text-center">#</th>
                             <th>Customer</th>
                             <th>Nomor Mesin</th>
-                            <th>Serial Number</th>
                             <th>Model</th>
-                            <th>Meter</th>
                             <th>Uraian</th>
                             <th>Tanggal Servis</th>
                             <th>Teknisi</th>
@@ -35,9 +33,7 @@
                             <td></td>
                             <td><input type="text" class="form-control search-cepat" id="search_customer" name="search_customer" placeholder="search"></td>
                             <td><input type="text" class="form-control search-cepat" id="search_nomor" name="search_nomor" placeholder="search"></td>
-                            <td><input type="text" class="form-control search-cepat" id="search_serial" name="search_serial" placeholder="search"></td>
                             <td><input type="text" class="form-control search-cepat" id="search_model" name="search_model" placeholder="search"></td>
-                            <td><input type="text" class="form-control search-cepat" id="search_meter" name="search_meter" placeholder="search"></td>
                             <td><input type="text" class="form-control search-cepat" id="search_uraian" name="search_uraian" placeholder="search"></td>
                             <td><input type="text" class="form-control search-cepat" id="search_tanggal" name="search_tanggal" placeholder="search"></td>
                             <td><input type="text" class="form-control search-cepat" id="search_teknisi" name="search_teknisi" placeholder="search"></td>
@@ -77,15 +73,11 @@
                     search_nomor: function() {
                         return $('#search_nomor').val()
                     },
-                    search_serial: function() {
-                        return $('#search_serial').val()
-                    },
+
                     search_model: function() {
                         return $('#search_model').val()
                     },
-                    search_meter: function() {
-                        return $('#search_meter').val()
-                    },
+
                     search_uraian: function() {
                         return $('#search_uraian').val()
                     },
@@ -112,15 +104,7 @@
             }, {
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
-                "data": "data.serial_number",
-            }, {
-                "target": [<?= $target ?>],
-                "className": 'text-center py-1',
                 "data": "data.model",
-            }, {
-                "target": [<?= $target ?>],
-                "className": 'text-center py-1',
-                "data": "data.meter",
             }, {
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
@@ -148,7 +132,7 @@
         });
 
         $('.search-cepat').keyup(function() {
-            console.log('OK')
+            // console.log('OK')
             reload_table()
         })
 

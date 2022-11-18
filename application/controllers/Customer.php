@@ -28,6 +28,20 @@ class Customer extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    public function customerdetail()
+    {
+        //ambil data notifikasi
+        // $data['notifikasi'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->result_array();
+        // $data['jumlah_notif'] = $this->crud->get_where('notifikasi_kontrak', ['status_read' => 0])->num_rows();
+        //end
+
+        $data['sess_menu'] = 'customer';
+
+        $this->load->view('template/header', $data);
+        $this->load->view('customerdetail');
+        $this->load->view('template/footer');
+    }
+
     public function ajax_table_customer()
     {
 
@@ -64,6 +78,50 @@ class Customer extends CI_Controller
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->crud->count_all($table),
             "recordsFiltered" => $this->crud->count_filtered($table, $select, $column_order, $column_search, $order),
+            "data" => $data,
+            "query" => $this->db->last_query()
+        );
+        //output to json format
+        echo json_encode($output);
+    }
+
+    public function ajax_table_customer_detail()
+    {
+
+        $where = array(
+            'kode' => $this->input->post('kode')
+        );
+
+        $table = 'customerdetail'; //nama tabel dari database
+        $column_order = array('id', 'kode', 'nama', 'nomor_mesin', 'model', 'uraian', 'tanggal_servis', 'teknisi', 'id_kerjaluar', 'date_created', 'id'); //field yang ada di table user
+        $column_search = array('id', 'kode', 'nama', 'nomor_mesin', 'model', 'uraian', 'tanggal_servis', 'teknisi', 'id_kerjaluar', 'date_created'); //field yang diizin untuk pencarian 
+        $select = 'id, kode, nama, nomor_mesin, model, uraian, tanggal_servis, teknisi,id_kerjaluar, date_created';
+        $order = array('id' => 'asc'); // default order 
+        $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order, $where);
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($list as $key) {
+            $no++;
+            $row = array();
+            $row['data']['no'] = $no;
+            $row['data']['id'] = $key->id;
+            $row['data']['kode'] = $key->kode;
+            $row['data']['nama'] = $key->nama;
+            $row['data']['nomor_mesin'] = $key->nomor_mesin;
+            $row['data']['model'] = $key->model;
+            $row['data']['uraian'] = $key->uraian;
+            $row['data']['tanggal_servis'] = date('d-M-Y', strtotime($key->tanggal_servis));
+            $row['data']['teknisi'] = $key->teknisi;
+            $row['data']['id_kerjaluar'] = $key->id_kerjaluar;
+            $row['data']['date_created'] = $key->date_created;
+
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->crud->count_all($table),
+            "recordsFiltered" => $this->crud->count_filtered($table, $select, $column_order, $column_search, $order, $where),
             "data" => $data,
             "query" => $this->db->last_query()
         );

@@ -164,6 +164,47 @@
         </div>
     </div>
 </div>
+<div class="modal" id="modal-status-kerja" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="block block-rounded shadow-none mb-0">
+                <div class="block-header block-header-default">
+                    <h3 class="block-title">Ubah Status Pekerjaan</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <form id="form-data-status-kerja">
+                    <div class="block-content fs-sm" id="body-modal3">
+                        <div class="row push">
+                            <div class="col-lg-12 col-xl-12">
+                                <div class="mb-4">
+                                    <label class="form-label" for="status_kerja">Status Pekerjaan</label>
+                                    <input type="hidden" class="form-control" id="id_kerja" name="id_kerja">
+                                    <select name="status_kerja" id="status_kerja" class="form-control">
+                                        <option value="OPEN">OPEN</option>
+                                        <option value="PENDING">PENDING</option>
+                                        <option value="SELESAI">SELESAI</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="block-content block-content-full block-content-sm text-end border-top">
+                        <button type="button" class="btn btn-alt-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-alt-primary" data-bs-dismiss="modal">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- select2 -->
 <script src="<?= base_url() ?>resources/select2/select2.min.js"></script>
 
@@ -266,20 +307,24 @@
                         return ``
                     } else if (data.jenis == 'SERVIS' || data.jenis == 'INSTAL') {
                         return `<div class="d-flex flex-column" style="row-gap: 10px;">
-                                        <button type="button" class="btn btn-sm btn-secondary" onclick=tentukan_data(` + data.id + `) data-bs-toggle="tooltip" title="Machine Record">
+                                        <a href="<?= base_url('kerjaluar/cetakmachinerecord?nomor=') ?>` + data.id + `" type="button" class="btn btn-sm btn-secondary" data-bs-toggle="tooltip" title="Machine Record">
                                             <i class="fa fa-file-lines"></i> Machine Record
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-warning" onclick=tentukan_data(` + data.id + `) data-bs-toggle="tooltip" title="Record Pekerjaan">
+                                            <i class="fa fa-file-lines"></i> Record Pekerjaan
                                         </button>
+                                        
                                         <a href="<?= base_url('kerjaluar/formkirim?id=') ?>` + data.id + `" target="_blank" type="button" class="btn btn-sm btn-success" data-bs-toggle="tooltip" title="Cetak Form Kirim">
                                         <i class="fa fa-print"></i> Form Kirim
                                     </a>
-                                        <button type="button" class="btn btn-sm btn-danger" onclick="selesai_data('` + data.id + `', '` + data.nomor_mesin + `','` + data.model + `')" data-bs-toggle="tooltip" title="Selesai">
-                                        <i class="fa fa-circle-check"></i> Selesai
+                                        <button type="button" class="btn btn-sm btn-danger" onclick="ubah_status_data('` + data.id + `')" data-bs-toggle="tooltip" title="Selesai">
+                                        <i class="fa fa-circle-check"></i> Ubah Status Pekerjaan
                                     </button>
                                 </div>
                                 `
                     } else {
                         return `<div class="d-flex flex-column" style="row-gap: 10px;">
-                                    <button type="button" class="btn btn-sm btn-danger" onclick="selesai_data('` + data.id + `', '` + data.nomor_mesin + `','` + data.model + `')" data-bs-toggle="tooltip" title="Selesai">
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="ubah_status_data('` + data.id + `')" data-bs-toggle="tooltip" title="Selesai">
                                     <i class="fa fa-circle-check"></i> Selesai
                                      </button>
                                 </div>`
@@ -472,6 +517,52 @@
         })
     })
 
+    $("#form-data-status-kerja").submit(function(e) {
+        e.preventDefault()
+        //   loading_submit()
+
+
+        var form_data = new FormData();
+        form_data.append('table', 'kerjaluar');
+        form_data.append('id', $("#id_kerja").val());
+        form_data.append('status', $("#status_kerja").val());
+
+        url_ajax = '<?= base_url() ?>kerjaluar/ubah_status_kerja'
+
+        $.ajax({
+            url: url_ajax,
+            type: "post",
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form_data,
+            dataType: "json",
+            success: function(result) {
+                if (result.status == "success") {
+                    Swal.fire(
+                        'Success!',
+                        result.message,
+                        'success'
+                    )
+                    reload_table()
+                } else {
+                    Swal.fire(
+                        'error!',
+                        result.message,
+                        'error'
+                    )
+                }
+            },
+            error: function(err) {
+                Swal.fire(
+                    'error!',
+                    err.responseText,
+                    'error'
+                )
+            }
+        })
+    })
+
     function tentukan_data(id) {
         console.log(id)
         $('#id').val(id)
@@ -494,43 +585,63 @@
         })
     }
 
-    function selesai_data(id) {
+    function ubah_status_data(id) {
+        console.log(id)
+        $('#id_kerja').val(id)
+        $('#modal-status-kerja').modal('show')
 
-        Swal.fire({
-            title: 'Apakah Anda Yakin ?',
-            text: "Anda melaporkan bahwa proses pekerjaan telah selesai!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, saya yakin!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '<?= base_url() ?>kerjaluar/selesai_proses',
-                    data: {
-                        id: id,
-                        table: "kerjaluar"
-                    },
-                    type: 'post',
-                    dataType: 'json',
-                    success: function(result) {
-                        if (result.status == "success") {
-                            Swal.fire(
-                                'Berhasil!',
-                                'Pekerjaan sudah selesai!',
-                                'success'
-                            )
-                            reload_table()
-                        } else
-                            toast('error', result.message)
-                    }
-                })
-            }
-        })
-
-
+        // $.ajax({
+        //     url: '<?= base_url() ?>kerjaluar/get_machinerecord',
+        //     data: {
+        //         id: id,
+        //         table: "kerjaluar"
+        //     },
+        //     type: 'post',
+        //     dataType: 'json',
+        //     success: function(result) {
+        //         result.forEach(d => {
+        //             $('#uraian').val(d.uraian)
+        //             $('#meter').val(d.meter)
+        //         });
+        //     }
+        // })
     }
+
+    // function selesai_data(id) {
+
+    //     Swal.fire({
+    //         title: 'Apakah Anda Yakin ?',
+    //         text: "Anda melaporkan bahwa proses pekerjaan telah selesai!",
+    //         icon: 'warning',
+    //         showCancelButton: true,
+    //         confirmButtonColor: '#3085d6',
+    //         cancelButtonColor: '#d33',
+    //         confirmButtonText: 'Ya, saya yakin!'
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             $.ajax({
+    //                 url: '<?= base_url() ?>kerjaluar/selesai_proses',
+    //                 data: {
+    //                     id: id,
+    //                     table: "kerjaluar"
+    //                 },
+    //                 type: 'post',
+    //                 dataType: 'json',
+    //                 success: function(result) {
+    //                     if (result.status == "success") {
+    //                         Swal.fire(
+    //                             'Berhasil!',
+    //                             'Pekerjaan sudah selesai!',
+    //                             'success'
+    //                         )
+    //                         reload_table()
+    //                     } else
+    //                         toast('error', result.message)
+    //                 }
+    //             })
+    //         }
+    //     })
+    // }
 
     function ubah_status(id, nomor_mesin, model) {
         console.log(nomor_mesin)

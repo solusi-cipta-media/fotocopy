@@ -424,6 +424,35 @@ class Kerjaluar extends CI_Controller
         echo json_encode($response);
     }
 
+    public function ubah_status_kerja()
+    {
+
+        $table = $this->input->post("table");
+        $id = $this->input->post("id");
+        $status = $this->input->post("status");
+
+
+
+        $data = array(
+            'status' => $status
+        );
+
+        $where = array(
+            'id' => $id
+        );
+
+
+        $update = $this->crud->update($table, $data, $where);
+
+
+        if ($update > 0) {
+            $response = ['status' => 'success', 'message' => 'Berhasil Ubah Status!'];
+        } else
+            $response = ['status' => 'error', 'message' => 'Gagal Ubah Status!'];
+
+        echo json_encode($response);
+    }
+
     public function input_catatan_meter()
     {
         $table = $this->input->post("table");
@@ -481,6 +510,25 @@ class Kerjaluar extends CI_Controller
         $data['latitude'] = $customer['latitude'];
         $data['longitude'] = $customer['longitude'];
         $data['status'] = 'OPEN';
+
+        //ubah status mesin di tabel overhaul
+
+        if ($customer['klasifikasi'] == 'RENTAL') {
+            $status_mesin = 'RENTAL';
+        } else if ($customer['klasifikasi'] == 'KONTRAK') {
+            $status_mesin = 'JUAL';
+        } else {
+            $status_mesin = 'JUAL LEPAS';
+        }
+
+        $datas = array(
+            'status' => $status_mesin
+        );
+        $wheres = array(
+            'nomor_mesin' => $a[1]
+        );
+
+        $update_status_mesin = $this->crud->update('overhaul', $datas, $wheres);
 
 
         $insert_data = $this->crud->insert($table, $data);

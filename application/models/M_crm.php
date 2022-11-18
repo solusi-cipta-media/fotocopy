@@ -1,6 +1,6 @@
 <?php
 
-class M_kerja extends CI_Model
+class M_crm extends CI_Model
 {
     private function _get_datatables_query($table, $select, $column_order, $column_search, $order, $where)
     {
@@ -14,15 +14,10 @@ class M_kerja extends CI_Model
         // echo "<pre>";
         // print_r($this->input->post('search_nomor'));
         // echo "</pre>";
-        $this->db->where('jenis <>', 'INVOICE');
-        if ($this->input->post('search_customer') != '') $this->db->like('customer', $this->input->post('search_customer'));
-        if ($this->input->post('search_nomor') != '') $this->db->like('nomor_mesin', $this->input->post('search_nomor'));
-        // if ($this->input->post('search_serial') != '') $this->db->like('serial_number', $this->input->post('search_serial'));
-        if ($this->input->post('search_model') != '') $this->db->like('model', $this->input->post('search_model'));
-        // if ($this->input->post('search_meter') != '') $this->db->like('meter', $this->input->post('search_meter'));
-        if ($this->input->post('search_uraian') != '') $this->db->like('uraian', $this->input->post('search_uraian'));
-        if ($this->input->post('search_tanggal') != '') $this->db->like('tgl_kerja', $this->input->post('search_tanggal'));
-        if ($this->input->post('search_teknisi') != '') $this->db->like('teknisi', $this->input->post('search_teknisi'));
+        // $this->db->where('jenis <>', 'INVOICE');
+        if ($this->input->post('search_nama') != '') $this->db->like('nama_karyawan', $this->input->post('search_nama'));
+        if ($this->input->post('search_tanggal') != '') $this->db->like('tanggal', $this->input->post('search_tanggal'));
+        if ($this->input->post('search_aktivitas') != '') $this->db->like('aktivitas', $this->input->post('search_aktivitas'));
 
         $i = 0;
         foreach ($column_search as $item) // looping awal

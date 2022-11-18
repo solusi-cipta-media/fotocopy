@@ -10,7 +10,7 @@
                 <h3 class="block-title">
                     Summary Mesin Nomor <?= $sn['nomor_mesin'] ?> - SN.<?= $sn['serial_number'] ?>
                 </h3>
-                <a href="<?= $_GET["status"] == 'selesai' ? base_url('overhaul/selesaioh') : ($_GET["status"] == 'qr' ? base_url('overhaul/cekqr') : base_url('overhaul/prosesoh'))  ?>" type="button" class="btn btn-outline-danger min-width-125">
+                <a href="<?= $_GET["status"] == 'selesai' ? base_url('overhaul/selesaioh') : ($_GET["status"] == 'qr' ? base_url('overhaul/cekqr') : ($_GET["status"] == 'detail' ? base_url('mesin/detailmesin?nomor=' . $_GET["nomor"]) : base_url('overhaul/prosesoh')))  ?>" type="button" class="btn btn-outline-danger min-width-125">
                     <i class="fa fa-minus-circle mr-5"></i> Kembali
                 </a>&nbsp;
                 <a href="<?= base_url('overhaul/cetakhasiloverhaul?id=' . $_GET["id"]) ?>" target="_blank" type="button" class="btn btn-outline-success min-width-125">

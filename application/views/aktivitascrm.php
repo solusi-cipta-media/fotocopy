@@ -29,9 +29,9 @@
                             <th>Customer</th>
                             <th>Contact Person</th>
                             <th>Handphone</th>
-                            <th>Status</th>
-                            <th>Uraian</th>
-                            <th style="width: 15%;">Aksi</th>
+                            <!-- <th>Status</th> -->
+                            <th style="width: 40%;">Uraian</th>
+                            <th style="width: 15%;">Status</th>
                         </tr>
                     </thead>
                 </table>
@@ -52,20 +52,19 @@
 
                             <div class="mb-4">
                                 <label class="form-label" for="customer">Customer</label>
-                                <select name="customer" id="customer" class="form-control">
-                                    <?php
-                                    foreach ($customer as $key => $value) {
-                                    ?>
-                                        <option value="<?= $value['nama'] . ' - ' . $value['contact_person'] . ' - ' . $value['hp_contact'] ?>"><?= $value['kode'] . ' - ' . $value['nama'] ?></option>
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
-                                <!-- <input type="text" class="form-control" id="customer" name="customer"> -->
+                                <input type="text" class="form-control" id="customer" name="customer" onkeyup="this.value = this.value.toUpperCase()">
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="pic_customer">Contact Person</label>
+                                <input type="text" class="form-control" id="pic_customer" name="pic_customer" onkeyup="this.value = this.value.toUpperCase()">
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="no_hp">Handphone</label>
+                                <input type="text" class="form-control" id="no_hp" name="no_hp">
                             </div>
                             <div class="mb-4">
                                 <label class="form-label" for="awal_kontrak">Uraian</label>
-                                <textarea name="uraian" id="uraian" cols="30" rows="5"></textarea>
+                                <textarea name="uraian" id="uraian" cols="30" rows="5" class="form-control"></textarea>
                             </div>
                         </div>
                         <div class="col-lg-12 col-xl-12">
@@ -128,10 +127,10 @@
     <?php $target = 0; ?>
     var a = '<?= $this->session->userdata('userid') ?>'
     $(function() {
-        $('#uraian').summernote({
-            height: "300px",
-            styleWithSpan: false
-        });
+        // $('#uraian').summernote({
+        //     height: "300px",
+        //     styleWithSpan: false
+        // });
 
         $("#table-mesin").DataTable({
             "responsive": true,
@@ -148,51 +147,53 @@
                 'type': 'post',
             },
             'columns': [{
-                "target": [<?= $target ?>],
-                "className": 'text-center py-1',
-                "data": "data.no",
-            }, {
-                "target": [<?= $target ?>],
-                "className": 'text-center py-1',
-                "data": "data.customer",
-            }, {
-                "target": [<?= $target ?>],
-                "className": 'text-center py-1',
-                "data": "data.pic_customer",
-            }, {
-                "target": [<?= $target ?>],
-                "className": 'text-center py-1',
-                "data": "data.no_hp",
-            }, {
-                "target": [<?= $target ?>],
-                "className": 'text-center py-1',
-                "data": "data",
-                "render": function(data) {
-                    if (data.status == 'OPEN') {
-                        return `<span class="badge bg-warning">OPEN</span>`
-                    } else {
-                        return `<span class="badge bg-success">CLOSED</span>`
+                    "target": [<?= $target ?>],
+                    "className": 'text-center py-1',
+                    "data": "data.no",
+                }, {
+                    "target": [<?= $target ?>],
+                    "className": 'text-center py-1',
+                    "data": "data.customer",
+                }, {
+                    "target": [<?= $target ?>],
+                    "className": 'text-center py-1',
+                    "data": "data.pic_customer",
+                }, {
+                    "target": [<?= $target ?>],
+                    "className": 'text-center py-1',
+                    "data": "data.no_hp",
+                },
+                // {
+                //     "target": [<?= $target ?>],
+                //     "className": 'text-center py-1',
+                //     "data": "data",
+                //     "render": function(data) {
+                //         if (data.status == 'OPEN') {
+                //             return `<span class="badge bg-warning">OPEN</span>`
+                //         } else {
+                //             return `<span class="badge bg-success">CLOSED</span>`
+                //         }
+                //     }
+                // },
+                {
+                    "target": [<?= $target ?>],
+                    "className": 'text-center py-1',
+                    "data": "data.uraian",
+                }, {
+                    "target": [<?= $target ?>],
+                    "className": 'py-1',
+                    "data": "data",
+                    "render": function(data) {
+                        if (data.status == 'OPEN') {
+                            return `<button type="button" class="btn btn-sm btn-danger" onclick=tutup_kasus(` + data.id + `) data-bs-toggle="tooltip" title="Update Status">
+                                        <i class="fa fa-circle-check"></i> Tutup Kasus
+                                    </button>`
+                        } else {
+                            return '<span class="badge bg-success">CLOSED</span>'
+                        }
                     }
-                }
-            }, {
-                "target": [<?= $target ?>],
-                "className": 'text-center py-1',
-                "data": "data",
-                "render": function(data) {
-                    return `<button type="button" class="btn btn-sm btn-dark" onclick="show_uraian('` + data.uraian + `')" data-bs-toggle="tooltip" title="Lihat Uraian">
-                                    <i class="fa fa-file"></i> Uraian
-                                </button>`
-                }
-            }, {
-                "target": [<?= $target ?>],
-                "className": 'py-1',
-                "data": "data",
-                "render": function(data) {
-                    return `<button type="button" class="btn btn-sm btn-danger" onclick=tutup_kasus(` + data.id + `) data-bs-toggle="tooltip" title="Update Status">
-                                    <i class="fa fa-circle-check"></i> Tutup Kasus
-                                </button>`
-                }
-            }, ],
+                },
+            ],
             "dom": '<"row" <"col-md-6" l><"col-md-6" f>>rt<"row" <"col-md-6" i><"col-md-6" p>>',
             "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         });

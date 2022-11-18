@@ -12,6 +12,7 @@ class Crm extends CI_Controller
             redirect('auth');
         }
         $this->load->model("Crud", "crud");
+        $this->load->model("M_crm", "m_crm");
     }
 
     public function index()
@@ -79,12 +80,14 @@ class Crm extends CI_Controller
     public function ajax_table_report()
     {
 
+        $where = [];
+
         $table = 'daily_report'; //nama tabel dari database
         $column_order = array('id', 'nama_karyawan', 'nomor_induk', 'tanggal', 'aktivitas', 'date_created', 'id'); //field yang ada di table user
         $column_search = array('id', 'nama_karyawan', 'nomor_induk', 'tanggal', 'aktivitas',  'date_created'); //field yang diizin untuk pencarian 
         $select = 'id, nama_karyawan, nomor_induk, tanggal, aktivitas, date_created';
         $order = array('id' => 'asc'); // default order 
-        $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order);
+        $list = $this->m_crm->get_datatables($table, $select, $column_order, $column_search, $order, $where);
         $data = array();
         $no = $_POST['start'];
         foreach ($list as $key) {
@@ -103,8 +106,8 @@ class Crm extends CI_Controller
 
         $output = array(
             "draw" => $_POST['draw'],
-            "recordsTotal" => $this->crud->count_all($table),
-            "recordsFiltered" => $this->crud->count_filtered($table, $select, $column_order, $column_search, $order),
+            "recordsTotal" => $this->m_crm->count_all($table),
+            "recordsFiltered" => $this->m_crm->count_filtered($table, $select, $column_order, $column_search, $order, $where),
             "data" => $data,
             "query" => $this->db->last_query()
         );

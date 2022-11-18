@@ -27,9 +27,14 @@
                         <tr>
                             <th class="text-center">#</th>
                             <th>Nama</th>
-                            <th>Nomor Induk</th>
                             <th>Tanggal</th>
-                            <th>Uraian</th>
+                            <th style="width: 60%;">Uraian</th>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><input type="text" class="form-control search-cepat" id="search_nama" name="search_nama" placeholder="search"></td>
+                            <td><input type="text" class="form-control search-cepat" id="search_tanggal" name="search_tanggal" placeholder="search"></td>
+                            <td><input type="text" class="form-control search-cepat" id="search_aktivitas" name="search_aktivitas" placeholder="search"></td>
                         </tr>
                     </thead>
                 </table>
@@ -148,6 +153,18 @@
                 'dataType': 'json',
                 'url': '<?= base_url() ?>crm/ajax_table_report',
                 'type': 'post',
+                'data': {
+                    search_nama: function() {
+                        return $('#search_nama').val()
+                    },
+                    search_tanggal: function() {
+                        return $('#search_tanggal').val()
+                    },
+
+                    search_aktivitas: function() {
+                        return $('#search_aktivitas').val()
+                    },
+                }
             },
             'columns': [{
                 "target": [<?= $target ?>],
@@ -160,24 +177,20 @@
             }, {
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
-                "data": "data.nomor_induk",
-            }, {
-                "target": [<?= $target ?>],
-                "className": 'text-center py-1',
                 "data": "data.tanggal",
             }, {
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
-                "data": "data",
-                "render": function(data) {
-                    return `<button type="button" class="btn btn-sm btn-primary" onclick="show_uraian('` + data.aktivitas + `')" data-bs-toggle="tooltip" title="Lihat Uraian">
-                                    <i class="fa fa-file"></i> Uraian
-                                </button>`
-                }
+                "data": "data.aktivitas",
             }, ],
             "dom": '<"row" <"col-md-6" l><"col-md-6" f>>rt<"row" <"col-md-6" i><"col-md-6" p>>',
             "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         });
+
+        $('.search-cepat').keyup(function() {
+            // console.log('OK')
+            reload_table()
+        })
 
         //   $('#tambah-user').hide();
         $('#customer').select2({
