@@ -610,7 +610,8 @@ class Overhaul extends CI_Controller
     {
 
         $where = array(
-            'finish_oh !=' => '0000-00-00 00:00:00'
+            'finish_oh !=' => '0000-00-00 00:00:00',
+            'approval_selesai' => '1'
         );
 
         $table = 'overhaul'; //nama tabel dari database
@@ -854,6 +855,22 @@ class Overhaul extends CI_Controller
         $where = array(
             'id' => $id
         );
+
+        //tulis ke tabel detailmesin
+        $getdata = $this->crud->get_where('overhaul', ['id' => $id])->row_array();
+
+        $datas = array(
+            'nomor_mesin' => $getdata['nomor_mesin'],
+            'model' => $getdata['model'],
+            'serial_number' => $getdata['serial_number'],
+            'asal' => $getdata['asal'],
+            'supplier' => $getdata['supplier'],
+            'tgl_aktivitas' => $getdata['finish_oh'],
+            'aktivitas' => 'OVERHAUL',
+            'id_overhaul' => $getdata['id'],
+            'id_kerjaluar' => ''
+        );
+        $insert = $this->crud->insert('detailmesin', $datas);
 
 
         if ($this->crud->update($table, $data, $where)) {

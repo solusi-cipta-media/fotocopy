@@ -230,7 +230,7 @@
                         </tr>
                         <tr>
                             <td style="border: solid black 1px;"><strong>3</strong></td>
-                            <td style="border: solid black 1px;text-align: left;" colspan="2"><strong>BLA BLA BLA TULISAN TIDAK JELAS</strong></td>
+                            <td style="border: solid black 1px;text-align: left;" colspan="2"><strong>Dokumentasi (Foto) Serah Terima Mesin Di Customer (Team+Plang Nama, Team+Mesin, Team+Cust, Cust+Mesin)</strong></td>
                             <td style="border: solid black 1px;"><strong></strong></td>
                         </tr>
                         <tr style="height: 30px;">

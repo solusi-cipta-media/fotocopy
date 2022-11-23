@@ -324,9 +324,9 @@
                                 `
                     } else {
                         return `<div class="d-flex flex-column" style="row-gap: 10px;">
-                                    <button type="button" class="btn btn-sm btn-danger" onclick="ubah_status_data('` + data.id + `')" data-bs-toggle="tooltip" title="Selesai">
-                                    <i class="fa fa-circle-check"></i> Selesai
-                                     </button>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="ubah_status_data('` + data.id + `')" data-bs-toggle="tooltip" title="Selesai">
+                                        <i class="fa fa-circle-check"></i> Ubah Status Pekerjaan
+                                    </button>
                                 </div>`
                     }
                 }

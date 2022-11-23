@@ -116,9 +116,9 @@ class Kerjaluar extends CI_Controller
 
 
         $table = 'kerjaluar'; //nama tabel dari database
-        $column_order = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'time_in', 'time_out', 'status', 'date_created', 'uraian', 'nomor_mesin', 'model', 'id'); //field yang ada di table user
-        $column_search = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'time_in', 'time_out', 'status', 'date_created', 'uraian', 'nomor_mesin', 'model'); //field yang diizin untuk pencarian 
-        $select = 'id, customer, jenis, tgl_kerja, lokasi, latitude, longitude, teknisi, id_karyawan, time_in, time_out, status, date_created, uraian, nomor_mesin,model';
+        $column_order = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'time_in', 'time_out', 'status', 'date_created', 'uraian', 'uraian_tugas', 'nomor_mesin', 'model', 'id'); //field yang ada di table user
+        $column_search = array('id', 'customer', 'jenis', 'tgl_kerja', 'lokasi', 'latitude', 'longitude', 'id_karyawan', 'teknisi', 'time_in', 'time_out', 'status', 'date_created', 'uraian', 'uraian_tugas', 'nomor_mesin', 'model'); //field yang diizin untuk pencarian 
+        $select = 'id, customer, jenis, tgl_kerja, lokasi, latitude, longitude, teknisi, id_karyawan, time_in, time_out, status, date_created, uraian, uraian_tugas, nomor_mesin,model';
         $order = array('id' => 'asc'); // default order 
         $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order);
         $data = array();
@@ -141,6 +141,7 @@ class Kerjaluar extends CI_Controller
             $row['data']['status'] = $key->status;
             $row['data']['date_created'] = $key->date_created;
             $row['data']['uraian'] = $key->uraian;
+            $row['data']['uraian_tugas'] = $key->uraian_tugas;
             $row['data']['model'] = $key->model;
             $row['data']['nomor_mesin'] = $key->nomor_mesin;
 
@@ -441,6 +442,38 @@ class Kerjaluar extends CI_Controller
             'id' => $id
         );
 
+        //insert tabel detailmesin
+        if ($status == 'SELESAI') {
+
+            $getdata = $this->crud->get_where('kerjaluar', ['id' => $id])->row_array();
+            $datas = array(
+                'nomor_mesin' => $getdata['nomor_mesin'],
+                'model' => $getdata['model'],
+                'serial_number' => $getdata['serial_number'],
+                'asal' => $getdata['asal'],
+                'supplier' => $getdata['supplier'],
+                'tgl_aktivitas' => $getdata['tgl_kerja'],
+                'aktivitas' =>  $getdata['jenis'],
+                'id_overhaul' => '',
+                'id_kerjaluar' =>  $getdata['id']
+            );
+
+            $datass = array(
+                'kode' => $getdata['kode_customer'],
+                'nama' => $getdata['customer'],
+                'nomor_mesin' => $getdata['nomor_mesin'],
+                'model' => $getdata['model'],
+                'uraian' => $getdata['uraian'],
+                'tanggal_servis' => $getdata['tgl_kerja'],
+                'teknisi' => $getdata['teknisi'],
+                'id_kerjaluar' => $getdata['id'],
+            );
+
+            $insert = $this->crud->insert('detailmesin', $datas);
+
+            $insert_cust = $this->crud->insert('customerdetail', $datass);
+        }
+
 
         $update = $this->crud->update($table, $data, $where);
 
@@ -503,8 +536,11 @@ class Kerjaluar extends CI_Controller
             $data['nomor_mesin'] = $a[1];
             $data['model'] = $a[2];
             $data['tegangan'] = $a[3];
+            $data['asal'] = $a[4];
+            $data['supplier'] = $a[5];
         }
 
+        $data['kode_customer'] = $customer['kode'];
         $data['customer'] = $customer['nama'];
         $data['lokasi'] = $customer['alamat'];
         $data['latitude'] = $customer['latitude'];

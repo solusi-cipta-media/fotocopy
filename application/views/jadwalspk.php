@@ -129,11 +129,17 @@
                                         <?php
                                         foreach ($mesin as $key => $value) {
                                         ?>
-                                            <option value="<?= $value['serial_number'] . '-' . $value['nomor_mesin'] . '-' . $value['model'] . '-' . $value['tegangan'] ?>"><?= $value['nomor_mesin'] . ' - ' . $value['serial_number'] ?></option>
+                                            <option value="<?= $value['serial_number'] . '-' . $value['nomor_mesin'] . '-' . $value['model'] . '-' . $value['tegangan'] . '-' . $value['asal'] . '-' . $value['supplier']  ?>"><?= $value['nomor_mesin'] . ' - ' . $value['serial_number'] ?></option>
                                         <?php
                                         }
                                         ?>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-xl-12">
+                                <div class="mb-4">
+                                    <label class="form-label" for="uraian">Uraian Pekerjaan</label>
+                                    <textarea class="form-control" name="uraian" id="uraian" cols="30" rows="5"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -347,7 +353,7 @@
                 {
                     "target": [<?= $target ?>],
                     "className": 'text-center py-1',
-                    "data": "data.uraian",
+                    "data": "data.uraian_tugas",
                 },
                 // {
                 //     "target": [<?= $target ?>],
@@ -493,6 +499,7 @@
         form_data.append('customer', $("#customer").val());
         form_data.append('tgl_kerja', $("#tgl_kerja").val());
         form_data.append('jenis', $("#jenis").val());
+        form_data.append('uraian_tugas', $("#uraian").val());
         form_data.append('nomor_mesin', $("#nomor_mesin").val());
 
         url_ajax = '<?= base_url() ?>kerjaluar/register_spk'
