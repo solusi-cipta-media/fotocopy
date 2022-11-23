@@ -1,0 +1,80 @@
+CMS
+====
+
+5-nov-2022
+
+MASTER
+-------
+1. MESIN
+[ok] tambah kolom uraian kondisi mesin ketika datang,
+  catatan ini dibawa terus sampai dengan proses overhaul
+[ok] buat dropdown status untuk menampilkan table
+[ok] status = import, overhaul, ready, kanibal, rental, jual, jual lepas
+[ok] nomor mesin dibuat otomatis sequence number
+[ok] tambah note modal berisi uraian
+[ok] tambah nama supplier di register dan table master mesin
+
+2. CUSTOMER
+[ok] nomor contact kantor
+3. KONTRAK
+[ok] hilangkan notifikasi flag kanan atas
+[ok] dashboard ada info reminder kontrak dengan warna mencolok, ada tombol untuk remove (inactive) sudah diaction
+
+OVERHAUL
+--------
+1. LIST MESIN
+[ok] SPV selain approve juga bisa reject
+[ok] judul list mesin diganti list mesin import
+
+2. PROSES OVERHAUL
+[ok] Tambah tombol di AKSI --> kondisi awal
+
+3. OVERHAUL SELESAI
+[ok] Informasi waktu approval sebelum dan sesudah dan teknisi dan SPV yang approve
+  di datatable maupun report print 
+[ok] Tambah informasi tanggal selesai overhaul di datatable
+
+4. FROM CETAK FINISHING
+[ok] Tanggal = tanggal selesai Overhaul
+[ok] Asal mesin adalah Supplier
+
+KERJA LUAR
+-----------
+1. JADWAL SPK
+[ok] klasifikasi kerja: invoice, service, instal, tarik, maintenance
+[ok] Tambah informasi uraian pekerjaan dan tipe mesin
+2. PROSES KERJA
+[ok] Form machine record type data meter diubah menjadi text
+[ok] setelah kerja instal selesai status mesin berubah di isi oleh teknisi (modal ubah status mesin) - ubah sesuai meet 12-nov-2022
+3. MACHINE RECORD
+[ok] tabel machine record tambah informasi customer
+[ok] buat print cetak Machine Record
+
+
+4. MENU BARU KASIH NAMA AKTIVITAS CRM
+[ok] isi table: customer, PIC Cutomer(Contact name), No.HP, status (Selesai apa belum), Uraian
+5. MENU BARU KASIH NAMA DAILY REPORT
+[x] isi tabel: nama karyawan, nik, tanggal, aktivitas
+
+
+12-nov-2022
+
+[] detail history mesin (customer, overhaul dll), link ada di master mesin
+[] detail history customer (mesin) unique nomor_mesin , link ada di master customer
+[x] item overhaul ada kurang lengkap OKE, GANTI, REPAIR
+[x] master mesin di menu edit ditambahkan pilihan status kanibal&import&jual lepas
+[x] jadwal SPK, uraian langsung ditampilkan di table tidak usah via button modal
+[x] ubah status mesin di admin proses kerja
+[x] tambah link machine record untuk melihat history mesin tersebut (form machine record)
+[x] status mesin diubah pada saat register SPK berdasarkan data klasifikasi di master customer
+[x] status pekerjaan update oleh teknisi , OPEN, PENDING, SELESAI (Proses Kerja)
+[x] remove serial number dan meter di table form machine
+[x] CRM, inputan customer diisi manual, dan lainnya diinput manual
+[x] uraian ditampilkan di table
+[x] status-aksi di jadikan satu
+[x] uraian ditampilkan - daily report
+[x] nama, tanggal uraian saja yang ditampilkan - daily report
+[x] filter berdasarkan nama dan tanggal - daily report
+
+
+
