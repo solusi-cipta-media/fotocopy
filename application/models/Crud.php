@@ -196,7 +196,7 @@ class Crud extends CI_Model
             $month = "Oktober";
         } else if ($bulan == 'November') {
             $month = "November";
-        } else if ($hari == 'December') {
+        } else if ($bulan == 'December') {
             $month = "Desember";
         }
 
