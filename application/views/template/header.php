@@ -136,18 +136,14 @@
                                 </a>
                             </li>
                             <li class="nav-main-heading">Master</li>
-                            <?php
-                            if ($this->session->userdata('role_id') == '1') {
-                            ?>
-                                <li class="nav-main-item">
-                                    <a class="<?= ($sess_menu == "karyawan") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('karyawan') ?>">
-                                        <i class="nav-main-link-icon fa fa-child"></i>
-                                        <span class="nav-main-link-name">Karyawan</span>
-                                    </a>
-                                </li>
-                            <?php
-                            }
-                            ?>
+
+                            <li class="nav-main-item">
+                                <a class="<?= ($sess_menu == "karyawan") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('karyawan') ?>">
+                                    <i class="nav-main-link-icon fa fa-child"></i>
+                                    <span class="nav-main-link-name">Karyawan</span>
+                                </a>
+                            </li>
+
 
                             <li class="nav-main-item">
                                 <a class="<?= ($sess_menu == "mesin") ? "nav-main-link active" : "nav-main-link"; ?>" href="<?= base_url('mesin') ?>">
